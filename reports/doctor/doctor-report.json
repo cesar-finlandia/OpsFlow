@@ -42,9 +42,9 @@
       "message": "component provenance included — ok"
     },
     {
-      "id": "gemini-key",
+      "id": "planner-credentials",
       "status": "warn",
-      "message": "GEMINI_API_KEY absent — deterministic planner will be used"
+      "message": "Vertex AI not configured (GOOGLE_VERTEX_PROJECT/GOOGLE_VERTEX_CREDENTIALS) — deterministic planner will be used"
     }
   ]
 }
