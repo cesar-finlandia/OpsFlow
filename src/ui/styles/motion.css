@@ -1,0 +1,263 @@
+/*
+  OpsFlow — motion layer. Every keyframe in the app lives here.
+  Principle §1.4.3: motion is a status report. Nothing loops for its own sake,
+  and no information is carried by motion alone (§7.1).
+*/
+
+/* ---------- arrival ---------- */
+
+@keyframes of-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes of-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes of-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes of-dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes of-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- status (§7.4) ---------- */
+
+/* running — an expanding halo, the agent is on the wire */
+@keyframes of-halo {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+/* degraded — a slow breathe, never an alarm */
+@keyframes of-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* gate — the human ring, waiting for a click */
+@keyframes of-gate-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 0.35;
+  }
+}
+
+/* error — three cycles, then still */
+@keyframes of-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+/* done — the check draws itself */
+@keyframes of-draw {
+  from {
+    stroke-dashoffset: var(--of-draw-length, 48);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* the packet travelling down the route rail (§7.2) */
+@keyframes of-wire {
+  from {
+    stroke-dashoffset: 26;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* three-dot in-flight pulse */
+@keyframes of-dot-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+/* skeleton shimmer (§7.3) */
+@keyframes of-shimmer {
+  from {
+    background-position: -180% 0;
+  }
+  to {
+    background-position: 180% 0;
+  }
+}
+
+/* primary-button sheen, hover only */
+@keyframes of-sheen {
+  from {
+    background-position: -120% 0;
+  }
+  to {
+    background-position: 220% 0;
+  }
+}
+
+/* a committed row flashes once */
+@keyframes of-commit-flash {
+  from {
+    background-color: var(--of-commit-soft);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+/* bars grow from nothing (§7.7) */
+@keyframes of-bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* logotype mark draws once on load (§2.2) */
+@keyframes of-mark-draw {
+  from {
+    stroke-dashoffset: 90;
+    opacity: 0.2;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* ---------- theme wipe (§4.3) ---------- */
+
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: of-mode-wipe var(--of-dur-4) var(--of-ease-in-out);
+  mix-blend-mode: normal;
+}
+
+@keyframes of-mode-wipe {
+  from {
+    clip-path: circle(0% at var(--of-wipe-x, 50%) var(--of-wipe-y, 0%));
+  }
+  to {
+    clip-path: circle(150% at var(--of-wipe-x, 50%) var(--of-wipe-y, 0%));
+  }
+}
+
+/* ---------- reduced motion (§7.1, §10) ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Static equivalents for the two widgets that would otherwise lose meaning:
+     the route rail's in-flight segment and the running status dot both keep a
+     visible, non-animated state. Their textual readouts (step N of M, status
+     word) carry the information regardless. */
+  .of-rail__wire--active {
+    stroke-dasharray: none;
+    opacity: 1;
+  }
+
+  .of-dot--running::after {
+    display: none;
+  }
+
+  .of-dot--running {
+    box-shadow: 0 0 0 3px var(--of-signal-soft);
+  }
+
+  ::view-transition-new(root),
+  ::view-transition-old(root) {
+    animation: none;
+  }
+}

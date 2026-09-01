@@ -2,6 +2,8 @@ import * as React from "react";
 import { orchestrator } from "src/agent/orchestrator.ts";
 import { useSession } from "src/ui/state/session.ts";
 import type { VariantMatch } from "src/engine/types.ts";
+import { AgentActivity } from "src/ui/components/AgentActivity.tsx";
+import { SignalMark } from "src/ui/components/Icons.tsx";
 
 export function BatchScreen(): JSX.Element {
   const { envelopes } = useSession();
@@ -144,10 +146,19 @@ export function BatchScreen(): JSX.Element {
       </div>
       {toast && <div role="status">{toast}</div>}
       {running && (
-        <div className="opsflow-running">Agent running… step {currentStep} of {totalSteps}: {toolName} — {rationale}</div>
+        <AgentActivity
+          steps={planSteps}
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          tool={toolName}
+          rationale={rationale}
+        />
       )}
       {showEmptyBeforeRun && (
-        <div className="opsflow-empty">Enter a goal above — e.g. &apos;hold all low-stock blue variants under $12 shipping to zone 4 for 15 minutes&apos; — then click Run with agent.</div>
+        <div className="opsflow-empty">
+          <SignalMark size={22} className="opsflow-mark of-empty-mark" />
+          <span>Enter a goal above — e.g. &apos;hold all low-stock blue variants under $12 shipping to zone 4 for 15 minutes&apos; — then click Run with agent.</span>
+        </div>
       )}
       {toolError && !running && (
         <div role="alert">
@@ -166,40 +177,54 @@ export function BatchScreen(): JSX.Element {
       )}
       {/* skeleton rows when running */}
       {running && (
-        <table>
-          <thead>
-            <tr><th>SKU</th><th>Title</th><th>Size</th><th>Color</th><th>Price</th><th>Stock</th><th>Select</th></tr>
-          </thead>
-          <tbody>
-            {[0,1,2].map((i) => (
-              <tr key={i}><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td><input type="checkbox" disabled /></td></tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      {showTable && !running && (
-        <>
-          <div className="opsflow-count">{matches.length} variants · {total} total</div>
+        <div className="of-table-wrap">
           <table>
             <thead>
-              <tr>
-                <th>SKU</th><th>Title</th><th>Size</th><th>Color</th><th>Price</th><th>Stock</th><th>Select</th>
-              </tr>
+              <tr><th>SKU</th><th>Title</th><th>Size</th><th>Color</th><th>Price</th><th>Stock</th><th>Select</th></tr>
             </thead>
             <tbody>
-              {matches.map((m) => (
-                <tr key={m.sku}>
-                  <td style={{ fontFamily: "monospace" }}>{m.sku}</td>
-                  <td>{m.title}</td>
-                  <td><span>{m.options.size}</span></td>
-                  <td><span>{m.options.color}</span></td>
-                  <td>{"$" + (m.price_cents / 100).toFixed(2)}</td>
-                  <td>{m.stock}{m.low_stock && <span className="opsflow-chip opsflow-chip--low">low stock</span>}</td>
-                  <td><input type="checkbox" checked={selectedSkus.includes(m.sku)} onChange={(e) => toggleSku(m.sku, e.target.checked)} aria-label={`Select ${m.sku}`} /></td>
+              {/* Skeleton bars are sized to each column's expected content, so the
+                  placeholder previews the layout instead of blinking (§7.3). */}
+              {[0,1,2].map((i) => (
+                <tr key={i} className="of-skel-row">
+                  <td><span className="of-skel of-skel--sku" aria-hidden="true" /></td>
+                  <td><span className="of-skel of-skel--title" aria-hidden="true" /></td>
+                  <td><span className="of-skel of-skel--sm" aria-hidden="true" /></td>
+                  <td><span className="of-skel of-skel--sm" aria-hidden="true" /></td>
+                  <td className="of-num"><span className="of-skel of-skel--num" aria-hidden="true" /></td>
+                  <td className="of-num"><span className="of-skel of-skel--num" aria-hidden="true" /></td>
+                  <td><input type="checkbox" disabled /></td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+      {showTable && !running && (
+        <>
+          <div className="opsflow-count">{matches.length} variants · {total} total</div>
+          <div className="of-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>SKU</th><th>Title</th><th>Size</th><th>Color</th><th className="of-num">Price</th><th className="of-num">Stock</th><th>Select</th>
+                </tr>
+              </thead>
+              <tbody>
+                {matches.map((m) => (
+                  <tr key={m.sku}>
+                    <td className="of-mono">{m.sku}</td>
+                    <td>{m.title}</td>
+                    <td><span>{m.options.size}</span></td>
+                    <td><span>{m.options.color}</span></td>
+                    <td className="of-num">{"$" + (m.price_cents / 100).toFixed(2)}</td>
+                    <td className="of-num">{m.stock}{m.low_stock && <span className="opsflow-chip opsflow-chip--low">low stock</span>}</td>
+                    <td><input type="checkbox" checked={selectedSkus.includes(m.sku)} onChange={(e) => toggleSku(m.sku, e.target.checked)} aria-label={`Select ${m.sku}`} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <div className="opsflow-count">{selectedSkus.length} selected — quote on Shipping tab</div>
         </>
       )}

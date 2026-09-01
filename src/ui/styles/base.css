@@ -1,0 +1,181 @@
+/*
+  OpsFlow — base layer: reset, document typography, ambient texture, focus,
+  scrollbars, forced-colors. See visual_identity_plan.md §5, §6, §7.8, §10.
+*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--of-canvas);
+}
+
+body {
+  min-height: 100%;
+  background: var(--of-canvas);
+  color: var(--of-text);
+  font-family: var(--of-font-sans);
+  font-size: var(--of-text-body);
+  line-height: var(--of-lh-normal);
+  font-weight: 450;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv05";
+  overflow-x: hidden;
+}
+
+/* Colour-mode cross-fade fallback for browsers without View Transitions.
+   The class is added around the swap and removed on transitionend, so the
+   transition never taxes ordinary interaction (§4.3). */
+html.of-mode-anim,
+html.of-mode-anim body,
+html.of-mode-anim .of-surface-anim {
+  transition:
+    background-color var(--of-dur-2) var(--of-ease-in-out),
+    color var(--of-dur-2) var(--of-ease-in-out),
+    border-color var(--of-dur-2) var(--of-ease-in-out);
+}
+
+/* ---------- ambient texture (§7.8) ---------- */
+/*
+  The ground: an engineering lattice that fades out of the working area, lit by
+  two soft auroras. Composited as ONE static `background-attachment: fixed`
+  stack on <body> — no pseudo-elements, no masks, no animation.
+
+  A drifting version (two animated, masked, position:fixed layers) was built
+  first and cut: a continuously animated, masked, full-viewport layer repaints
+  every frame for the sake of a decorative gradient, and this is a console whose
+  main thread is busy executing agent tool calls. Principle §1.4.3 — nothing
+  loops for its own sake — settles it. Standing still it looks the same.
+
+  Layer order, topmost first: aurora ×2 → centre veil (fades the lattice out of
+  the area that holds data) → lattice ×2 → canvas.
+*/
+body {
+  background-color: var(--of-canvas);
+  background-image:
+    radial-gradient(60% 55% at 8% 0%, var(--of-aurora-1) 0%, transparent 70%),
+    radial-gradient(55% 50% at 95% 100%, var(--of-aurora-2) 0%, transparent 72%),
+    radial-gradient(115% 80% at 50% 28%, var(--of-canvas) 0%, transparent 78%),
+    repeating-linear-gradient(0deg, var(--of-grid-line) 0 1px, transparent 1px 32px),
+    repeating-linear-gradient(90deg, var(--of-grid-line) 0 1px, transparent 1px 32px);
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat, repeat;
+  background-attachment: fixed;
+}
+
+/* Content always sits above the ground. */
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- typography defaults ---------- */
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: var(--of-track-tight);
+  line-height: var(--of-lh-snug);
+  color: var(--of-text);
+}
+
+p {
+  margin: 0;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--of-font-mono);
+  font-feature-settings: "ss01", "cv05";
+}
+
+a {
+  color: var(--of-signal);
+  text-underline-offset: 2px;
+}
+
+/* Anything that can hold a number never jitters. */
+table,
+input,
+.opsflow-meter,
+.opsflow-quote,
+.of-tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- focus (§10) ---------- */
+
+:focus-visible {
+  outline: 2px solid var(--of-focus);
+  outline-offset: 2px;
+  border-radius: var(--of-radius-xs);
+  box-shadow: 0 0 0 4px var(--of-focus-halo);
+}
+
+::selection {
+  background: var(--of-accent-soft);
+  color: var(--of-text);
+}
+
+/* ---------- scrollbars ---------- */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--of-border-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--of-border-strong);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: var(--of-radius-full);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--of-text-3);
+  background-clip: content-box;
+}
+
+/* ---------- forced colors (§10) ---------- */
+
+@media (forced-colors: active) {
+  body {
+    background-image: none;
+  }
+
+  .opsflow-panel,
+  .opsflow-card,
+  .opsflow-quote,
+  .opsflow-form {
+    border: 1px solid CanvasText;
+  }
+
+  :focus-visible {
+    outline: 2px solid Highlight;
+    box-shadow: none;
+  }
+}

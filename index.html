@@ -10,6 +10,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark" />
+    <!-- No-flash colour mode (visual_identity_plan.md §4.2). Runs synchronously
+         before any stylesheet so the resolved mode is painted on the first
+         frame: explicit choice -> prefers-color-scheme -> dark. Mirrors
+         src/ui/theme/mode.ts; costs no network round-trip (NFR-10). -->
+    <script>
+      (function () {
+        try {
+          var m = localStorage.getItem("opsflow.theme.v1");
+          if (m !== "light" && m !== "dark") {
+            m = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          }
+          document.documentElement.setAttribute("data-mode", m);
+          document.documentElement.style.colorScheme = m;
+          var meta = document.querySelector('meta[name="color-scheme"]');
+          if (meta) meta.setAttribute("content", m);
+        } catch (e) {
+          document.documentElement.setAttribute("data-mode", "dark");
+        }
+      })();
+    </script>
     <meta
       name="description"
       content="OpsFlow — an agent-native fulfillment console for solo operators. Five WebMCP tools let a browser agent search, filter, quote, hold and confirm a fulfillment batch, with every state change gated behind a human confirmation click."

@@ -33,7 +33,11 @@ test.describe("UC-13 the production bundle is the thing that works", () => {
       return { maxWidth: cs.maxWidth, display: cs.display, bodyBg: getComputedStyle(document.body).backgroundColor };
     });
     expect(styled, ".opsflow root must exist in the built page").not.toBeNull();
-    expect(styled!.display).toBe("flex");
+    // The console root is laid out by CSS, not left at the default `block`.
+    // The specific mode is a design decision (it is `grid` since the Signal &
+    // Slate identity gave the timeline a desktop side rail), so assert the
+    // property this test actually cares about: a stylesheet reached the page.
+    expect(["flex", "grid"]).toContain(styled!.display);
     expect(styled!.maxWidth).not.toBe("none");
     expect(styled!.bodyBg).not.toBe("rgba(0, 0, 0, 0)");
   });

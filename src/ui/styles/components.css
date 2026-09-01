@@ -1,0 +1,1576 @@
+/*
+  OpsFlow — component layer. One section per surface in
+  design_documents/visual_identity_plan.md §9.
+
+  Class hooks asserted by the Playwright suite are preserved verbatim
+  (§11.1): .opsflow-banner*, .opsflow-meter, .opsflow-quote, [data-tool],
+  form[toolname], table structure and column order.
+*/
+
+/* =========================================================================
+   1. Shell / layout (§6.4)
+   ========================================================================= */
+
+.opsflow {
+  position: relative;
+  max-width: var(--of-layout-max);
+  margin-inline: auto;
+  padding: var(--of-space-6) var(--of-space-6) var(--of-space-16);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--of-space-5);
+  align-content: start;
+}
+
+@media (min-width: 1120px) {
+  .opsflow {
+    grid-template-columns: minmax(0, 1fr) var(--of-rail-width);
+    align-items: start;
+  }
+
+  .opsflow > * {
+    grid-column: 1 / -1;
+  }
+
+  .opsflow > [role="tabpanel"],
+  .opsflow > .opsflow-meter {
+    grid-column: 1;
+  }
+
+  .opsflow > .opsflow-timeline {
+    grid-column: 2;
+    position: sticky;
+    top: var(--of-space-4);
+    max-height: calc(100vh - var(--of-space-8));
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .opsflow {
+    padding: var(--of-space-4) var(--of-space-4) var(--of-space-12);
+    gap: var(--of-space-4);
+  }
+}
+
+/* =========================================================================
+   2. Header (§9)
+   ========================================================================= */
+
+.opsflow-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--of-space-3);
+  padding: var(--of-space-3) var(--of-space-4);
+  margin: calc(var(--of-space-6) * -1) calc(var(--of-space-4) * -1) 0;
+  background: var(--of-header-bg);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  backdrop-filter: blur(10px) saturate(1.4);
+  border-bottom: 1px solid var(--of-border);
+  border-radius: 0 0 var(--of-radius-md) var(--of-radius-md);
+}
+
+.opsflow-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--of-space-2);
+}
+
+.opsflow-header h1 {
+  margin: 0;
+  font-size: var(--of-text-h1);
+  font-weight: 640;
+  letter-spacing: -0.02em;
+  line-height: var(--of-lh-tight);
+  text-transform: none;
+  color: var(--of-text);
+}
+
+/* The Signal mark (§2.2) — five nodes, the fourth an open human gate. */
+.opsflow-mark {
+  flex: none;
+  display: block;
+}
+
+.opsflow-mark .of-mark__wire {
+  stroke: var(--of-signal);
+  stroke-width: 1.75;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 90;
+  animation: of-mark-draw 620ms var(--of-ease-out) both;
+}
+
+.opsflow-mark .of-mark__node {
+  fill: var(--of-signal);
+}
+
+.opsflow-mark .of-mark__gate {
+  fill: none;
+  stroke: var(--of-gate);
+  stroke-width: 2;
+}
+
+.opsflow-tagline {
+  color: var(--of-text-3);
+  font-size: var(--of-text-meta);
+  letter-spacing: 0.005em;
+}
+
+.opsflow-header__spacer {
+  flex: 1 1 auto;
+}
+
+.opsflow-header__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--of-space-2);
+}
+
+/* Synthetic-data honesty badge (NFR-04) — Replay channel. */
+.opsflow-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border: 1px solid color-mix(in srgb, var(--of-replay) 35%, transparent);
+  border-radius: var(--of-radius-full);
+  background: var(--of-replay-soft);
+  color: var(--of-replay);
+  font-size: var(--of-text-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  white-space: nowrap;
+}
+
+.opsflow-badge__full {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================================
+   3. Buttons & controls (§7.9)
+   ========================================================================= */
+
+button {
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 7px 13px;
+  border-radius: var(--of-radius-sm);
+  border: 1px solid var(--of-border-strong);
+  background: var(--of-surface);
+  color: var(--of-text);
+  box-shadow: var(--of-shadow-1), var(--of-inset-top);
+  transition:
+    background-color var(--of-dur-1) var(--of-ease-out),
+    border-color var(--of-dur-1) var(--of-ease-out),
+    color var(--of-dur-1) var(--of-ease-out),
+    transform var(--of-dur-1) var(--of-ease-out),
+    box-shadow var(--of-dur-1) var(--of-ease-out);
+}
+
+button:hover:not(:disabled) {
+  background: var(--of-surface-3);
+  border-color: var(--of-text-3);
+  transform: translateY(-1px);
+  box-shadow: var(--of-shadow-2), var(--of-inset-top);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.14);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+button.opsflow-primary {
+  background: var(--of-signal);
+  border-color: var(--of-signal);
+  color: var(--of-signal-on);
+  font-weight: 600;
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in srgb, #fff 22%, transparent) 50%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  background-position: -120% 0;
+}
+
+button.opsflow-primary:hover:not(:disabled) {
+  background-color: var(--of-signal-hover);
+  border-color: var(--of-signal-hover);
+  color: var(--of-signal-on);
+  animation: of-sheen 2.5s var(--of-ease-in-out) infinite;
+}
+
+/* Icon-only control (theme toggle, inspector) */
+.of-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px 10px;
+  color: var(--of-text-2);
+}
+
+.of-icon-btn svg {
+  flex: none;
+}
+
+.of-icon-btn:hover:not(:disabled) {
+  color: var(--of-text);
+}
+
+/* --- theme toggle (§4.3) --- */
+
+.of-theme-toggle {
+  width: 36px;
+  height: 34px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.of-theme-toggle svg {
+  overflow: visible;
+}
+
+.of-theme-toggle .of-sun-core {
+  fill: var(--of-gate);
+  transition: transform var(--of-dur-3) var(--of-ease-spring);
+}
+
+.of-theme-toggle .of-sun-rays {
+  stroke: var(--of-gate);
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  transform-origin: 12px 12px;
+  fill: none;
+  transition:
+    transform var(--of-dur-3) var(--of-ease-spring),
+    opacity var(--of-dur-2) var(--of-ease-out);
+}
+
+.of-theme-toggle .of-moon-mask {
+  fill: #000;
+  transition: transform var(--of-dur-3) var(--of-ease-spring);
+  transform: translate(11px, -11px);
+}
+
+/* Dark mode → the sun becomes a crescent: rays retract, the mask slides in. */
+:root[data-mode="dark"] .of-theme-toggle .of-sun-core {
+  fill: var(--of-signal-strong);
+}
+
+:root[data-mode="dark"] .of-theme-toggle .of-sun-rays {
+  opacity: 0;
+  transform: scale(0.4) rotate(-45deg);
+}
+
+:root[data-mode="dark"] .of-theme-toggle .of-moon-mask {
+  transform: translate(4.2px, -4.2px);
+}
+
+/* =========================================================================
+   4. Tabs (§9) — roles/ids/keyboard handling unchanged, chrome restyled
+   ========================================================================= */
+
+[role="tablist"] {
+  position: relative;
+  display: flex;
+  gap: var(--of-space-1);
+  padding-bottom: 0;
+  border-bottom: 1px solid var(--of-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+[role="tablist"]::-webkit-scrollbar {
+  display: none;
+}
+
+/* the hairline that fades out toward the edges (§7.8) */
+[role="tablist"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--of-signal) 45%, transparent),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+[role="tab"] {
+  position: relative;
+  border: none;
+  border-radius: var(--of-radius-sm) var(--of-radius-sm) 0 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--of-text-2);
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  font-size: var(--of-text-label);
+  font-weight: 600;
+  padding: 10px 18px;
+  white-space: nowrap;
+}
+
+[role="tab"]:hover:not(:disabled) {
+  background: var(--of-surface-3);
+  border-color: transparent;
+  transform: none;
+  box-shadow: none;
+  color: var(--of-text);
+}
+
+[role="tab"][aria-selected="true"] {
+  color: var(--of-signal);
+  background: transparent;
+}
+
+[role="tab"][aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--of-signal);
+  animation: of-pop var(--of-dur-2) var(--of-ease-out) both;
+}
+
+[role="tabpanel"] {
+  min-height: 180px;
+  animation: of-rise var(--of-dur-3) var(--of-ease-out) both;
+}
+
+/* =========================================================================
+   5. Panels, cards, empty states
+   ========================================================================= */
+
+.opsflow-panel {
+  border: 1px solid var(--of-panel-border);
+  border-radius: var(--of-radius-md);
+  background: var(--of-panel-bg);
+  box-shadow: var(--of-shadow-1), var(--of-inset-top);
+  padding: var(--of-space-4);
+}
+
+.opsflow-panel > h2,
+.opsflow-panel > h3 {
+  margin: 0 0 var(--of-space-3);
+  font-size: var(--of-text-label);
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  color: var(--of-text-3);
+  font-weight: 600;
+}
+
+.opsflow-empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--of-space-3);
+  text-align: center;
+  color: var(--of-text-2);
+  font-size: var(--of-text-body-sm);
+  padding: var(--of-space-12) var(--of-space-6);
+  border: 1px dashed var(--of-border-strong);
+  border-radius: var(--of-radius-md);
+  background: var(--of-canvas-2);
+  animation: of-fade-in var(--of-dur-3) var(--of-ease-out) both;
+}
+
+.opsflow-hint {
+  color: var(--of-text-2);
+  font-size: var(--of-text-body-sm);
+  padding: var(--of-space-3) 0;
+}
+
+.opsflow-count {
+  font-size: var(--of-text-meta);
+  color: var(--of-text-3);
+  padding: var(--of-space-2) 0;
+  letter-spacing: 0.01em;
+}
+
+/* =========================================================================
+   6. Banners (§9)
+   ========================================================================= */
+
+.opsflow-banner {
+  padding: var(--of-space-3) var(--of-space-4);
+  border-radius: var(--of-radius-md);
+  border: 1px solid transparent;
+  border-left-width: 3px;
+  font-size: var(--of-text-body-sm);
+  line-height: 1.6;
+  animation: of-slide-down var(--of-dur-3) var(--of-ease-out) both;
+}
+
+.opsflow-banner strong {
+  font-weight: 600;
+}
+
+.opsflow-banner--webmcp {
+  background: var(--of-signal-soft);
+  border-color: color-mix(in srgb, var(--of-signal) 35%, transparent);
+  border-left-color: var(--of-signal);
+  color: var(--of-text);
+}
+
+/* Degraded is Replay violet, never red — degraded is not broken (§3.1). */
+.opsflow-banner--degraded {
+  background: var(--of-replay-soft);
+  border-color: color-mix(in srgb, var(--of-replay) 35%, transparent);
+  border-left-color: var(--of-replay);
+  color: var(--of-text);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--of-space-3);
+}
+
+.opsflow-banner--degraded::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 7px;
+  border-radius: var(--of-radius-full);
+  background: var(--of-replay);
+  animation: of-breathe 2.4s var(--of-ease-in-out) infinite;
+}
+
+/* =========================================================================
+   7. Inputs & forms
+   ========================================================================= */
+
+input[type="text"],
+input:not([type]),
+select,
+textarea {
+  font: inherit;
+  padding: 8px 11px;
+  border-radius: var(--of-radius-sm);
+  border: 1px solid var(--of-border-strong);
+  background: var(--of-input-bg);
+  color: var(--of-text);
+  transition:
+    border-color var(--of-dur-1) var(--of-ease-out),
+    box-shadow var(--of-dur-1) var(--of-ease-out),
+    background-color var(--of-dur-1) var(--of-ease-out);
+}
+
+input[type="text"]:hover,
+select:hover {
+  border-color: var(--of-text-3);
+}
+
+input::placeholder {
+  color: var(--of-text-3);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--of-signal);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  transition: transform var(--of-dur-1) var(--of-ease-spring);
+}
+
+input[type="checkbox"]:checked {
+  transform: scale(1.12);
+}
+
+.opsflow-goalbar {
+  display: flex;
+  gap: var(--of-space-2);
+  align-items: center;
+  padding: var(--of-space-3);
+  border: 1px solid var(--of-panel-border);
+  border-radius: var(--of-radius-md);
+  background: var(--of-panel-bg);
+  box-shadow: var(--of-shadow-1), var(--of-inset-top);
+}
+
+.opsflow-goalbar input {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--of-text-lead);
+  padding: 10px 13px;
+}
+
+.opsflow-goalbar .opsflow-primary {
+  padding: 10px 18px;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .opsflow-goalbar {
+    flex-wrap: wrap;
+  }
+
+  .opsflow-goalbar input {
+    flex-basis: 100%;
+  }
+}
+
+.opsflow-form {
+  position: relative;
+  display: grid;
+  gap: var(--of-space-4);
+  padding: var(--of-space-5);
+  border: 1px solid var(--of-panel-border);
+  border-radius: var(--of-radius-md);
+  background: var(--of-panel-bg);
+  box-shadow: var(--of-shadow-1), var(--of-inset-top);
+}
+
+.opsflow-form label {
+  display: grid;
+  gap: 5px;
+  font-size: var(--of-text-label);
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  font-weight: 600;
+  color: var(--of-text-3);
+}
+
+.opsflow-form .hint {
+  margin: 0;
+  font-size: var(--of-text-meta);
+  color: var(--of-text-3);
+  text-transform: none;
+  letter-spacing: normal;
+  line-height: 1.6;
+}
+
+.opsflow-form .hint code {
+  padding: 1px 5px;
+  border-radius: var(--of-radius-xs);
+  background: var(--of-signal-soft);
+  color: var(--of-signal);
+  font-size: 0.92em;
+}
+
+/* MAN-02 scoring artifact — mark the declarative form as deliberate. */
+.of-ribbon {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  padding: 4px 10px;
+  border: 1px solid color-mix(in srgb, var(--of-signal) 35%, transparent);
+  border-radius: 0 var(--of-radius-md) 0 var(--of-radius-md);
+  background: var(--of-signal-soft);
+  color: var(--of-signal);
+  font-size: var(--of-text-micro);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* =========================================================================
+   8. Tables (§9) — column order and tbody structure frozen (§11.1)
+   ========================================================================= */
+
+.of-table-wrap {
+  border: 1px solid var(--of-panel-border);
+  border-radius: var(--of-radius-md);
+  background: var(--of-panel-bg);
+  box-shadow: var(--of-shadow-1), var(--of-inset-top);
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--of-text-body-sm);
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+  padding: 9px var(--of-space-3);
+  background: var(--of-canvas-2);
+  border-bottom: 1px solid var(--of-border);
+  color: var(--of-text-3);
+  font-size: var(--of-text-label);
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 9px var(--of-space-3);
+  border-bottom: 1px solid var(--of-border);
+  color: var(--of-text);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr {
+  transition: background-color 90ms var(--of-ease-out);
+}
+
+tbody tr:hover {
+  background: var(--of-surface-3);
+}
+
+/* machine-authored identifiers are always mono (§5.3.4) */
+.of-mono {
+  font-family: var(--of-font-mono);
+  font-size: 0.95em;
+  letter-spacing: -0.01em;
+}
+
+.of-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* chips */
+.opsflow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  margin-left: 6px;
+  border-radius: var(--of-radius-full);
+  border: 1px solid transparent;
+  font-size: var(--of-text-micro);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  animation: of-pop var(--of-dur-2) var(--of-ease-out) both;
+}
+
+.opsflow-chip--low {
+  background: var(--of-gate-soft);
+  border-color: color-mix(in srgb, var(--of-gate) 35%, transparent);
+  color: var(--of-gate);
+}
+
+.opsflow-chip--degraded {
+  background: var(--of-replay-soft);
+  border-color: color-mix(in srgb, var(--of-replay) 35%, transparent);
+  color: var(--of-replay);
+}
+
+/* status chips on the Holds table — values unchanged, colour by agency */
+.of-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px;
+  border-radius: var(--of-radius-full);
+  border: 1px solid transparent;
+  font-size: var(--of-text-micro);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.of-status-chip::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: var(--of-radius-full);
+  background: currentColor;
+}
+
+.of-status-chip--held {
+  background: var(--of-gate-soft);
+  border-color: color-mix(in srgb, var(--of-gate) 35%, transparent);
+  color: var(--of-gate);
+}
+
+.of-status-chip--confirmed {
+  background: var(--of-commit-soft);
+  border-color: color-mix(in srgb, var(--of-commit) 35%, transparent);
+  color: var(--of-commit);
+}
+
+.of-status-chip--neutral {
+  background: var(--of-surface-3);
+  border-color: var(--of-border-strong);
+  color: var(--of-text-2);
+}
+
+.of-row--expired {
+  opacity: 0.62;
+}
+
+.of-row-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.of-row-actions button {
+  padding: 5px 10px;
+  font-size: var(--of-text-meta);
+}
+
+/* TTL countdown ring (§7.6) */
+.of-ttl {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-variant-numeric: tabular-nums;
+  color: var(--of-text-2);
+  font-size: var(--of-text-meta);
+}
+
+.of-ttl__ring {
+  flex: none;
+  transform: rotate(-90deg);
+}
+
+.of-ttl__track {
+  fill: none;
+  stroke: var(--of-border);
+  stroke-width: 3;
+}
+
+.of-ttl__value {
+  fill: none;
+  stroke: var(--of-gate);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke var(--of-dur-3) var(--of-ease-out);
+}
+
+.of-ttl--urgent .of-ttl__value {
+  stroke: var(--of-fault);
+  animation: of-breathe 1s var(--of-ease-in-out) infinite;
+}
+
+.of-ttl--expired .of-ttl__value {
+  stroke: var(--of-text-3);
+  animation: none;
+}
+
+/* =========================================================================
+   9. Skeleton loading (§7.3)
+   ========================================================================= */
+
+.of-skel-row td {
+  padding-block: 11px;
+}
+
+.of-skel {
+  display: block;
+  height: 10px;
+  border-radius: var(--of-radius-full);
+  background: linear-gradient(
+    110deg,
+    var(--of-surface-3) 8%,
+    color-mix(in srgb, var(--of-text-3) 22%, var(--of-surface-3)) 18%,
+    var(--of-surface-3) 33%
+  );
+  background-size: 220% 100%;
+  animation: of-shimmer 1.2s linear infinite;
+}
+
+.of-skel-row:nth-child(2) .of-skel {
+  animation-delay: 90ms;
+}
+
+.of-skel-row:nth-child(3) .of-skel {
+  animation-delay: 180ms;
+}
+
+.of-skel--sku {
+  width: 92px;
+}
+.of-skel--title {
+  width: 72%;
+}
+.of-skel--sm {
+  width: 34px;
+}
+.of-skel--num {
+  width: 44px;
+  margin-left: auto;
+}
+
+/* =========================================================================
+   10. Agent Activity widget (§7.2) — the centrepiece
+   ========================================================================= */
+
+.of-activity {
+  display: grid;
+  gap: var(--of-space-3);
+  padding: var(--of-space-4);
+  border: 1px solid color-mix(in srgb, var(--of-signal) 30%, var(--of-border));
+  border-radius: var(--of-radius-md);
+  background:
+    linear-gradient(180deg, var(--of-signal-soft) 0%, transparent 70%),
+    var(--of-panel-bg);
+  box-shadow: var(--of-shadow-1), var(--of-inset-top);
+  animation: of-rise var(--of-dur-3) var(--of-ease-out) both;
+}
+
+.of-activity__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--of-space-2);
+  flex-wrap: wrap;
+}
+
+.of-activity__eyebrow {
+  font-size: var(--of-text-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  color: var(--of-signal);
+}
+
+.of-activity__tool {
+  font-family: var(--of-font-mono);
+  font-size: var(--of-text-body);
+  color: var(--of-text);
+}
+
+.of-activity__rationale {
+  color: var(--of-text-2);
+  font-size: var(--of-text-body-sm);
+}
+
+.of-activity__elapsed {
+  margin-left: auto;
+  font-family: var(--of-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--of-text-meta);
+  color: var(--of-text-3);
+}
+
+/* the three-dot in-flight pulse */
+.of-dots {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.of-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: var(--of-radius-full);
+  background: var(--of-signal);
+  animation: of-dot-pulse 1.1s var(--of-ease-in-out) infinite;
+}
+
+.of-dots span:nth-child(2) {
+  animation-delay: 160ms;
+}
+.of-dots span:nth-child(3) {
+  animation-delay: 320ms;
+}
+
+/* the five-node route rail */
+.of-rail {
+  display: block;
+  width: 100%;
+  height: 30px;
+  overflow: visible;
+}
+
+.of-rail__wire {
+  stroke: var(--of-border-strong);
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.of-rail__wire--done {
+  stroke: var(--of-signal);
+}
+
+/* the packet travelling down the wire */
+.of-rail__wire--active {
+  stroke: var(--of-signal);
+  stroke-dasharray: 12 14;
+  animation: of-wire 1.1s linear infinite;
+}
+
+.of-rail__node {
+  fill: var(--of-surface);
+  stroke: var(--of-border-strong);
+  stroke-width: 2;
+  transition: fill var(--of-dur-2) var(--of-ease-out), stroke var(--of-dur-2) var(--of-ease-out);
+}
+
+.of-rail__node--done {
+  fill: var(--of-signal);
+  stroke: var(--of-signal);
+}
+
+.of-rail__node--active {
+  fill: var(--of-signal);
+  stroke: var(--of-signal);
+}
+
+/* human gate nodes stay open rings and pulse until clicked (§3.1) */
+.of-rail__node--gate {
+  fill: var(--of-surface);
+  stroke: var(--of-gate);
+}
+
+.of-rail__node--gate.of-rail__node--active {
+  animation: of-gate-pulse 1.4s var(--of-ease-in-out) infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.of-rail__label {
+  font-family: var(--of-font-mono);
+  font-size: 8px;
+  fill: var(--of-text-3);
+  text-anchor: middle;
+  letter-spacing: 0.02em;
+}
+
+.of-rail__label--active {
+  fill: var(--of-signal);
+}
+
+/* =========================================================================
+   11. Shipping quote card (§9) — .opsflow-quote asserted by E2E
+   ========================================================================= */
+
+.opsflow-quote {
+  border: 1px solid var(--of-panel-border);
+  border-radius: var(--of-radius-md);
+  background: var(--of-panel-bg);
+  box-shadow: var(--of-shadow-1), var(--of-inset-top);
+  padding: var(--of-space-5);
+  margin-bottom: var(--of-space-4);
+  animation: of-rise var(--of-dur-3) var(--of-ease-out) both;
+}
+
+.opsflow-quote__head {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--of-space-2);
+  font-size: var(--of-text-label);
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  font-weight: 600;
+  color: var(--of-text-3);
+}
+
+.opsflow-quote__total {
+  font-size: var(--of-text-metric);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  color: var(--of-signal);
+  padding: var(--of-space-2) 0 var(--of-space-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.opsflow-quote ul,
+.opsflow-quote ol {
+  margin: var(--of-space-2) 0 0;
+  padding-left: var(--of-space-5);
+  font-size: var(--of-text-body-sm);
+  color: var(--of-text-2);
+  display: grid;
+  gap: 5px;
+}
+
+.opsflow-quote ol li::marker {
+  color: var(--of-text-3);
+  font-family: var(--of-font-mono);
+  font-size: 0.85em;
+}
+
+.of-quote__section {
+  margin-top: var(--of-space-3);
+  padding-top: var(--of-space-3);
+  border-top: 1px solid var(--of-border);
+  font-size: var(--of-text-body-sm);
+  color: var(--of-text-2);
+}
+
+.of-quote__excluded {
+  color: var(--of-fault);
+  font-weight: 500;
+}
+
+.opsflow-quote > button {
+  margin-top: var(--of-space-4);
+}
+
+/* =========================================================================
+   12. Co-Execution Timeline (§7.4, FR-14)
+   ========================================================================= */
+
+.opsflow-timeline__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 460px;
+  overflow-y: auto;
+  padding-right: var(--of-space-1);
+}
+
+@media (min-width: 1120px) {
+  .opsflow > .opsflow-timeline .opsflow-timeline__list {
+    max-height: none;
+    flex: 1 1 auto;
+  }
+}
+
+.opsflow-timeline__entry {
+  position: relative;
+  border-left: none;
+  padding: 0 0 var(--of-space-4) var(--of-space-6);
+  animation: of-rise var(--of-dur-3) var(--of-ease-out) both;
+}
+
+/* the rail draws downward as rows arrive */
+.opsflow-timeline__entry::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 14px;
+  bottom: 0;
+  width: 2px;
+  background: var(--of-border);
+  transform-origin: top;
+  animation: of-bar-grow var(--of-dur-3) var(--of-ease-out) both;
+}
+
+.opsflow-timeline__entry:last-child::before {
+  display: none;
+}
+
+.opsflow-timeline__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--of-space-2);
+  min-height: 20px;
+}
+
+.opsflow-timeline__elapsed {
+  margin-left: auto;
+  color: var(--of-text-3);
+  font-family: var(--of-font-mono);
+  font-size: var(--of-text-meta);
+  font-variant-numeric: tabular-nums;
+}
+
+/* status dot — colour AND shape, never colour alone (§10) */
+.of-dot {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--of-radius-full);
+  border: 2px solid var(--of-border-strong);
+  background: var(--of-surface);
+  display: grid;
+  place-items: center;
+}
+
+.of-dot svg {
+  width: 8px;
+  height: 8px;
+}
+
+.of-dot--running {
+  border-color: var(--of-status-running);
+  background: var(--of-signal-soft);
+}
+
+.of-dot--running::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: var(--of-radius-full);
+  border: 2px solid var(--of-status-running);
+  animation: of-halo 1.6s var(--of-ease-out) infinite;
+}
+
+.of-dot--done {
+  border-color: var(--of-status-done);
+  background: var(--of-commit-soft);
+  color: var(--of-status-done);
+}
+
+.of-dot--done svg path {
+  stroke: currentColor;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 14;
+  animation: of-draw 260ms var(--of-ease-out) both;
+  --of-draw-length: 14;
+}
+
+.of-dot--error {
+  border-color: var(--of-status-error);
+  background: var(--of-fault-soft);
+  color: var(--of-status-error);
+  animation: of-shake 420ms var(--of-ease-out) 3;
+}
+
+.of-dot--error svg path {
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.of-dot--degraded {
+  border-color: var(--of-status-degraded);
+  background: var(--of-replay-soft);
+  animation: of-breathe 2.4s var(--of-ease-in-out) infinite;
+}
+
+/* chassis StepStatusIndicator, flattened into the row (kept from DP-UI) */
+.opsflow-timeline .ui-step-status__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  gap: var(--of-space-2);
+}
+
+.opsflow-timeline .ui-step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--of-space-2);
+}
+
+.opsflow-timeline .ui-badge {
+  border: 1px solid var(--of-border-strong);
+  border-radius: var(--of-radius-full);
+  padding: 1px 9px;
+  font-size: var(--of-text-micro);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--of-text-3);
+}
+
+.opsflow-timeline .ui-badge--done {
+  border-color: color-mix(in srgb, var(--of-commit) 45%, transparent);
+  background: var(--of-commit-soft);
+  color: var(--of-commit);
+}
+
+.opsflow-timeline .ui-badge--error {
+  border-color: color-mix(in srgb, var(--of-fault) 45%, transparent);
+  background: var(--of-fault-soft);
+  color: var(--of-fault);
+}
+
+.opsflow-timeline .ui-step__label {
+  color: var(--of-text);
+  font-family: var(--of-font-mono);
+  font-size: var(--of-text-meta);
+}
+
+/* payload wells — dense by default, inspectable on demand */
+.opsflow-timeline pre,
+.opsflow-inspector pre {
+  background: var(--of-canvas-2);
+  border: 1px solid var(--of-border);
+  border-radius: var(--of-radius-sm);
+  padding: var(--of-space-2) var(--of-space-3);
+  overflow: auto;
+  max-height: 220px;
+  font-size: var(--of-text-meta);
+  line-height: 1.5;
+  color: var(--of-text-2);
+  margin: var(--of-space-2) 0 0;
+}
+
+.opsflow-timeline pre {
+  max-height: 92px;
+  transition: max-height var(--of-dur-3) var(--of-ease-in-out);
+  cursor: zoom-in;
+}
+
+.opsflow-timeline pre:hover,
+.opsflow-timeline pre:focus-within {
+  max-height: 320px;
+}
+
+/* =========================================================================
+   13. Savings meter (§7.7, FR-15) — .opsflow-meter asserted by E2E
+   ========================================================================= */
+
+.opsflow-meter {
+  border: 1px solid var(--of-panel-border);
+  border-left: 3px solid var(--of-signal);
+  border-radius: var(--of-radius-md);
+  background: var(--of-panel-bg);
+  box-shadow: var(--of-shadow-1), var(--of-inset-top);
+  padding: var(--of-space-4) var(--of-space-5);
+  font-size: var(--of-text-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.of-meter {
+  display: grid;
+  gap: var(--of-space-3);
+}
+
+.of-meter__top {
+  display: flex;
+  align-items: baseline;
+  gap: var(--of-space-3);
+  flex-wrap: wrap;
+}
+
+.of-meter__value {
+  font-size: var(--of-text-metric-lg);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--of-commit);
+}
+
+.of-meter__unit {
+  font-size: var(--of-text-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  color: var(--of-text-3);
+}
+
+.of-meter__stats {
+  margin-left: auto;
+  display: inline-flex;
+  gap: var(--of-space-4);
+  font-family: var(--of-font-mono);
+  font-size: var(--of-text-meta);
+  color: var(--of-text-2);
+}
+
+.of-meter__bars {
+  display: grid;
+  gap: 6px;
+}
+
+.of-bar {
+  display: grid;
+  grid-template-columns: 96px 1fr auto;
+  align-items: center;
+  gap: var(--of-space-3);
+  font-size: var(--of-text-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: var(--of-text-3);
+}
+
+.of-bar__track {
+  height: 8px;
+  border-radius: var(--of-radius-full);
+  background: var(--of-canvas-2);
+  overflow: hidden;
+}
+
+.of-bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--of-radius-full);
+  transform-origin: left;
+  animation: of-bar-grow 700ms var(--of-ease-out) both;
+}
+
+.of-bar--baseline .of-bar__fill {
+  background: var(--of-text-3);
+}
+
+.of-bar--actual .of-bar__fill {
+  background: linear-gradient(90deg, var(--of-signal), var(--of-commit));
+  animation-delay: 120ms;
+}
+
+.of-meter__readout {
+  color: var(--of-text-3);
+  font-size: var(--of-text-meta);
+}
+
+/* =========================================================================
+   14. Tool Inspector (§9, FR-10) — [data-tool] asserted by E2E
+   ========================================================================= */
+
+.opsflow-inspector [data-tool] {
+  border: 1px solid var(--of-border);
+  border-radius: var(--of-radius-md);
+  padding: var(--of-space-4);
+  margin-bottom: var(--of-space-3);
+  background: var(--of-surface-2);
+  animation: of-rise var(--of-dur-3) var(--of-ease-out) both;
+}
+
+.opsflow-inspector [data-tool]:nth-child(2) {
+  animation-delay: 40ms;
+}
+.opsflow-inspector [data-tool]:nth-child(3) {
+  animation-delay: 80ms;
+}
+.opsflow-inspector [data-tool]:nth-child(4) {
+  animation-delay: 120ms;
+}
+.opsflow-inspector [data-tool]:nth-child(5) {
+  animation-delay: 160ms;
+}
+
+.opsflow-inspector h4 {
+  margin: 0 0 var(--of-space-1);
+  color: var(--of-text);
+  font-family: var(--of-font-mono);
+  font-size: var(--of-text-h3);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.opsflow-inspector p {
+  margin: 0 0 var(--of-space-2);
+  color: var(--of-text-2);
+  font-size: var(--of-text-body-sm);
+}
+
+/* readOnly = Signal (agent may act freely) · confirm-required = Gate (you decide) */
+.opsflow-inspector [data-tool] > span {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: var(--of-radius-full);
+  border: 1px solid color-mix(in srgb, var(--of-signal) 35%, transparent);
+  background: var(--of-signal-soft);
+  color: var(--of-signal);
+  font-size: var(--of-text-micro);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.opsflow-inspector [data-tool="hold_order"] > span,
+.opsflow-inspector [data-tool="confirm_fulfillment"] > span {
+  border-color: color-mix(in srgb, var(--of-gate) 40%, transparent);
+  background: var(--of-gate-soft);
+  color: var(--of-gate);
+}
+
+/* =========================================================================
+   15. Confirmation dialog (§7.5, FR-05/FR-06)
+   ========================================================================= */
+
+.opsflow-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: var(--of-scrim);
+  -webkit-backdrop-filter: blur(6px) saturate(0.85);
+  backdrop-filter: blur(6px) saturate(0.85);
+  animation: of-fade-in 160ms var(--of-ease-out) both;
+}
+
+.opsflow-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  min-width: 320px;
+  max-width: 620px;
+  width: calc(100vw - var(--of-space-8));
+  padding: var(--of-space-6);
+  padding-left: var(--of-space-6);
+  border: 1px solid var(--of-border);
+  border-left: 4px solid var(--of-gate);
+  border-radius: var(--of-radius-lg);
+  background: var(--of-surface);
+  color: var(--of-text);
+  box-shadow: var(--of-shadow-3);
+  animation: of-dialog-in 240ms var(--of-ease-spring) both;
+}
+
+.opsflow-dialog__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--of-text-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  color: var(--of-gate);
+}
+
+.opsflow-dialog h2 {
+  margin: var(--of-space-2) 0 var(--of-space-2);
+  font-size: var(--of-text-h3);
+}
+
+.opsflow-dialog h2 .of-mono {
+  color: var(--of-signal);
+}
+
+.opsflow-dialog p {
+  color: var(--of-text-2);
+  font-size: var(--of-text-body);
+  margin-bottom: var(--of-space-4);
+}
+
+.opsflow-dialog pre {
+  background: var(--of-canvas-2);
+  border: 1px solid var(--of-border);
+  border-radius: var(--of-radius-sm);
+  padding: var(--of-space-3);
+  overflow: auto;
+  max-height: 220px;
+  font-size: var(--of-text-body-sm);
+  line-height: 1.55;
+  color: var(--of-text);
+  margin: 0;
+}
+
+.opsflow-dialog__actions {
+  display: flex;
+  gap: var(--of-space-2);
+  justify-content: flex-end;
+  margin-top: var(--of-space-5);
+}
+
+.opsflow-dialog__actions .opsflow-primary {
+  background: var(--of-gate);
+  border-color: var(--of-gate);
+  color: var(--of-gate-on);
+}
+
+.opsflow-dialog__actions .opsflow-primary:hover:not(:disabled) {
+  background-color: var(--of-gate-hover);
+  border-color: var(--of-gate-hover);
+}
+
+/* =========================================================================
+   16. Alerts & committed banner
+   ========================================================================= */
+
+[role="alert"]:not(.opsflow-banner) {
+  display: grid;
+  gap: var(--of-space-2);
+  justify-items: start;
+  border: 1px solid color-mix(in srgb, var(--of-fault) 40%, transparent);
+  border-left: 3px solid var(--of-fault);
+  background: var(--of-fault-soft);
+  color: var(--of-text);
+  padding: var(--of-space-3) var(--of-space-4);
+  border-radius: var(--of-radius-md);
+  font-size: var(--of-text-body-sm);
+  animation: of-shake 420ms var(--of-ease-out) 1;
+}
+
+[role="alert"]:not(.opsflow-banner) pre {
+  width: 100%;
+  background: var(--of-surface);
+  border: 1px solid var(--of-border);
+  border-radius: var(--of-radius-sm);
+  padding: var(--of-space-2) var(--of-space-3);
+  font-size: var(--of-text-meta);
+  overflow: auto;
+  margin: 0;
+}
+
+.of-committed {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--of-space-3);
+  margin-top: var(--of-space-4);
+  padding: var(--of-space-3) var(--of-space-4);
+  border: 1px solid color-mix(in srgb, var(--of-commit) 40%, transparent);
+  border-left: 3px solid var(--of-commit);
+  border-radius: var(--of-radius-md);
+  background: var(--of-commit-soft);
+  color: var(--of-text);
+  font-size: var(--of-text-body-sm);
+  animation: of-pop var(--of-dur-3) var(--of-ease-spring) both;
+}
+
+.of-committed svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--of-commit);
+}
+
+.of-committed svg path {
+  stroke: currentColor;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 32;
+  animation: of-draw 420ms var(--of-ease-out) 120ms both;
+  --of-draw-length: 32;
+}
+
+.of-row--committed td {
+  animation: of-commit-flash 600ms var(--of-ease-out) both;
+}
+
+/* =========================================================================
+   17. Empty-state mark
+   ========================================================================= */
+
+.of-empty-mark {
+  opacity: 0.55;
+}
+
+.of-empty-mark .of-mark__wire {
+  stroke: var(--of-text-3);
+  stroke-width: 1.75;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.of-empty-mark .of-mark__node {
+  fill: var(--of-text-3);
+}
+
+.of-empty-mark .of-mark__gate {
+  fill: none;
+  stroke: var(--of-gate);
+  stroke-width: 2;
+}

@@ -7,6 +7,8 @@ import { CoExecutionTimeline } from "src/ui/components/CoExecutionTimeline.tsx";
 import { SavingsMeter } from "src/ui/components/SavingsMeter.tsx";
 import { ToolInspector } from "src/ui/components/ToolInspector.tsx";
 import { ConfirmDialog, useConfirmDialogState } from "src/ui/components/ConfirmDialog.tsx";
+import { ThemeToggle } from "src/ui/components/ThemeToggle.tsx";
+import { SignalMark, InspectIcon } from "src/ui/components/Icons.tsx";
 import { BatchScreen } from "src/ui/screens/BatchScreen.tsx";
 import { ShippingScreen } from "src/ui/screens/ShippingScreen.tsx";
 import { HoldsScreen } from "src/ui/screens/HoldsScreen.tsx";
@@ -53,11 +55,26 @@ export function App({ probe }: { probe: Probe }): JSX.Element {
       {!probe.available && <WebMcpBanner probe={probe} />}
       {degraded && <DegradedBanner degraded={degraded} />}
       <header className="opsflow-header">
-        <h1>OpsFlow</h1>
+        {/* The Signal mark is a legend for the trust model: five nodes, one per
+            tool, the fourth an open ring because that is where the human
+            decides (visual_identity_plan.md §2.2). */}
+        <span className="opsflow-brand">
+          <SignalMark size={16} />
+          <h1>OpsFlow</h1>
+        </span>
         <span className="opsflow-tagline">Agent-native fulfillment console</span>
-        <span className="opsflow-badge" aria-label="synthetic data badge">Synthetic data — all 200 SKUs are generated. Every record carries synthetic:true (NFR-04).</span>
+        <span className="opsflow-badge" aria-label="synthetic data badge">
+          <span aria-hidden="true">Synthetic data</span>
+          <span className="opsflow-badge__full">Synthetic data — all 200 SKUs are generated. Every record carries synthetic:true (NFR-04).</span>
+        </span>
         <span className="opsflow-header__spacer" />
-        <button onClick={() => setInspectorOpen((v) => !v)}>Inspect tools (5)</button>
+        <span className="opsflow-header__actions">
+          <button className="of-icon-btn" onClick={() => setInspectorOpen((v) => !v)} aria-expanded={inspectorOpen}>
+            <InspectIcon />
+            Inspect tools (5)
+          </button>
+          <ThemeToggle />
+        </span>
       </header>
       <div role="tablist" onKeyDown={handleTabKeyDown}>
         <button role="tab" aria-selected={activeTab === "batch"} aria-controls="panel-batch" id="tab-batch" ref={(el) => { tabRefs.current.batch = el; }} onClick={() => setActiveTab("batch")} tabIndex={activeTab === "batch" ? 0 : -1}>Batch</button>

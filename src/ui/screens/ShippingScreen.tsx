@@ -2,6 +2,7 @@ import * as React from "react";
 import { executeToolCompat } from "src/webmcp/policy.ts";
 import { useSession } from "src/ui/state/session.ts";
 import type { ShippingZone, ServiceLevel } from "src/engine/types.ts";
+import { SignalMark } from "src/ui/components/Icons.tsx";
 
 function formatCents(cents: number): string {
   return "$" + (cents / 100).toFixed(2);
@@ -30,7 +31,10 @@ export function ShippingScreen(): JSX.Element {
   return (
     <div>
       {!lastQuote && !submitting && (
-        <div className="opsflow-empty">No shipping quote yet — run a batch or use the declarative form below.</div>
+        <div className="opsflow-empty">
+          <SignalMark size={22} className="opsflow-mark of-empty-mark" />
+          <span>No shipping quote yet — run a batch or use the declarative form below.</span>
+        </div>
       )}
       {lastQuote && (
         <div className="opsflow-quote">
@@ -43,10 +47,10 @@ export function ShippingScreen(): JSX.Element {
               ))}
             </ul>
           )}
-          {lastQuote.surcharges.length === 0 && <div>No surcharges</div>}
+          {lastQuote.surcharges.length === 0 && <div className="of-quote__section">No surcharges</div>}
           {lastQuote.excluded.length > 0 && (
-            <div>
-              <div>{lastQuote.excluded.length} variant(s) excluded from quote:</div>
+            <div className="of-quote__section">
+              <div className="of-quote__excluded">{lastQuote.excluded.length} variant(s) excluded from quote:</div>
               <ul>
                 {lastQuote.excluded.map((e) => (
                   <li key={e.sku}>{e.sku}: {e.reason}</li>
@@ -65,6 +69,7 @@ export function ShippingScreen(): JSX.Element {
         </div>
       )}
       <form className="opsflow-form" toolname="calculate_shipping" onSubmit={handleDeclarativeSubmit} aria-label="Shipping calculator (declarative WebMCP form)">
+        <span className="of-ribbon" aria-hidden="true">WebMCP · Declarative</span>
         <label>
           Zone
           <select name="zone" value={zone} onChange={(e) => setZone(Number(e.target.value) as ShippingZone)} tooldescription="Shipping zone 1–5; 4 is the demo default">

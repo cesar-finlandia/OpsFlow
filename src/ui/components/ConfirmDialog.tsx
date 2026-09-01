@@ -1,5 +1,6 @@
 import * as React from "react";
 import type { ToolName } from "src/engine/types.ts";
+import { GateIcon } from "src/ui/components/Icons.tsx";
 
 type Req = { tool: ToolName; args: Record<string, unknown>; summary: string };
 
@@ -101,12 +102,16 @@ export function ConfirmDialog({ request, onResolve }: { request: Req | null; onR
 
   return (
     <>
-      <div data-testid="confirm-backdrop" onClick={() => onResolve(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", zIndex: 999 }} />
-      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="confirm-title" tabIndex={-1} style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)", background: "white", color: "black", padding: 24, zIndex: 1000, minWidth: 320, maxWidth: 600 }}>
-        <h2 id="confirm-title">Confirm {request.tool}</h2>
+      <div data-testid="confirm-backdrop" className="opsflow-dialog-backdrop" onClick={() => onResolve(false)} />
+      {/* The gate is the emotional peak of the product (§7.5): the backdrop blur
+          makes the app visibly stop, the amber rail marks it as the one place a
+          human decides, and the arguments stay literal — never summarised. */}
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="confirm-title" tabIndex={-1} className="opsflow-dialog">
+        <span className="opsflow-dialog__eyebrow"><GateIcon />Awaiting your confirmation</span>
+        <h2 id="confirm-title">Confirm <span className="of-mono">{request.tool}</span></h2>
         <p>{request.summary}</p>
-        <pre style={{ background: "#f5f5f5", padding: 12, overflow: "auto", maxHeight: 200 }}>{JSON.stringify(request.args, null, 2)}</pre>
-        <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 16 }}>
+        <pre>{JSON.stringify(request.args, null, 2)}</pre>
+        <div className="opsflow-dialog__actions">
           <button type="button" onClick={() => onResolve(false)}>Cancel</button>
           <button type="button" className="opsflow-primary" ref={confirmBtnRef} data-testid="confirm-action" onClick={() => onResolve(true)}>Confirm</button>
         </div>

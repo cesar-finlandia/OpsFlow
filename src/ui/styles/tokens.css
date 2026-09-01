@@ -1,0 +1,224 @@
+/*
+  OpsFlow — "Signal & Slate" token layer
+  Source of truth: design_documents/visual_identity_plan.md §3, §5, §6, §7.1
+
+  Two independent attributes live on <html>:
+    data-theme="operator"          → chassis identity slot (src/platform/ui, never edited, NFR-05)
+    data-mode="light" | "dark"     → OpsFlow colour mode, owned by src/ui/theme/mode.ts
+
+  Components reference ONLY --of-* roles, never a raw hex. Swapping a palette is a
+  change to this file alone. The chassis --ui-* contract is re-pointed at the bottom
+  so chassis components (StepStatusIndicator, CitationDisplay) inherit the identity
+  without any chassis edit.
+*/
+
+:root {
+  /* ---------- typography (§5) ---------- */
+  --of-font-sans:
+    "Geist Sans Variable", "Geist Sans", "Inter var", Inter,
+    "Segoe UI Variable Text", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --of-font-mono:
+    "Geist Mono Variable", "Geist Mono", "JetBrains Mono", ui-monospace,
+    "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
+
+  --of-text-micro: 0.625rem;      /* 10 */
+  --of-text-label: 0.6875rem;     /* 11 */
+  --of-text-meta: 0.75rem;        /* 12 */
+  --of-text-body-sm: 0.8125rem;   /* 13 */
+  --of-text-body: 0.875rem;       /* 14 */
+  --of-text-lead: 1rem;           /* 16 */
+  --of-text-h3: 1.125rem;         /* 18 */
+  --of-text-h2: 1.375rem;         /* 22 */
+  --of-text-h1: 1.625rem;         /* 26 */
+  --of-text-metric: 2.125rem;     /* 34 */
+  --of-text-metric-lg: 2.75rem;   /* 44 */
+
+  --of-lh-tight: 1.2;
+  --of-lh-snug: 1.35;
+  --of-lh-normal: 1.55;
+  --of-track-label: 0.08em;
+  --of-track-tight: -0.015em;
+
+  /* ---------- spacing (§6.1) ---------- */
+  --of-space-1: 4px;
+  --of-space-2: 8px;
+  --of-space-3: 12px;
+  --of-space-4: 16px;
+  --of-space-5: 20px;
+  --of-space-6: 24px;
+  --of-space-8: 32px;
+  --of-space-10: 40px;
+  --of-space-12: 48px;
+  --of-space-16: 64px;
+
+  /* ---------- radii (§6.2) ---------- */
+  --of-radius-xs: 3px;
+  --of-radius-sm: 5px;
+  --of-radius-md: 8px;
+  --of-radius-lg: 12px;
+  --of-radius-full: 999px;
+
+  /* ---------- layout (§6.4) ---------- */
+  --of-layout-max: 1240px;
+  --of-rail-width: 380px;
+
+  /* ---------- motion (§7.1) ---------- */
+  --of-dur-1: 120ms;
+  --of-dur-2: 200ms;
+  --of-dur-3: 320ms;
+  --of-dur-4: 480ms;
+  --of-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --of-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --of-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* =========================================================================
+   LIGHT — "Paper" (§3.2)
+   Default for :root so a document with no data-mode still renders coherently;
+   the inline boot script in index.html stamps data-mode before first paint.
+   ========================================================================= */
+:root,
+:root[data-mode="light"] {
+  color-scheme: light;
+
+  --of-canvas: #f2f5f7;
+  --of-canvas-2: #e8edf1;
+  --of-surface: #ffffff;
+  --of-surface-2: #f7f9fb;
+  --of-surface-3: #ecf1f5;
+  --of-border: #dce3e9;
+  --of-border-strong: #b9c6d1;
+  --of-text: #0e1720;
+  --of-text-2: #4a5c6c;
+  --of-text-3: #64768a;
+
+  --of-signal: #0b7285;
+  --of-signal-hover: #095e6e;
+  --of-signal-strong: #064f5d;
+  --of-signal-soft: #dceef2;
+  --of-signal-on: #ffffff;
+
+  --of-gate: #9a5800;
+  --of-gate-hover: #834a00;
+  --of-gate-soft: #fdf0dc;
+  --of-gate-on: #2a1900;
+
+  --of-commit: #0f7a45;
+  --of-commit-soft: #ddf2e6;
+
+  --of-fault: #b0231a;
+  --of-fault-soft: #fce5e2;
+
+  --of-replay: #5847c4;
+  --of-replay-soft: #e9e7fb;
+
+  --of-focus: #0b7285;
+  --of-focus-halo: rgba(11, 114, 133, 0.28);
+
+  --of-shadow-1: 0 1px 2px rgba(14, 23, 32, 0.06), 0 1px 1px rgba(14, 23, 32, 0.04);
+  --of-shadow-2: 0 4px 12px rgba(14, 23, 32, 0.08), 0 1px 3px rgba(14, 23, 32, 0.06);
+  --of-shadow-3: 0 18px 48px rgba(14, 23, 32, 0.18), 0 2px 8px rgba(14, 23, 32, 0.1);
+  --of-inset-top: none;
+
+  --of-grid-line: rgba(14, 23, 32, 0.055);
+  --of-aurora-1: rgba(11, 114, 133, 0.1);
+  --of-aurora-2: rgba(88, 71, 196, 0.08);
+  --of-scrim: rgba(20, 30, 40, 0.42);
+  --of-header-bg: rgba(255, 255, 255, 0.82);
+}
+
+/* =========================================================================
+   DARK — "Ink" (§3.3)
+   ========================================================================= */
+:root[data-mode="dark"] {
+  color-scheme: dark;
+
+  --of-canvas: #0a0f14;
+  --of-canvas-2: #0e151c;
+  --of-surface: #121b23;
+  --of-surface-2: #18232d;
+  --of-surface-3: #1f2c38;
+  --of-border: #24333f;
+  --of-border-strong: #3a4c5a;
+  --of-text: #e7eef4;
+  --of-text-2: #9db0bf;
+  --of-text-3: #788c9e;
+
+  --of-signal: #35c4d6;
+  --of-signal-hover: #5ad5e4;
+  --of-signal-strong: #7fe2ed;
+  --of-signal-soft: #0b2d34;
+  --of-signal-on: #04191d;
+
+  --of-gate: #f0a22e;
+  --of-gate-hover: #f8b857;
+  --of-gate-soft: #33230a;
+  --of-gate-on: #241703;
+
+  --of-commit: #45d18a;
+  --of-commit-soft: #0c2a1d;
+
+  --of-fault: #ff7f70;
+  --of-fault-soft: #351210;
+
+  --of-replay: #a99bff;
+  --of-replay-soft: #1d1a38;
+
+  --of-focus: #35c4d6;
+  --of-focus-halo: rgba(53, 196, 214, 0.3);
+
+  /* Dark has no drop shadow — depth is border + inset highlight (§6.3). */
+  --of-shadow-1: none;
+  --of-shadow-2: none;
+  --of-shadow-3: 0 24px 64px rgba(0, 0, 0, 0.62), 0 2px 10px rgba(0, 0, 0, 0.5);
+  --of-inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  --of-grid-line: rgba(160, 200, 225, 0.05);
+  --of-aurora-1: rgba(53, 196, 214, 0.12);
+  --of-aurora-2: rgba(169, 155, 255, 0.09);
+  --of-scrim: rgba(4, 8, 12, 0.62);
+  --of-header-bg: rgba(18, 27, 35, 0.82);
+}
+
+/* =========================================================================
+   Semantic aliases (§3.4) — the only names components should reach for.
+   ========================================================================= */
+:root {
+  --of-app-bg: var(--of-canvas);
+  --of-panel-bg: var(--of-surface);
+  --of-panel-border: var(--of-border);
+  --of-input-bg: var(--of-surface-2);
+
+  --of-accent: var(--of-signal);
+  --of-accent-fg: var(--of-signal-on);
+  --of-accent-soft: var(--of-signal-soft);
+
+  --of-status-running: var(--of-signal);
+  --of-status-done: var(--of-commit);
+  --of-status-error: var(--of-fault);
+  --of-status-gate: var(--of-gate);
+  --of-status-degraded: var(--of-replay);
+}
+
+/* =========================================================================
+   Chassis bridge (§3.5) — re-point the --ui-* contract at our tokens.
+   Imported AFTER src/platform/ui/themes/operator.css, equal specificity,
+   so these win on cascade order without editing a single chassis file.
+   ========================================================================= */
+:root[data-theme="operator"],
+:root[data-theme="minimal"],
+:root[data-theme="editorial"] {
+  --ui-font-family: var(--of-font-sans);
+  --ui-font-size-base: 14px;
+  --ui-line-height: var(--of-lh-normal);
+  --ui-spacing-unit: 4px;
+  --ui-radius: var(--of-radius-sm);
+  --ui-color-bg: var(--of-canvas);
+  --ui-color-fg: var(--of-text);
+  --ui-color-accent: var(--of-signal);
+  --ui-color-accent-soft: var(--of-signal-soft);
+  --ui-color-degraded-bg: var(--of-replay-soft);
+  --ui-layout-max: var(--of-layout-max);
+  --ui-layout-gap: var(--of-space-4);
+}

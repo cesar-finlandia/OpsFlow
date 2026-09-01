@@ -3,6 +3,8 @@ import { holdsStore } from "src/engine/domain/holdsStore.ts";
 import { useSession } from "src/ui/state/session.ts";
 import { executeToolCompat } from "src/webmcp/policy.ts";
 import type { Hold, Fulfillment } from "src/engine/types.ts";
+import { TtlRing } from "src/ui/components/TtlRing.tsx";
+import { CommittedIcon, SignalMark } from "src/ui/components/Icons.tsx";
 
 function formatCents(cents: number): string {
   return "$" + (cents / 100).toFixed(2);
@@ -27,24 +29,32 @@ function HoldRow({ hold, onRelease, onConfirm }: { hold: Hold; onRelease: (id: s
   const mm = String(Math.floor(remaining / 60)).padStart(2, "0");
   const ss = String(remaining % 60).padStart(2, "0");
   const showExpiredText = isExpiredRow;
-  // status chip color
-  let statusStyle: React.CSSProperties = {};
-  if (hold.status === "held") statusStyle = { background: "#f59e0b", color: "white", padding: "2px 6px", borderRadius: 4 };
-  else if (hold.status === "confirmed") statusStyle = { background: "#16a34a", color: "white", padding: "2px 6px", borderRadius: 4 };
-  else statusStyle = { background: "#9ca3af", color: "white", padding: "2px 6px", borderRadius: 4 };
+  // Status colour encodes agency (visual_identity_plan.md §3.1): held = Gate
+  // amber (you must act), confirmed = Commit green, everything else neutral.
+  // The literal status word is unchanged and still carries the meaning.
+  const statusVariant =
+    hold.status === "held" ? "held" : hold.status === "confirmed" ? "confirmed" : "neutral";
+  const grantedSeconds = Math.max(1, hold.ttl_minutes * 60);
 
   return (
-    <tr {...(isExpiredRow ? { "aria-label": "expired" } : {})}>
-      <td style={{ fontFamily: "monospace" }}>{hold.hold_id}</td>
+    <tr className={isExpiredRow ? "of-row--expired" : undefined} {...(isExpiredRow ? { "aria-label": "expired" } : {})}>
+      <td className="of-mono">{hold.hold_id}</td>
       <td>{hold.line_items.length} SKUs</td>
-      <td><span style={statusStyle}>{hold.status}</span></td>
+      <td><span className={`of-status-chip of-status-chip--${statusVariant}`}>{hold.status}</span></td>
       <td>
-        {isExpiredLive ? "Expired" : `expires in ${mm}:${ss}`}
-        {showExpiredText && <span> Expired — release to clear</span>}
+        <span className="of-ttl">
+          <TtlRing remaining={remaining} total={grantedSeconds} expired={isExpiredRow} />
+          <span>
+            {isExpiredLive ? "Expired" : `expires in ${mm}:${ss}`}
+            {showExpiredText && <span> Expired — release to clear</span>}
+          </span>
+        </span>
       </td>
       <td>
-        <button type="button" onClick={() => onRelease(hold.hold_id)}>Release</button>
-        <button type="button" onClick={() => onConfirm(hold.hold_id)} disabled={isExpiredRow} title={isExpiredRow ? "Hold expired — cannot confirm" : undefined}>Confirm</button>
+        <span className="of-row-actions">
+          <button type="button" onClick={() => onRelease(hold.hold_id)}>Release</button>
+          <button type="button" onClick={() => onConfirm(hold.hold_id)} disabled={isExpiredRow} title={isExpiredRow ? "Hold expired — cannot confirm" : undefined}>Confirm</button>
+        </span>
       </td>
     </tr>
   );
@@ -106,10 +116,16 @@ export function HoldsScreen(): JSX.Element {
   if (holds.length === 0) {
     return (
       <div>
-        <div className="opsflow-empty">No holds yet — search and hold variants from the Batch tab.</div>
+        <div className="opsflow-empty">
+          <SignalMark size={22} className="opsflow-mark of-empty-mark" />
+          <span>No holds yet — search and hold variants from the Batch tab.</span>
+        </div>
         {lastFulfillment && (
-          <div role="status" style={{ background: "#dcfce7", padding: 8, marginTop: 8 }}>
+          <div role="status" className="of-committed">
+            <CommittedIcon />
+            <span>
             Fulfillment {lastFulfillment.fulfillment.fulfillment_id} confirmed from {lastFulfillment.fulfillment.hold_id} — {lastFulfillment.fulfillment.line_items.length} SKUs, {formatCents(lastFulfillment.fulfillment.total_cents)} — manual baseline 25 min saved.
+            </span>
           </div>
         )}
       </div>
@@ -118,6 +134,7 @@ export function HoldsScreen(): JSX.Element {
 
   return (
     <div>
+      <div className="of-table-wrap">
       <table>
         <thead>
           <tr>
@@ -134,10 +151,14 @@ export function HoldsScreen(): JSX.Element {
           ))}
         </tbody>
       </table>
+      </div>
       {confirmError && <div role="alert">{confirmError}</div>}
       {lastFulfillment && (
-        <div role="status" style={{ background: "#dcfce7", padding: 8, marginTop: 8 }}>
+        <div role="status" className="of-committed">
+          <CommittedIcon />
+          <span>
           Fulfillment {lastFulfillment.fulfillment.fulfillment_id} confirmed from {lastFulfillment.fulfillment.hold_id} — {lastFulfillment.fulfillment.line_items.length} SKUs, {formatCents(lastFulfillment.fulfillment.total_cents)} — manual baseline 25 min saved.
+          </span>
         </div>
       )}
     </div>
