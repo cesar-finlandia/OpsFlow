@@ -1,0 +1,50 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "id": "resilience",
+      "status": "pass",
+      "message": "component resilience included — ok"
+    },
+    {
+      "id": "platform",
+      "status": "pass",
+      "message": "component platform included — ok"
+    },
+    {
+      "id": "ideation",
+      "status": "pass",
+      "message": "component ideation included — ok"
+    },
+    {
+      "id": "context",
+      "status": "pass",
+      "message": "component context included — ok"
+    },
+    {
+      "id": "dev-tooling",
+      "status": "pass",
+      "message": "component dev-tooling included — ok"
+    },
+    {
+      "id": "data",
+      "status": "pass",
+      "message": "component data included — ok"
+    },
+    {
+      "id": "cost",
+      "status": "pass",
+      "message": "component cost included — ok"
+    },
+    {
+      "id": "provenance",
+      "status": "pass",
+      "message": "component provenance included — ok"
+    },
+    {
+      "id": "gemini-key",
+      "status": "warn",
+      "message": "GEMINI_API_KEY absent — deterministic planner will be used"
+    }
+  ]
+}
