@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "app": { "name": "OpsFlow", "theme": "operator", "trace_prefix": "opsflow" },
+  "planner": {
+    "provider": "gemini",
+    "model": "gemini-2.5-flash",
+    "max_output_tokens": 1024,
+    "temperature": 0.1,
+    "fallback": "deterministic"
+  },
+  "tools": {
+    "max_text_chars": 200,
+    "max_result_chars": 4000,
+    "max_items": 50,
+    "default_limit": 25,
+    "network_timeout_ms": 900
+  },
+  "holds": { "default_ttl_minutes": 15, "min_ttl_minutes": 1, "max_ttl_minutes": 120 },
+  "resilience": {
+    "timeout_ms": 8000,
+    "retries": 1,
+    "backoff": { "policy": "exponential", "base_ms": 250, "factor": 2, "max_ms": 2000, "jitter": true },
+    "fallback_chain": { "order": ["cache", "replay", "none"] }
+  },
+  "context": { "max_tokens": 8000, "reserve_output": 1024 },
+  "cost": { "store_path": "data/cost-store.json", "budget_path": "config/cost.json" }
+}

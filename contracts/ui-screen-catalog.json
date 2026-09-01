@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chassis/contracts/ui-screen-catalog.json",
+  "version": "1.0.0",
+  "screens": [
+    { "id": "batch", "title": "Batch — Search & holds" },
+    { "id": "shipping", "title": "Shipping — Quote & zones" },
+    { "id": "holds", "title": "Holds — Active holds" },
+    { "id": "widget-detail", "title": "Widget Detail" },
+    { "id": "search", "title": "Search Inventory" }
+  ]
+}

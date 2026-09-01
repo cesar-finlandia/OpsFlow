@@ -1,0 +1,14 @@
+{
+  "_comment": "MAN-03 origin isolation: Origin-Agent-Cluster: ?1 enables origin isolation required for WebMCP; Permissions-Policy: tools=(self) gates the 'tools' policy to same-origin only. No cross-origin iframe exists (NFR-12), so allow=\"tools\" is deliberately unused.",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Origin-Agent-Cluster", "value": "?1" },
+        { "key": "Permissions-Policy", "value": "tools=(self)" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

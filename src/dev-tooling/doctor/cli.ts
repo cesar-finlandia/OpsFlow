@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// DP-DEV W2 doctor - derived from assembly.manifest.json, GEMINI_API_KEY warn not fail
+// DP-DEV W2 doctor - derived from assembly.manifest.json, planner credentials warn not fail
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 
@@ -40,12 +40,15 @@ async function main() {
     }
   }
 
-  // GEMINI_API_KEY must be warn not fail when absent
-  const hasGemini = !!process.env.GEMINI_API_KEY;
+  // Planner credentials must warn, never fail: the deterministic planner keeps
+  // the app fully functional without them (FR-12, NFR-11). The planner reaches
+  // Gemini 2.5 Flash through Vertex AI, so the credential is a service account
+  // and a project id, not an API key.
+  const hasGemini = !!process.env.GOOGLE_VERTEX_PROJECT && (!!process.env.GOOGLE_VERTEX_CREDENTIALS || process.env.GOOGLE_VERTEX_USE_METADATA === "1");
   if (hasGemini) {
-    checks.push({ id: "gemini-key", status: "pass", message: "GEMINI_API_KEY present" });
+    checks.push({ id: "planner-credentials", status: "pass", message: "Vertex AI configured — Gemini 2.5 Flash planner enabled" });
   } else {
-    checks.push({ id: "gemini-key", status: "warn", message: "GEMINI_API_KEY absent — deterministic planner will be used" });
+    checks.push({ id: "planner-credentials", status: "warn", message: "Vertex AI not configured (GOOGLE_VERTEX_PROJECT/GOOGLE_VERTEX_CREDENTIALS) — deterministic planner will be used" });
   }
 
   const ok = checks.every((c) => c.status !== "fail");

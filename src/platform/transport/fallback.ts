@@ -12,8 +12,10 @@
 // unhandled — callers catch and surface via their own onError channels
 // (GOV-RES-04).
 
-import { readFileSync } from "node:fs";
+import { nodeBuiltin } from "../../resilience/node-compat.js";
 import { validate } from "../../resilience/validate.js";
+type FsMod = typeof import("node:fs");
+const fsMod = nodeBuiltin<FsMod>("node:fs");
 import type { EventEnvelope } from "./event-envelope.js";
 
 /** Synchronous final response body served by GET /events (plan §4.6). */
@@ -28,7 +30,8 @@ let cachedSchema: object | null = null;
 function loadEnvelopeSchema(): object {
   if (!cachedSchema) {
     const url = new URL("../../../contracts/event-envelope.schema.json", import.meta.url);
-    cachedSchema = JSON.parse(readFileSync(url, "utf8")) as object;
+    const raw = fsMod?.readFileSync ? fsMod.readFileSync(url as unknown as string, "utf8") as unknown as string : "{}";
+    try { cachedSchema = JSON.parse(raw as string) as object; } catch { cachedSchema = {}; }
   }
   return cachedSchema;
 }

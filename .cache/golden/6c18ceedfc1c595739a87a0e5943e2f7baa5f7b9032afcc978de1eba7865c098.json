@@ -1,0 +1,42 @@
+{
+  "key": "6c18ceedfc1c595739a87a0e5943e2f7baa5f7b9032afcc978de1eba7865c098",
+  "value": {
+    "ok": true,
+    "data": {
+      "zone": 4,
+      "service": "ground",
+      "items": [
+        {
+          "sku": "OPS-1002-BLU-M",
+          "qty": 1
+        },
+        {
+          "sku": "OPS-1005-BLU-M",
+          "qty": 1
+        },
+        {
+          "sku": "OPS-1007-BLU-M",
+          "qty": 1
+        },
+        {
+          "sku": "OPS-1009-BLU-L",
+          "qty": 1
+        }
+      ],
+      "total_weight_g": 4831,
+      "subtotal_cents": 4400,
+      "base_rate_cents": 950,
+      "surcharges": [],
+      "total_cents": 5605,
+      "explain": [
+        "Zone 4 base 950c",
+        "Weight 4831g @95c/100g"
+      ],
+      "excluded": []
+    }
+  },
+  "meta": {
+    "seeded": true,
+    "created_at": "2026-09-01T13:33:23.550Z"
+  }
+}

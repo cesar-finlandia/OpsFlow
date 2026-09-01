@@ -1,0 +1,50 @@
+{
+  "$id": "https://chassis/contracts/cost-store-snapshot.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "DP-CORE cost-store snapshot — TypeScript writes {version, entries: UsageEntry[]}; Python CostStore reads same file via CLI. Schema accepts both shapes and superset for cross-language seam.",
+  "title": "CostStoreSnapshot",
+  "description": "Snapshot written by src/engine/usage.ts (DP-CORE W6) and rendered by src/cost/cli.py. TS shape is {version, entries}, Python shape is {version, records, totals_by_provider, global_totals}; superset with both is valid.",
+  "type": "object",
+  "required": ["version"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semver — must be 1.0.0"
+    },
+    "entries": {
+      "type": "array",
+      "description": "DP-CORE entries written by recordUsage — each counted via src/context count()",
+      "items": {
+        "type": "object",
+        "required": ["role", "model", "prompt_tokens", "completion_tokens", "ts"],
+        "properties": {
+          "role": { "type": "string" },
+          "model": { "type": "string" },
+          "prompt_tokens": { "type": "integer", "minimum": 0 },
+          "completion_tokens": { "type": "integer", "minimum": 0 },
+          "ts": { "type": "string", "format": "date-time" },
+          "budget_path": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "records": {
+      "type": "array",
+      "description": "Python CostStore records — optional superset compat"
+    },
+    "totals_by_provider": {
+      "type": "object",
+      "description": "Python aggregates — optional"
+    },
+    "global_totals": {
+      "type": "object",
+      "description": "Python global totals — optional",
+      "properties": {
+        "provider": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

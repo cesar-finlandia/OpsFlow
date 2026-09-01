@@ -4,8 +4,21 @@
 // against contracts/event-envelope.schema.json BEFORE emit; a malformed
 // envelope throws EnvelopeValidationError — the publisher never silently emits.
 
-import { randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { nodeBuiltin } from "../../resilience/node-compat.js";
+type CryptoMod = typeof import("node:crypto");
+type FsMod = typeof import("node:fs");
+const cryptoMod = nodeBuiltin<CryptoMod>("node:crypto");
+const fsMod = nodeBuiltin<FsMod>("node:fs");
+function randomUUID(): string {
+  if (cryptoMod?.randomUUID) return cryptoMod.randomUUID();
+  const g = globalThis as unknown as { crypto?: { randomUUID?: () => string } };
+  if (g.crypto?.randomUUID) return g.crypto.randomUUID();
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+function readFileSyncWrap(path: string, encoding: string): string {
+  if (fsMod?.readFileSync) return fsMod.readFileSync(path as unknown as string, encoding as unknown as "utf8") as unknown as string;
+  throw new Error("readFileSync unavailable in browser");
+}
 import { validate, ValidationError } from "../../resilience/validate.js";
 import type { EventEnvelope } from "./event-envelope.js";
 import type { FallbackSnapshot } from "./fallback.js";
@@ -21,7 +34,8 @@ let cachedSchema: object | null = null;
 function loadEnvelopeSchema(): object {
   if (!cachedSchema) {
     const url = new URL("../../../contracts/event-envelope.schema.json", import.meta.url);
-    cachedSchema = JSON.parse(readFileSync(url, "utf8")) as object;
+    const raw = fsMod?.readFileSync ? fsMod.readFileSync(url as unknown as string, "utf8") as unknown as string : "{}";
+    cachedSchema = JSON.parse(raw as string) as object;
   }
   return cachedSchema;
 }
@@ -92,7 +106,7 @@ export interface CollectablePublisher extends SsePublisher {
   readonly wsConnectionCount: number;
 }
 
-type TransportKind = "sse" | "websocket" | "none";
+type TransportKind = "sse" | "websocket" | "none" | "memory";
 
 /** TRANSPORT knob: config/transport.json + env override; safe fallback "sse" + warn (GOV-RES-02). */
 export function resolveTransport(transport?: TransportKind | string): TransportKind {
@@ -100,16 +114,15 @@ export function resolveTransport(transport?: TransportKind | string): TransportK
   if (raw === undefined) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const cfg = JSON.parse(
-        readFileSync(new URL("../../../config/transport.json", import.meta.url), "utf8"),
-      ) as { transport?: string };
+      const rawCfg = fsMod?.readFileSync ? fsMod.readFileSync(new URL("../../../config/transport.json", import.meta.url) as unknown as string, "utf8") as unknown as string : '{"transport":"sse"}';
+      const cfg = JSON.parse(rawCfg as string) as { transport?: string };
       raw = process.env.TRANSPORT ?? cfg.transport ?? undefined;
     } catch {
       raw = process.env.TRANSPORT ?? undefined; // missing/malformed config → env or default
     }
   }
   if (raw === "websocket") return "websocket"; // adapter lands in a later step; caller warns below
-  if (raw === "none" || raw === "sse") return raw;
+  if (raw === "none" || raw === "sse" || raw === "memory") return raw as TransportKind;
   if (raw !== undefined && raw !== "sse") console.warn(`[transport] unknown TRANSPORT "${raw}" → falling back to "sse"`);
   return "sse";
 }
@@ -204,7 +217,7 @@ class SsePublisherImpl implements CollectablePublisher {
       await this.wsHub.fanout(envelope); // identical JSON payload, TRN-06/GOV-REU-01
       return;
     }
-    if (kind === "none") return; // TRN-RES-03 collect-only path; validation already done
+    if (kind === "none" || kind === "memory") return; // TRN-RES-03 collect-only path; validation already done
     await this.hub.fanout(envelope);
   }
 
@@ -215,7 +228,7 @@ class SsePublisherImpl implements CollectablePublisher {
 }
 
 /** Factory — selects SSE or WS adapter by config/env (default "sse", TRN-03). */
-export function createPublisher(transport?: "sse" | "websocket"): CollectablePublisher {
+export function createPublisher(transport?: "sse" | "websocket" | "memory" | "none"): CollectablePublisher {
   resolveTransport(transport);
   return new SsePublisherImpl();
 }

@@ -12,7 +12,7 @@
   "properties": {
     "step_id": {
       "type": "string",
-      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "pattern": "^[a-z0-9]+([._-][a-z0-9]+)*$",
       "minLength": 1,
       "maxLength": 64,
       "description": "Opaque kebab-case step identifier. No semantics enforced. Examples: retrieval-pass, widget-overview, synthesis."
@@ -39,8 +39,9 @@
     },
     "trace_id": {
       "type": "string",
-      "format": "uuid",
-      "description": "Optional correlation id across steps of one run. UUID v4."
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "Optional correlation id across steps of one run. UUID v4 or opsflow prefixed."
     },
     "degraded": {
       "type": "boolean",

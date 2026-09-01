@@ -1,0 +1,69 @@
+{
+  "version": "1.0.0",
+  "synthetic": true,
+  "generated_at": "2026-09-01T00:00:00.000Z",
+  "zones": {
+    "1": {
+      "base_cents": 550,
+      "per_100g_cents": 45,
+      "service_multiplier": {
+        "ground": 1,
+        "expedited": 1.6,
+        "overnight": 2.4
+      }
+    },
+    "2": {
+      "base_cents": 700,
+      "per_100g_cents": 65,
+      "service_multiplier": {
+        "ground": 1,
+        "expedited": 1.6,
+        "overnight": 2.4
+      }
+    },
+    "3": {
+      "base_cents": 850,
+      "per_100g_cents": 80,
+      "service_multiplier": {
+        "ground": 1,
+        "expedited": 1.6,
+        "overnight": 2.4
+      }
+    },
+    "4": {
+      "base_cents": 950,
+      "per_100g_cents": 95,
+      "service_multiplier": {
+        "ground": 1,
+        "expedited": 1.6,
+        "overnight": 2.4
+      }
+    },
+    "5": {
+      "base_cents": 1150,
+      "per_100g_cents": 120,
+      "service_multiplier": {
+        "ground": 1,
+        "expedited": 1.6,
+        "overnight": 2.4
+      }
+    }
+  },
+  "surcharges": [
+    {
+      "code": "OVERSIZE",
+      "label": "Oversize (any item > 1500g)",
+      "amount_cents": 800
+    },
+    {
+      "code": "REMOTE",
+      "label": "Remote zone (zones 4-5)",
+      "amount_cents": 600
+    },
+    {
+      "code": "EXPEDITED_FUEL",
+      "label": "Expedited fuel surcharge",
+      "amount_cents": 450
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "demodrive-script",
+  "type": "object",
+  "properties": {
+    "version": { "type": "string" },
+    "base_url": { "type": "string" },
+    "viewport": { "type": "object" },
+    "video": { "type": "object" },
+    "layout": { "type": "string" },
+    "theme": { "type": ["string", "null"] },
+    "data_source": { "type": "object" },
+    "steps": { "type": "array" }
+  },
+  "required": ["version", "base_url", "steps"],
+  "additionalProperties": true
+}

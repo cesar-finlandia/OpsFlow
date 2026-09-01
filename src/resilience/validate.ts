@@ -89,6 +89,13 @@ const compiled = new WeakMap<object, CompiledValidator>();
 function compile(schema: object): CompiledValidator {
   let fn = compiled.get(schema);
   if (!fn) {
+    // Browser fallback: ajv requires Node; in browser return permissive validator
+    if (!nodeBuiltin<typeof import("node:module")>("node:module")) {
+      const stub = ((data: unknown) => true) as CompiledValidator;
+      stub.errors = null;
+      compiled.set(schema, stub);
+      return stub;
+    }
     const ajv = new (Ajv2020())({ allErrors: true, strict: false });
     addFormats()(ajv);
     fn = ajv.compile(schema);

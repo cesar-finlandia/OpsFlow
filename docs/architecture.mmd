@@ -1,0 +1,45 @@
+```mermaid
+flowchart LR
+  subgraph AGENTS["Agents that call the tools"]
+    CGPT["ChatGPT in-app browser agent<br/>(WebMCP by default)"]
+    CHR["Chrome 149+<br/>chrome://flags/#enable-webmcp-testing"]
+    INP["In-page Agent Console (DP-AGENT)<br/>orchestrator.ts · executeTool"]
+  end
+
+  subgraph DOC["Origin-isolated document — MAN-03<br/>Origin-Agent-Cluster: ?1 · Permissions-Policy: tools=(self)"]
+    MC["document.modelContext — MAN-01<br/>src/webmcp/register.ts"]
+    T1["search_inventory<br/>readOnlyHint"]
+    T2["filter_variants<br/>readOnlyHint"]
+    T3["calculate_shipping<br/>readOnlyHint"]
+    T4["hold_order<br/>confirm required"]
+    T5["confirm_fulfillment<br/>confirm required"]
+    FORM["Declarative form — MAN-02<br/>ShippingScreen.tsx"]
+    DOM["Domain logic (DP-DOM)<br/>catalog · filter · shipping · holds"]
+    UI["Console UI (DP-UI)<br/>Batch · Shipping · Holds + Tool Inspector"]
+    CORE["Engine core (DP-CORE)<br/>types · envelopes · withResilience · golden cache · context · usage"]
+  end
+
+  subgraph VRC["Vercel (DP-SRV / DP-SHIP)"]
+    API["/api/health · /api/inventory/search · /api/inventory/filter<br/>/api/shipping/quote · /api/agent/plan"]
+  end
+
+  GEM["Gemini 2.5 Flash (Gemini API)<br/>server-side only — GEMINI_API_KEY"]
+  DATA[("data/catalog.json · zones.json · baseline.json<br/>200 SKUs · synthetic:true (DP-SEED)")]
+  CACHE[(".cache/golden/*.json<br/>golden replay (DP-CORE/DP-SEED)")]
+
+  CGPT --> MC
+  CHR --> MC
+  INP --> MC
+  MC --> T1 & T2 & T3 & T4 & T5
+  T1 & T2 & T3 & T4 & T5 --> DOM
+  FORM --> DOM
+  DOM --> DATA
+  DOM -- "network path, read-only tools" --> API
+  API --> DATA
+  INP -- "POST /api/agent/plan" --> API
+  API -- "withResilience · NFR-06" --> GEM
+  T1 & T2 & T3 & T4 & T5 -- "EventEnvelope started/done/error" --> CORE
+  CORE --> UI
+  CORE -. "degraded replay (FR-18)" .-> CACHE
+  UI -- "confirmation dialog before hold/confirm" --> T4 & T5
+```

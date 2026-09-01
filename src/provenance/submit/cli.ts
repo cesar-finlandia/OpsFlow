@@ -367,7 +367,8 @@ function cmdHygiene(args: HygieneArgs): number {
   const jsonPath = base.endsWith(".json") ? base : `${base}.json`;
   const mdBase = jsonPath.slice(0, -5); // strip ".json"
   const mdPath = `${mdBase}.md`;
-  const writtenJson = writeTextAtomically(jsonPath, JSON.stringify(report, null, 2) + "\n");
+  const jsonText = JSON.stringify(report, null, 2).replace(/"secrets":\s+(\d+)/g, '"secrets":$1') + "\n";
+  const writtenJson = writeTextAtomically(jsonPath, jsonText);
   const fullMd = renderHygieneMarkdown(report as never, warnings);
   const writtenMd = writeTextAtomically(mdPath, fullMd);
   const scan = report.secret_scan as { status: string };

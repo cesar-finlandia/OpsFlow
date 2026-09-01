@@ -163,8 +163,10 @@ interface YamlListItem {
 export function parseTimingYaml(text: string): unknown {
   const lines = text.split(/\r?\n/).map(stripComment);
   const doc: Record<string, unknown> = {};
-  const items: YamlListItem[] = [];
+  const itemsByKey = new Map<string, YamlListItem[]>();
   let listKey: string | null = null;
+  let videoPolicy: Record<string, unknown> | null = null;
+  let inVideoPolicy = false;
 
   for (let i = 0; i < lines.length; i++) {
     const line = (lines[i] ?? "").replace(/\t/g, "  ");
@@ -172,7 +174,11 @@ export function parseTimingYaml(text: string): unknown {
 
     const listMatch = /^(\s*)-\s+(.*)$/.exec(line);
     if (listMatch && listKey !== null) {
-      items.push(parseListLine(listMatch[2] ?? ""));
+      const bucket = itemsByKey.get(listKey) ?? [];
+      bucket.push(parseListLine(listMatch[2] ?? ""));
+      itemsByKey.set(listKey, bucket);
+      // any indented content after a list item ends video_policy scope
+      inVideoPolicy = false;
       continue;
     }
     if (listMatch && listKey === null) {
@@ -183,22 +189,43 @@ export function parseTimingYaml(text: string): unknown {
     if (!kv) throw new Error(`cannot parse line ${i + 1}: "${line.trim()}"`);
     const [, indent, key, restRaw] = kv as unknown as [string, string, string, string];
     if (indent.length > 0) {
+      if (inVideoPolicy && videoPolicy) {
+        videoPolicy[key] = parseScalar(restRaw);
+        continue;
+      }
       // Continuation of the most recent block-style list item.
-      const last = items[items.length - 1];
+      const bucket = listKey ? itemsByKey.get(listKey) : undefined;
+      const last = bucket?.[bucket.length - 1];
       if (!last || last.flow) throw new Error(`unexpected indented key "${key}" at line ${i + 1}`);
       last.rest.push([key, parseScalar(restRaw)]);
       continue;
     }
+    // top-level key
+    inVideoPolicy = false;
     if (restRaw.trim() === "") {
-      // Block list header, e.g. `sections:`.
+      // Block header: either list (segments/sections) or nested map (video_policy)
+      if (key === "video_policy") {
+        videoPolicy = {};
+        doc[key] = videoPolicy;
+        inVideoPolicy = true;
+        // do not set listKey for video_policy; it's a map, not a list
+        continue;
+      }
+      // Block list header, e.g. `sections:` or `segments:`.
       listKey = key;
+      if (!itemsByKey.has(listKey)) itemsByKey.set(listKey, []);
+      continue;
+    }
+    // Handle inline flow map for video_policy: { max_seconds: 180, ... }
+    if (key === "video_policy" && restRaw.trim().startsWith("{")) {
+      try { doc[key] = parseFlowMapping(restRaw.trim().slice(1, -1)); } catch { doc[key] = parseScalar(restRaw); }
       continue;
     }
     doc[key] = parseScalar(restRaw);
   }
 
-  if (listKey !== null) {
-    doc[listKey] = items.map(materializeItem);
+  for (const [k, items] of itemsByKey.entries()) {
+    doc[k] = items.map(materializeItem);
   }
   return doc;
 }
@@ -266,8 +293,11 @@ export function validateTiming(doc: unknown, timingPath: string): TimingConfig {
   }
   const cfg = doc as unknown as TimingConfig;
   if (cfg.total_minutes != null) {
+    const rawSum = cfg.sections.reduce((s, sec) => s + sec.minutes, 0);
     const sum = sumSectionMinutes(cfg.sections);
-    if (Math.abs(sum - cfg.total_minutes) > 0.01) {
+    // Allow precise totals like 2.75 (165s) where rounded sum 2.8 differs by 0.05 from exact 2.75;
+    // accept either exact raw sum or rounded sum within tolerance.
+    if (Math.abs(rawSum - cfg.total_minutes) > 0.01 && Math.abs(sum - cfg.total_minutes) > 0.01) {
       throw new TimingValidationError(
         `timing validation: sum ${sum.toFixed(1)} != total ${Number(cfg.total_minutes).toFixed(1)} — adjust sections to sum to total`,
         timingPath,
@@ -293,7 +323,36 @@ export function loadTiming(path: string | null | undefined): TimingConfig | null
   const resolved = path.trim();
   try {
     const text = readFileSync(resolved, "utf8");
-    const parsed = /\.json$/i.test(resolved) ? JSON.parse(text) : parseTimingYaml(text);
+    let parsed: unknown = /\.json$/i.test(resolved) ? JSON.parse(text) : parseTimingYaml(text);
+    // DP-PITCH §6.1 compatibility: map segments/duration_s/total_s to sections/minutes/total_minutes
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      const doc = parsed as Record<string, unknown>;
+      if (doc["segments"] && !doc["sections"]) {
+        const segs = doc["segments"] as Array<Record<string, unknown>>;
+        doc["sections"] = segs.map((s) => ({
+          id: s["id"],
+          title: s["title"],
+          minutes: typeof s["minutes"] === "number" ? s["minutes"] : typeof s["duration_s"] === "number" ? (s["duration_s"] as number) / 60 : 0.5,
+          ...(typeof s["live"] === "boolean" ? { live: s["live"] } : {}),
+          ...(typeof s["description"] === "string" ? { description: s["description"] } : {}),
+        }));
+        // Ensure coexecution is live if none marked
+        const secs = doc["sections"] as Array<Record<string, unknown>>;
+        if (!secs.some((x) => x["live"] === true)) {
+          const cand = secs.find((x) => x["id"] === "coexecution") ?? secs[1];
+          if (cand) (cand as Record<string, unknown>)["live"] = true;
+        }
+      }
+      if (doc["total_s"] != null && doc["total_minutes"] == null) {
+        const ts = doc["total_s"] as number;
+        if (typeof ts === "number") doc["total_minutes"] = ts / 60;
+      }
+      // Handle total_s + video_policy target consistency
+      if (doc["total_minutes"] == null && doc["video_policy"] && typeof doc["video_policy"] === "object") {
+        const vp = doc["video_policy"] as Record<string, unknown>;
+        if (typeof vp["target_seconds"] === "number") doc["total_minutes"] = (vp["target_seconds"] as number) / 60;
+      }
+    }
     return validateTiming(parsed, resolved);
   } catch (err) {
     if (err instanceof TimingValidationError) throw err;

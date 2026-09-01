@@ -1,0 +1,65 @@
+{
+  "key": "1840672b5aba426779768af491767bcf072e4fdc53158253d6193dbfdb62885f",
+  "value": {
+    "ok": true,
+    "data": {
+      "matches": [
+        {
+          "sku": "OPS-1002-BLU-M",
+          "title": "Harbor Lightweight Parka",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 1100,
+          "stock": 3,
+          "low_stock": true
+        },
+        {
+          "sku": "OPS-1005-BLU-M",
+          "title": "Crimson Trail Windbreaker",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 1100,
+          "stock": 3,
+          "low_stock": true
+        },
+        {
+          "sku": "OPS-1007-BLU-M",
+          "title": "Sand Washed Tee",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 1100,
+          "stock": 3,
+          "low_stock": true
+        },
+        {
+          "sku": "OPS-1009-BLU-L",
+          "title": "Blue Breton Stripe Top",
+          "options": {
+            "size": "L",
+            "color": "Blue"
+          },
+          "price_cents": 1100,
+          "stock": 3,
+          "low_stock": true
+        }
+      ],
+      "total": 4,
+      "applied": [
+        "color=Blue",
+        "maxPriceCents=1200",
+        "low_stock (≤5)"
+      ],
+      "from_result_set": true
+    }
+  },
+  "meta": {
+    "seeded": true,
+    "created_at": "2026-09-01T13:33:23.547Z"
+  }
+}

@@ -1,0 +1,40 @@
+# timing.yaml — OpsFlow 2:45 script budgets (DP-PITCH W1)
+# Total must be 165 s; script CLI asserts total <= 175 s (MAN-06 headroom 15 s).
+version: "1.0.0"
+project: "OpsFlow"
+video_policy:
+  max_seconds: 180
+  target_seconds: 165
+  headroom_seconds: 15
+segments:
+  - id: "problem"
+    title: "Maya's six tabs; the 25-minute batch"
+    duration_s: 25
+    on_screen: "Maya's six tabs; the 25-minute batch (slide + screen recording)"
+    audio_must_say: "the problem, the persona, the 25-minute cost"
+    source: "slide + screen recording"
+  - id: "tools"
+    title: "Live URL + Tool Inspector — five tools"
+    duration_s: 30
+    on_screen: "Live URL opened in ChatGPT desktop in-app browser; Tool Inspector panel listing five tools with schemas"
+    audio_must_say: "the page registers five WebMCP tools with typed input schemas"
+    source: "live capture"
+  - id: "coexecution"
+    title: "Canonical goal → co-execution timeline → confirmation"
+    duration_s: 55
+    on_screen: "Canonical goal typed; co-execution timeline showing search_inventory → filter_variants → calculate_shipping, then confirmation dialog for hold_order being clicked, then confirm_fulfillment"
+    audio_must_say: "what the agent and the human each did, and why the confirmation step exists"
+    source: "live capture, demodrive fallback"
+  - id: "inspector"
+    title: "DevTools WebMCP inspector + registerTool code"
+    duration_s: 30
+    on_screen: "DevTools → Application → WebMCP inspector, then 5-second shot of src/webmcp/register.ts"
+    audio_must_say: "here is the imperative registerTool call — one call site, five tools, JSON Schema, annotations, abort handling"
+    source: "screen capture"
+  - id: "impact"
+    title: "Savings meter — 25 min → ~3 min — track line"
+    duration_s: 25
+    on_screen: "Savings meter and the delta 25 min → ~3 min; the track line"
+    audio_must_say: "the impact claim, stated as measured on synthetic data"
+    source: "live capture"
+total_s: 165

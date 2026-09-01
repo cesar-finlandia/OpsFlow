@@ -3,8 +3,10 @@
 // EventEnvelope contract (TRN-06); validates each received envelope via RES-04
 // after receive (§3.5). Never imports adapters (GOV-REU-03).
 
-import { readFileSync } from "node:fs";
+import { nodeBuiltin } from "../../resilience/node-compat.js";
 import { validate } from "../../resilience/validate.js";
+type FsMod = typeof import("node:fs");
+const fsMod = nodeBuiltin<FsMod>("node:fs");
 import { resolveApiBase } from "./fallback.js";
 import { subscribeViaNone } from "./adapters/none.js";
 import type { EventEnvelope } from "./event-envelope.js";
@@ -13,7 +15,8 @@ let cachedSchema: object | null = null;
 function loadEnvelopeSchema(): object {
   if (!cachedSchema) {
     const url = new URL("../../../contracts/event-envelope.schema.json", import.meta.url);
-    cachedSchema = JSON.parse(readFileSync(url, "utf8")) as object;
+    const raw = fsMod?.readFileSync ? fsMod.readFileSync(url as unknown as string, "utf8") as unknown as string : "{}";
+    try { cachedSchema = JSON.parse(raw as string) as object; } catch { cachedSchema = {}; }
   }
   return cachedSchema;
 }

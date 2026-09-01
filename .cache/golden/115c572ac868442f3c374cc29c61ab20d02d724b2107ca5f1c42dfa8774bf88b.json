@@ -1,0 +1,69 @@
+{
+  "key": "115c572ac868442f3c374cc29c61ab20d02d724b2107ca5f1c42dfa8774bf88b",
+  "value": {
+    "ok": true,
+    "data": {
+      "fulfillment": {
+        "fulfillment_id": "FUL-EFGH5678",
+        "hold_id": "HOLD-ABCD1234",
+        "confirmed_at": "2026-09-01T12:01:00.000Z",
+        "line_items": [
+          {
+            "sku": "OPS-1002-BLU-M",
+            "qty": 1
+          },
+          {
+            "sku": "OPS-1005-BLU-M",
+            "qty": 1
+          },
+          {
+            "sku": "OPS-1007-BLU-M",
+            "qty": 1
+          },
+          {
+            "sku": "OPS-1009-BLU-L",
+            "qty": 1
+          }
+        ],
+        "total_cents": 5605
+      },
+      "hold": {
+        "hold_id": "HOLD-ABCD1234",
+        "line_items": [
+          {
+            "sku": "OPS-1002-BLU-M",
+            "qty": 1
+          },
+          {
+            "sku": "OPS-1005-BLU-M",
+            "qty": 1
+          },
+          {
+            "sku": "OPS-1007-BLU-M",
+            "qty": 1
+          },
+          {
+            "sku": "OPS-1009-BLU-L",
+            "qty": 1
+          }
+        ],
+        "created_at": "2026-09-01T12:00:00.000Z",
+        "expires_at": "2026-09-01T12:15:00.000Z",
+        "ttl_minutes": 15,
+        "status": "confirmed",
+        "note": "demo batch — low-stock blues",
+        "quote": {
+          "zone": 4,
+          "service": "ground",
+          "total_weight_g": 4831,
+          "subtotal_cents": 4400,
+          "total_cents": 5605
+        }
+      }
+    }
+  },
+  "meta": {
+    "seeded": true,
+    "created_at": "2026-09-01T13:33:23.558Z"
+  }
+}

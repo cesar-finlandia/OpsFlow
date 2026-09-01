@@ -1,0 +1,184 @@
+{
+  "version": "1.0.0",
+  "trace_id": "opsflow-1725148800000",
+  "envelopes": [
+    {
+      "step_id": "agent.plan",
+      "status": "started",
+      "payload": { "goal": "hold all low-stock blue variants under $12 shipping to zone 4 for 15 minutes" },
+      "delay_ms": 0,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "agent.plan",
+      "status": "done",
+      "payload": {
+        "planner": "deterministic",
+        "steps": [
+          { "tool": "search_inventory", "args": { "query": "blue", "inStockOnly": false, "limit": 25 }, "rationale": "find blue variants" },
+          { "tool": "filter_variants", "args": { "options": { "color": "Blue" }, "maxPriceCents": 1200, "minStock": 1, "maxStock": 5, "limit": 25 }, "rationale": "narrow to low-stock Blues under $12" },
+          { "tool": "calculate_shipping", "args": { "items": [{ "sku": "OPS-1002-BLU-M", "qty": 1 }, { "sku": "OPS-1005-BLU-M", "qty": 1 }, { "sku": "OPS-1007-BLU-M", "qty": 1 }, { "sku": "OPS-1009-BLU-L", "qty": 1 }], "zone": 4, "service": "ground" }, "rationale": "quote zone 4 ground" },
+          { "tool": "hold_order", "args": { "lineItems": [{ "sku": "OPS-1002-BLU-M", "qty": 1 }, { "sku": "OPS-1005-BLU-M", "qty": 1 }, { "sku": "OPS-1007-BLU-M", "qty": 1 }, { "sku": "OPS-1009-BLU-L", "qty": 1 }], "ttlMinutes": 15, "note": "demo batch — low-stock blues" }, "rationale": "hold the batch" },
+          { "tool": "confirm_fulfillment", "args": { "holdId": "HOLD-ABCD1234" }, "rationale": "confirm after human gate" }
+        ],
+        "degraded": false
+      },
+      "delay_ms": 1200,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.search_inventory",
+      "status": "started",
+      "payload": { "args": { "query": "blue", "inStockOnly": false, "limit": 25 } },
+      "delay_ms": 400,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.search_inventory",
+      "status": "done",
+      "payload": {
+        "outcome": {
+          "ok": true,
+          "data": {
+            "matches": [
+              { "sku": "OPS-1002-BLU-M", "title": "Harbor Lightweight Parka", "options": { "size": "M", "color": "Blue" }, "price_cents": 1100, "stock": 3, "low_stock": true },
+              { "sku": "OPS-1005-BLU-M", "title": "Crimson Trail Windbreaker", "options": { "size": "M", "color": "Blue" }, "price_cents": 1100, "stock": 3, "low_stock": true },
+              { "sku": "OPS-1007-BLU-M", "title": "Sand Washed Tee", "options": { "size": "M", "color": "Blue" }, "price_cents": 1100, "stock": 3, "low_stock": true }
+            ],
+            "total": 34,
+            "truncated": true,
+            "query_echo": "blue"
+          }
+        }
+      },
+      "delay_ms": 2800,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.filter_variants",
+      "status": "started",
+      "payload": { "args": { "options": { "color": "Blue" }, "maxPriceCents": 1200, "minStock": 1, "maxStock": 5, "limit": 25 } },
+      "delay_ms": 400,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.filter_variants",
+      "status": "done",
+      "payload": {
+        "outcome": {
+          "ok": true,
+          "data": {
+            "matches": [
+              { "sku": "OPS-1002-BLU-M", "title": "Harbor Lightweight Parka", "options": { "size": "M", "color": "Blue" }, "price_cents": 1100, "stock": 3, "low_stock": true },
+              { "sku": "OPS-1005-BLU-M", "title": "Crimson Trail Windbreaker", "options": { "size": "M", "color": "Blue" }, "price_cents": 1100, "stock": 3, "low_stock": true },
+              { "sku": "OPS-1007-BLU-M", "title": "Sand Washed Tee", "options": { "size": "M", "color": "Blue" }, "price_cents": 1100, "stock": 3, "low_stock": true },
+              { "sku": "OPS-1009-BLU-L", "title": "Blue Breton Stripe Top", "options": { "size": "L", "color": "Blue" }, "price_cents": 1100, "stock": 3, "low_stock": true }
+            ],
+            "total": 4,
+            "applied": ["color=Blue", "maxPriceCents=1200", "low_stock (\u22645)"],
+            "from_result_set": true
+          }
+        }
+      },
+      "delay_ms": 2600,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.calculate_shipping",
+      "status": "started",
+      "payload": { "args": { "items": [{ "sku": "OPS-1002-BLU-M", "qty": 1 }, { "sku": "OPS-1005-BLU-M", "qty": 1 }, { "sku": "OPS-1007-BLU-M", "qty": 1 }, { "sku": "OPS-1009-BLU-L", "qty": 1 }], "zone": 4, "service": "ground" } },
+      "delay_ms": 400,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.calculate_shipping",
+      "status": "done",
+      "payload": {
+        "outcome": {
+          "ok": true,
+          "data": {
+            "zone": 4,
+            "service": "ground",
+            "items": [{ "sku": "OPS-1002-BLU-M", "qty": 1 }, { "sku": "OPS-1005-BLU-M", "qty": 1 }, { "sku": "OPS-1007-BLU-M", "qty": 1 }, { "sku": "OPS-1009-BLU-L", "qty": 1 }],
+            "total_weight_g": 4831,
+            "subtotal_cents": 4400,
+            "base_rate_cents": 950,
+            "surcharges": [],
+            "total_cents": 5605,
+            "explain": ["Zone 4 base 950c", "Weight 4831g @95c/100g"],
+            "excluded": []
+          }
+        }
+      },
+      "delay_ms": 3200,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.hold_order",
+      "status": "started",
+      "payload": { "args": { "lineItems": [{ "sku": "OPS-1002-BLU-M", "qty": 1 }, { "sku": "OPS-1005-BLU-M", "qty": 1 }, { "sku": "OPS-1007-BLU-M", "qty": 1 }, { "sku": "OPS-1009-BLU-L", "qty": 1 }], "ttlMinutes": 15, "note": "demo batch \u2014 low-stock blues" } },
+      "delay_ms": 400,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.hold_order",
+      "status": "done",
+      "payload": {
+        "outcome": {
+          "ok": true,
+          "data": {
+            "hold": {
+              "hold_id": "HOLD-ABCD1234",
+              "line_items": [{ "sku": "OPS-1002-BLU-M", "qty": 1 }, { "sku": "OPS-1005-BLU-M", "qty": 1 }, { "sku": "OPS-1007-BLU-M", "qty": 1 }, { "sku": "OPS-1009-BLU-L", "qty": 1 }],
+              "created_at": "2026-09-01T12:00:00.000Z",
+              "expires_at": "2026-09-01T12:15:00.000Z",
+              "ttl_minutes": 15,
+              "status": "held",
+              "note": "demo batch \u2014 low-stock blues",
+              "quote": { "zone": 4, "service": "ground", "total_weight_g": 4831, "subtotal_cents": 4400, "total_cents": 5605 }
+            },
+            "requires_confirmation": true
+          }
+        }
+      },
+      "delay_ms": 2800,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "session.confirm",
+      "status": "started",
+      "payload": { "tool": "hold_order", "args": { "lineItems": [{ "sku": "OPS-1002-BLU-M", "qty": 1 }, { "sku": "OPS-1005-BLU-M", "qty": 1 }, { "sku": "OPS-1007-BLU-M", "qty": 1 }, { "sku": "OPS-1009-BLU-L", "qty": 1 }], "ttlMinutes": 15 } },
+      "delay_ms": 800,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "session.confirm",
+      "status": "done",
+      "payload": { "granted": true },
+      "delay_ms": 20000,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.confirm_fulfillment",
+      "status": "started",
+      "payload": { "args": { "holdId": "HOLD-ABCD1234" } },
+      "delay_ms": 400,
+      "trace_id": "opsflow-1725148800000"
+    },
+    {
+      "step_id": "tool.confirm_fulfillment",
+      "status": "done",
+      "payload": {
+        "outcome": {
+          "ok": true,
+          "data": {
+            "fulfillment": { "fulfillment_id": "FUL-EFGH5678", "hold_id": "HOLD-ABCD1234", "confirmed_at": "2026-09-01T12:01:00.000Z", "line_items": [{ "sku": "OPS-1002-BLU-M", "qty": 1 }, { "sku": "OPS-1005-BLU-M", "qty": 1 }, { "sku": "OPS-1007-BLU-M", "qty": 1 }, { "sku": "OPS-1009-BLU-L", "qty": 1 }], "total_cents": 5605 },
+            "hold": { "hold_id": "HOLD-ABCD1234", "line_items": [{ "sku": "OPS-1002-BLU-M", "qty": 1 }, { "sku": "OPS-1005-BLU-M", "qty": 1 }, { "sku": "OPS-1007-BLU-M", "qty": 1 }, { "sku": "OPS-1009-BLU-L", "qty": 1 }], "created_at": "2026-09-01T12:00:00.000Z", "expires_at": "2026-09-01T12:15:00.000Z", "ttl_minutes": 15, "status": "confirmed", "note": "demo batch \u2014 low-stock blues", "quote": { "zone": 4, "service": "ground", "total_weight_g": 4831, "subtotal_cents": 4400, "total_cents": 5605 } }
+          }
+        }
+      },
+      "delay_ms": 2600,
+      "trace_id": "opsflow-1725148800000"
+    }
+  ]
+}

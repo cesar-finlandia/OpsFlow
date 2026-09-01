@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "demodrive-config",
+  "type": "object",
+  "properties": {
+    "version": { "type": "string" },
+    "browser": { "type": "object" },
+    "video": { "type": "object" },
+    "viewport": { "type": "object" },
+    "layout": { "type": "string" },
+    "output": { "type": "object" },
+    "timeouts": { "type": "object" }
+  },
+  "additionalProperties": true
+}

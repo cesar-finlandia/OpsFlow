@@ -1,0 +1,3347 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-09-01T00:00:00.000Z",
+  "synthetic": true,
+  "products": [
+    {
+      "id": "OPS-1001",
+      "title": "Cedar Waxed Canvas Jacket",
+      "brand": "NorthRange",
+      "category": "Outerwear",
+      "variants": [
+        {
+          "sku": "OPS-1001-BLA-XL",
+          "product_id": "OPS-1001",
+          "title": "Cedar Waxed Canvas Jacket",
+          "options": {
+            "size": "XL",
+            "color": "Black"
+          },
+          "price_cents": 2300,
+          "stock": 4,
+          "weight_g": 2319,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1001-OLI-L",
+          "product_id": "OPS-1001",
+          "title": "Cedar Waxed Canvas Jacket",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 1850,
+          "stock": 0,
+          "weight_g": 2229,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1001-SAN-M",
+          "product_id": "OPS-1001",
+          "title": "Cedar Waxed Canvas Jacket",
+          "options": {
+            "size": "M",
+            "color": "Sand"
+          },
+          "price_cents": 1100,
+          "stock": 33,
+          "weight_g": 306,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1001-SAN-XS",
+          "product_id": "OPS-1001",
+          "title": "Cedar Waxed Canvas Jacket",
+          "options": {
+            "size": "XS",
+            "color": "Sand"
+          },
+          "price_cents": 2650,
+          "stock": 0,
+          "weight_g": 1584,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1002",
+      "title": "Harbor Lightweight Parka",
+      "brand": "OpsFlow",
+      "category": "Tops",
+      "variants": [
+        {
+          "sku": "OPS-1002-BLU-M",
+          "product_id": "OPS-1002",
+          "title": "Harbor Lightweight Parka",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 1100,
+          "stock": 3,
+          "weight_g": 466,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1002-CRI-M",
+          "product_id": "OPS-1002",
+          "title": "Harbor Lightweight Parka",
+          "options": {
+            "size": "M",
+            "color": "Crimson"
+          },
+          "price_cents": 2850,
+          "stock": 41,
+          "weight_g": 210,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1002-OLI-XL",
+          "product_id": "OPS-1002",
+          "title": "Harbor Lightweight Parka",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 2700,
+          "stock": 51,
+          "weight_g": 1052,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1002-SAN-XL",
+          "product_id": "OPS-1002",
+          "title": "Harbor Lightweight Parka",
+          "options": {
+            "size": "XL",
+            "color": "Sand"
+          },
+          "price_cents": 3200,
+          "stock": 1,
+          "weight_g": 1767,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1003",
+      "title": "Field Study Chore Coat",
+      "brand": "Field Study",
+      "category": "Bottoms",
+      "variants": [
+        {
+          "sku": "OPS-1003-BLA-S",
+          "product_id": "OPS-1003",
+          "title": "Field Study Chore Coat",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 2550,
+          "stock": 10,
+          "weight_g": 1799,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1003-BLA-XS",
+          "product_id": "OPS-1003",
+          "title": "Field Study Chore Coat",
+          "options": {
+            "size": "XS",
+            "color": "Black"
+          },
+          "price_cents": 950,
+          "stock": 0,
+          "weight_g": 874,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1003-SAN-M",
+          "product_id": "OPS-1003",
+          "title": "Field Study Chore Coat",
+          "options": {
+            "size": "M",
+            "color": "Sand"
+          },
+          "price_cents": 2400,
+          "stock": 43,
+          "weight_g": 695,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1003-SAN-XL",
+          "product_id": "OPS-1003",
+          "title": "Field Study Chore Coat",
+          "options": {
+            "size": "XL",
+            "color": "Sand"
+          },
+          "price_cents": 3500,
+          "stock": 32,
+          "weight_g": 1534,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1004",
+      "title": "NorthRange Alpine Shell",
+      "brand": "OpsFlow",
+      "category": "Dresses",
+      "variants": [
+        {
+          "sku": "OPS-1004-BLA-M",
+          "product_id": "OPS-1004",
+          "title": "NorthRange Alpine Shell",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 3450,
+          "stock": 15,
+          "weight_g": 2049,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1004-CRI-XL",
+          "product_id": "OPS-1004",
+          "title": "NorthRange Alpine Shell",
+          "options": {
+            "size": "XL",
+            "color": "Crimson"
+          },
+          "price_cents": 4350,
+          "stock": 3,
+          "weight_g": 1032,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1004-OLI-L",
+          "product_id": "OPS-1004",
+          "title": "NorthRange Alpine Shell",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 4500,
+          "stock": 0,
+          "weight_g": 2005,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1004-OLI-S",
+          "product_id": "OPS-1004",
+          "title": "NorthRange Alpine Shell",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 3700,
+          "stock": 45,
+          "weight_g": 1143,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1005",
+      "title": "Crimson Trail Windbreaker",
+      "brand": "OpsFlow",
+      "category": "Knitwear",
+      "variants": [
+        {
+          "sku": "OPS-1005-BLA-XL",
+          "product_id": "OPS-1005",
+          "title": "Crimson Trail Windbreaker",
+          "options": {
+            "size": "XL",
+            "color": "Black"
+          },
+          "price_cents": 650,
+          "stock": 0,
+          "weight_g": 1014,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1005-BLA-XS",
+          "product_id": "OPS-1005",
+          "title": "Crimson Trail Windbreaker",
+          "options": {
+            "size": "XS",
+            "color": "Black"
+          },
+          "price_cents": 4350,
+          "stock": 3,
+          "weight_g": 2071,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1005-BLU-M",
+          "product_id": "OPS-1005",
+          "title": "Crimson Trail Windbreaker",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 1100,
+          "stock": 3,
+          "weight_g": 1483,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1005-OLI-L",
+          "product_id": "OPS-1005",
+          "title": "Crimson Trail Windbreaker",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 1700,
+          "stock": 4,
+          "weight_g": 1510,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1006",
+      "title": "Olive Everyday Oxford Shirt",
+      "brand": "Harbor Line",
+      "category": "Activewear",
+      "variants": [
+        {
+          "sku": "OPS-1006-OLI-L",
+          "product_id": "OPS-1006",
+          "title": "Olive Everyday Oxford Shirt",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 1350,
+          "stock": 52,
+          "weight_g": 2111,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1006-OLI-XL",
+          "product_id": "OPS-1006",
+          "title": "Olive Everyday Oxford Shirt",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 3450,
+          "stock": 2,
+          "weight_g": 1207,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1006-SAN-L",
+          "product_id": "OPS-1006",
+          "title": "Olive Everyday Oxford Shirt",
+          "options": {
+            "size": "L",
+            "color": "Sand"
+          },
+          "price_cents": 2850,
+          "stock": 80,
+          "weight_g": 2197,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1006-SAN-XS",
+          "product_id": "OPS-1006",
+          "title": "Olive Everyday Oxford Shirt",
+          "options": {
+            "size": "XS",
+            "color": "Sand"
+          },
+          "price_cents": 3950,
+          "stock": 4,
+          "weight_g": 1301,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1007",
+      "title": "Sand Washed Tee",
+      "brand": "Cedar & Thread",
+      "category": "Footwear",
+      "variants": [
+        {
+          "sku": "OPS-1007-BLA-L",
+          "product_id": "OPS-1007",
+          "title": "Sand Washed Tee",
+          "options": {
+            "size": "L",
+            "color": "Black"
+          },
+          "price_cents": 3550,
+          "stock": 0,
+          "weight_g": 2046,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1007-BLU-M",
+          "product_id": "OPS-1007",
+          "title": "Sand Washed Tee",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 1100,
+          "stock": 3,
+          "weight_g": 1297,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1007-CRI-XL",
+          "product_id": "OPS-1007",
+          "title": "Sand Washed Tee",
+          "options": {
+            "size": "XL",
+            "color": "Crimson"
+          },
+          "price_cents": 2400,
+          "stock": 5,
+          "weight_g": 1554,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1007-SAN-XS",
+          "product_id": "OPS-1007",
+          "title": "Sand Washed Tee",
+          "options": {
+            "size": "XS",
+            "color": "Sand"
+          },
+          "price_cents": 2050,
+          "stock": 1,
+          "weight_g": 2269,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1008",
+      "title": "Black Essential Crew Tee",
+      "brand": "Cedar & Thread",
+      "category": "Accessories",
+      "variants": [
+        {
+          "sku": "OPS-1008-CRI-S",
+          "product_id": "OPS-1008",
+          "title": "Black Essential Crew Tee",
+          "options": {
+            "size": "S",
+            "color": "Crimson"
+          },
+          "price_cents": 4550,
+          "stock": 0,
+          "weight_g": 992,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1008-OLI-XL",
+          "product_id": "OPS-1008",
+          "title": "Black Essential Crew Tee",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 2450,
+          "stock": 0,
+          "weight_g": 973,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1008-SAN-M",
+          "product_id": "OPS-1008",
+          "title": "Black Essential Crew Tee",
+          "options": {
+            "size": "M",
+            "color": "Sand"
+          },
+          "price_cents": 2750,
+          "stock": 13,
+          "weight_g": 1391,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1008-SAN-S",
+          "product_id": "OPS-1008",
+          "title": "Black Essential Crew Tee",
+          "options": {
+            "size": "S",
+            "color": "Sand"
+          },
+          "price_cents": 650,
+          "stock": 43,
+          "weight_g": 399,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1009",
+      "title": "Blue Breton Stripe Top",
+      "brand": "OpsFlow",
+      "category": "Denim",
+      "variants": [
+        {
+          "sku": "OPS-1009-BLA-M",
+          "product_id": "OPS-1009",
+          "title": "Blue Breton Stripe Top",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 1150,
+          "stock": 43,
+          "weight_g": 1696,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1009-BLU-L",
+          "product_id": "OPS-1009",
+          "title": "Blue Breton Stripe Top",
+          "options": {
+            "size": "L",
+            "color": "Blue"
+          },
+          "price_cents": 1100,
+          "stock": 3,
+          "weight_g": 1585,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1009-CRI-XS",
+          "product_id": "OPS-1009",
+          "title": "Blue Breton Stripe Top",
+          "options": {
+            "size": "XS",
+            "color": "Crimson"
+          },
+          "price_cents": 3950,
+          "stock": 27,
+          "weight_g": 2341,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1009-OLI-M",
+          "product_id": "OPS-1009",
+          "title": "Blue Breton Stripe Top",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 1250,
+          "stock": 30,
+          "weight_g": 1258,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1010",
+      "title": "Crimson Mock-Neck Base Layer",
+      "brand": "Cedar & Thread",
+      "category": "Swimwear",
+      "variants": [
+        {
+          "sku": "OPS-1010-BLA-S",
+          "product_id": "OPS-1010",
+          "title": "Crimson Mock-Neck Base Layer",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 750,
+          "stock": 59,
+          "weight_g": 339,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1010-BLU-M",
+          "product_id": "OPS-1010",
+          "title": "Crimson Mock-Neck Base Layer",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 1300,
+          "stock": 58,
+          "weight_g": 783,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1010-BLU-XS",
+          "product_id": "OPS-1010",
+          "title": "Crimson Mock-Neck Base Layer",
+          "options": {
+            "size": "XS",
+            "color": "Blue"
+          },
+          "price_cents": 2550,
+          "stock": 0,
+          "weight_g": 1027,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1010-OLI-S",
+          "product_id": "OPS-1010",
+          "title": "Crimson Mock-Neck Base Layer",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 4350,
+          "stock": 1,
+          "weight_g": 2207,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1011",
+      "title": "Sand Relaxed Chino",
+      "brand": "NorthRange",
+      "category": "Loungewear",
+      "variants": [
+        {
+          "sku": "OPS-1011-BLA-L",
+          "product_id": "OPS-1011",
+          "title": "Sand Relaxed Chino",
+          "options": {
+            "size": "L",
+            "color": "Black"
+          },
+          "price_cents": 2250,
+          "stock": 4,
+          "weight_g": 2273,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1011-BLU-L",
+          "product_id": "OPS-1011",
+          "title": "Sand Relaxed Chino",
+          "options": {
+            "size": "L",
+            "color": "Blue"
+          },
+          "price_cents": 4300,
+          "stock": 0,
+          "weight_g": 178,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1011-OLI-M",
+          "product_id": "OPS-1011",
+          "title": "Sand Relaxed Chino",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 4800,
+          "stock": 0,
+          "weight_g": 446,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1011-OLI-S",
+          "product_id": "OPS-1011",
+          "title": "Sand Relaxed Chino",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 4500,
+          "stock": 24,
+          "weight_g": 2205,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1012",
+      "title": "Olive Cargo Pant",
+      "brand": "Field Study",
+      "category": "Workwear",
+      "variants": [
+        {
+          "sku": "OPS-1012-BLA-L",
+          "product_id": "OPS-1012",
+          "title": "Olive Cargo Pant",
+          "options": {
+            "size": "L",
+            "color": "Black"
+          },
+          "price_cents": 1650,
+          "stock": 2,
+          "weight_g": 201,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1012-BLU-XL",
+          "product_id": "OPS-1012",
+          "title": "Olive Cargo Pant",
+          "options": {
+            "size": "XL",
+            "color": "Blue"
+          },
+          "price_cents": 2600,
+          "stock": 40,
+          "weight_g": 1425,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1012-CRI-L",
+          "product_id": "OPS-1012",
+          "title": "Olive Cargo Pant",
+          "options": {
+            "size": "L",
+            "color": "Crimson"
+          },
+          "price_cents": 800,
+          "stock": 26,
+          "weight_g": 1610,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1012-SAN-XL",
+          "product_id": "OPS-1012",
+          "title": "Olive Cargo Pant",
+          "options": {
+            "size": "XL",
+            "color": "Sand"
+          },
+          "price_cents": 2950,
+          "stock": 19,
+          "weight_g": 1999,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1013",
+      "title": "Black Straight-Leg Jean",
+      "brand": "Field Study",
+      "category": "Outerwear",
+      "variants": [
+        {
+          "sku": "OPS-1013-BLU-S",
+          "product_id": "OPS-1013",
+          "title": "Black Straight-Leg Jean",
+          "options": {
+            "size": "S",
+            "color": "Blue"
+          },
+          "price_cents": 3550,
+          "stock": 64,
+          "weight_g": 1322,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1013-CRI-L",
+          "product_id": "OPS-1013",
+          "title": "Black Straight-Leg Jean",
+          "options": {
+            "size": "L",
+            "color": "Crimson"
+          },
+          "price_cents": 2350,
+          "stock": 47,
+          "weight_g": 2132,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1013-CRI-XL",
+          "product_id": "OPS-1013",
+          "title": "Black Straight-Leg Jean",
+          "options": {
+            "size": "XL",
+            "color": "Crimson"
+          },
+          "price_cents": 3200,
+          "stock": 38,
+          "weight_g": 1871,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1013-SAN-S",
+          "product_id": "OPS-1013",
+          "title": "Black Straight-Leg Jean",
+          "options": {
+            "size": "S",
+            "color": "Sand"
+          },
+          "price_cents": 2650,
+          "stock": 60,
+          "weight_g": 815,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1014",
+      "title": "Blue Wide-Leg Trouser",
+      "brand": "NorthRange",
+      "category": "Tops",
+      "variants": [
+        {
+          "sku": "OPS-1014-BLA-S",
+          "product_id": "OPS-1014",
+          "title": "Blue Wide-Leg Trouser",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 3650,
+          "stock": 0,
+          "weight_g": 473,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1014-BLA-XS",
+          "product_id": "OPS-1014",
+          "title": "Blue Wide-Leg Trouser",
+          "options": {
+            "size": "XS",
+            "color": "Black"
+          },
+          "price_cents": 4250,
+          "stock": 0,
+          "weight_g": 2386,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1014-OLI-M",
+          "product_id": "OPS-1014",
+          "title": "Blue Wide-Leg Trouser",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 3300,
+          "stock": 41,
+          "weight_g": 1862,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1014-SAN-L",
+          "product_id": "OPS-1014",
+          "title": "Blue Wide-Leg Trouser",
+          "options": {
+            "size": "L",
+            "color": "Sand"
+          },
+          "price_cents": 1150,
+          "stock": 46,
+          "weight_g": 2289,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1015",
+      "title": "Crimson Track Pant",
+      "brand": "Cedar & Thread",
+      "category": "Bottoms",
+      "variants": [
+        {
+          "sku": "OPS-1015-BLU-M",
+          "product_id": "OPS-1015",
+          "title": "Crimson Track Pant",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 600,
+          "stock": 46,
+          "weight_g": 2128,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1015-BLU-S",
+          "product_id": "OPS-1015",
+          "title": "Crimson Track Pant",
+          "options": {
+            "size": "S",
+            "color": "Blue"
+          },
+          "price_cents": 1900,
+          "stock": 0,
+          "weight_g": 1331,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1015-OLI-L",
+          "product_id": "OPS-1015",
+          "title": "Crimson Track Pant",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 3400,
+          "stock": 34,
+          "weight_g": 1152,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1015-OLI-S",
+          "product_id": "OPS-1015",
+          "title": "Crimson Track Pant",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 1050,
+          "stock": 3,
+          "weight_g": 1658,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1016",
+      "title": "Sand Slip Dress",
+      "brand": "Harbor Line",
+      "category": "Dresses",
+      "variants": [
+        {
+          "sku": "OPS-1016-BLA-M",
+          "product_id": "OPS-1016",
+          "title": "Sand Slip Dress",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 750,
+          "stock": 0,
+          "weight_g": 1195,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1016-BLA-S",
+          "product_id": "OPS-1016",
+          "title": "Sand Slip Dress",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 750,
+          "stock": 0,
+          "weight_g": 179,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1016-CRI-M",
+          "product_id": "OPS-1016",
+          "title": "Sand Slip Dress",
+          "options": {
+            "size": "M",
+            "color": "Crimson"
+          },
+          "price_cents": 4500,
+          "stock": 2,
+          "weight_g": 2124,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1016-OLI-M",
+          "product_id": "OPS-1016",
+          "title": "Sand Slip Dress",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 2500,
+          "stock": 72,
+          "weight_g": 2078,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1017",
+      "title": "Olive Shirtdress",
+      "brand": "Harbor Line",
+      "category": "Knitwear",
+      "variants": [
+        {
+          "sku": "OPS-1017-OLI-S",
+          "product_id": "OPS-1017",
+          "title": "Olive Shirtdress",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 3400,
+          "stock": 22,
+          "weight_g": 2302,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1017-SAN-L",
+          "product_id": "OPS-1017",
+          "title": "Olive Shirtdress",
+          "options": {
+            "size": "L",
+            "color": "Sand"
+          },
+          "price_cents": 750,
+          "stock": 70,
+          "weight_g": 982,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1017-SAN-S",
+          "product_id": "OPS-1017",
+          "title": "Olive Shirtdress",
+          "options": {
+            "size": "S",
+            "color": "Sand"
+          },
+          "price_cents": 4600,
+          "stock": 3,
+          "weight_g": 398,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1017-SAN-XS",
+          "product_id": "OPS-1017",
+          "title": "Olive Shirtdress",
+          "options": {
+            "size": "XS",
+            "color": "Sand"
+          },
+          "price_cents": 1250,
+          "stock": 58,
+          "weight_g": 2244,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1018",
+      "title": "Black Wrap Dress",
+      "brand": "OpsFlow",
+      "category": "Activewear",
+      "variants": [
+        {
+          "sku": "OPS-1018-BLA-M",
+          "product_id": "OPS-1018",
+          "title": "Black Wrap Dress",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 4600,
+          "stock": 24,
+          "weight_g": 313,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1018-BLU-L",
+          "product_id": "OPS-1018",
+          "title": "Black Wrap Dress",
+          "options": {
+            "size": "L",
+            "color": "Blue"
+          },
+          "price_cents": 3000,
+          "stock": 61,
+          "weight_g": 645,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1018-CRI-M",
+          "product_id": "OPS-1018",
+          "title": "Black Wrap Dress",
+          "options": {
+            "size": "M",
+            "color": "Crimson"
+          },
+          "price_cents": 2350,
+          "stock": 13,
+          "weight_g": 1631,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1018-OLI-XS",
+          "product_id": "OPS-1018",
+          "title": "Black Wrap Dress",
+          "options": {
+            "size": "XS",
+            "color": "Olive"
+          },
+          "price_cents": 3300,
+          "stock": 32,
+          "weight_g": 552,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1019",
+      "title": "Blue Poplin Dress",
+      "brand": "Cedar & Thread",
+      "category": "Footwear",
+      "variants": [
+        {
+          "sku": "OPS-1019-BLA-M",
+          "product_id": "OPS-1019",
+          "title": "Blue Poplin Dress",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 2300,
+          "stock": 80,
+          "weight_g": 1785,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1019-CRI-L",
+          "product_id": "OPS-1019",
+          "title": "Blue Poplin Dress",
+          "options": {
+            "size": "L",
+            "color": "Crimson"
+          },
+          "price_cents": 650,
+          "stock": 0,
+          "weight_g": 1202,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1019-CRI-S",
+          "product_id": "OPS-1019",
+          "title": "Blue Poplin Dress",
+          "options": {
+            "size": "S",
+            "color": "Crimson"
+          },
+          "price_cents": 2950,
+          "stock": 0,
+          "weight_g": 2286,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1019-OLI-XS",
+          "product_id": "OPS-1019",
+          "title": "Blue Poplin Dress",
+          "options": {
+            "size": "XS",
+            "color": "Olive"
+          },
+          "price_cents": 3800,
+          "stock": 75,
+          "weight_g": 2204,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1020",
+      "title": "Crimson Knit Midi Dress",
+      "brand": "Cedar & Thread",
+      "category": "Accessories",
+      "variants": [
+        {
+          "sku": "OPS-1020-BLA-S",
+          "product_id": "OPS-1020",
+          "title": "Crimson Knit Midi Dress",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 3500,
+          "stock": 2,
+          "weight_g": 151,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1020-BLA-XL",
+          "product_id": "OPS-1020",
+          "title": "Crimson Knit Midi Dress",
+          "options": {
+            "size": "XL",
+            "color": "Black"
+          },
+          "price_cents": 2550,
+          "stock": 13,
+          "weight_g": 1307,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1020-OLI-S",
+          "product_id": "OPS-1020",
+          "title": "Crimson Knit Midi Dress",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 750,
+          "stock": 3,
+          "weight_g": 448,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1020-OLI-XS",
+          "product_id": "OPS-1020",
+          "title": "Crimson Knit Midi Dress",
+          "options": {
+            "size": "XS",
+            "color": "Olive"
+          },
+          "price_cents": 2250,
+          "stock": 63,
+          "weight_g": 746,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1021",
+      "title": "Sand Cable-Knit Sweater",
+      "brand": "OpsFlow",
+      "category": "Denim",
+      "variants": [
+        {
+          "sku": "OPS-1021-BLA-XS",
+          "product_id": "OPS-1021",
+          "title": "Sand Cable-Knit Sweater",
+          "options": {
+            "size": "XS",
+            "color": "Black"
+          },
+          "price_cents": 1900,
+          "stock": 49,
+          "weight_g": 2163,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1021-OLI-S",
+          "product_id": "OPS-1021",
+          "title": "Sand Cable-Knit Sweater",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 2450,
+          "stock": 35,
+          "weight_g": 879,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1021-OLI-XL",
+          "product_id": "OPS-1021",
+          "title": "Sand Cable-Knit Sweater",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 3550,
+          "stock": 44,
+          "weight_g": 459,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1022",
+      "title": "Olive Merino Pullover",
+      "brand": "Harbor Line",
+      "category": "Swimwear",
+      "variants": [
+        {
+          "sku": "OPS-1022-BLA-M",
+          "product_id": "OPS-1022",
+          "title": "Olive Merino Pullover",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 2750,
+          "stock": 0,
+          "weight_g": 2018,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1022-OLI-M",
+          "product_id": "OPS-1022",
+          "title": "Olive Merino Pullover",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 4350,
+          "stock": 0,
+          "weight_g": 987,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1022-SAN-XL",
+          "product_id": "OPS-1022",
+          "title": "Olive Merino Pullover",
+          "options": {
+            "size": "XL",
+            "color": "Sand"
+          },
+          "price_cents": 1550,
+          "stock": 69,
+          "weight_g": 1742,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1023",
+      "title": "Black Cashmere Blend Cardigan",
+      "brand": "Field Study",
+      "category": "Loungewear",
+      "variants": [
+        {
+          "sku": "OPS-1023-OLI-L",
+          "product_id": "OPS-1023",
+          "title": "Black Cashmere Blend Cardigan",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 2100,
+          "stock": 59,
+          "weight_g": 1863,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1023-OLI-XS",
+          "product_id": "OPS-1023",
+          "title": "Black Cashmere Blend Cardigan",
+          "options": {
+            "size": "XS",
+            "color": "Olive"
+          },
+          "price_cents": 3700,
+          "stock": 26,
+          "weight_g": 664,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1023-SAN-XS",
+          "product_id": "OPS-1023",
+          "title": "Black Cashmere Blend Cardigan",
+          "options": {
+            "size": "XS",
+            "color": "Sand"
+          },
+          "price_cents": 3450,
+          "stock": 23,
+          "weight_g": 1725,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1024",
+      "title": "Blue Waffle Knit Henley",
+      "brand": "NorthRange",
+      "category": "Workwear",
+      "variants": [
+        {
+          "sku": "OPS-1024-BLU-XS",
+          "product_id": "OPS-1024",
+          "title": "Blue Waffle Knit Henley",
+          "options": {
+            "size": "XS",
+            "color": "Blue"
+          },
+          "price_cents": 1850,
+          "stock": 40,
+          "weight_g": 839,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1024-CRI-L",
+          "product_id": "OPS-1024",
+          "title": "Blue Waffle Knit Henley",
+          "options": {
+            "size": "L",
+            "color": "Crimson"
+          },
+          "price_cents": 2900,
+          "stock": 10,
+          "weight_g": 422,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1024-OLI-S",
+          "product_id": "OPS-1024",
+          "title": "Blue Waffle Knit Henley",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 3450,
+          "stock": 37,
+          "weight_g": 1117,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1025",
+      "title": "Crimson Half-Zip Fleece",
+      "brand": "Harbor Line",
+      "category": "Outerwear",
+      "variants": [
+        {
+          "sku": "OPS-1025-BLA-M",
+          "product_id": "OPS-1025",
+          "title": "Crimson Half-Zip Fleece",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 4200,
+          "stock": 1,
+          "weight_g": 1978,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1025-BLA-S",
+          "product_id": "OPS-1025",
+          "title": "Crimson Half-Zip Fleece",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 3150,
+          "stock": 0,
+          "weight_g": 1466,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1025-SAN-L",
+          "product_id": "OPS-1025",
+          "title": "Crimson Half-Zip Fleece",
+          "options": {
+            "size": "L",
+            "color": "Sand"
+          },
+          "price_cents": 4400,
+          "stock": 5,
+          "weight_g": 1322,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1026",
+      "title": "Sand Performance Legging",
+      "brand": "OpsFlow",
+      "category": "Tops",
+      "variants": [
+        {
+          "sku": "OPS-1026-BLU-XS",
+          "product_id": "OPS-1026",
+          "title": "Sand Performance Legging",
+          "options": {
+            "size": "XS",
+            "color": "Blue"
+          },
+          "price_cents": 850,
+          "stock": 53,
+          "weight_g": 1325,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1026-CRI-S",
+          "product_id": "OPS-1026",
+          "title": "Sand Performance Legging",
+          "options": {
+            "size": "S",
+            "color": "Crimson"
+          },
+          "price_cents": 2900,
+          "stock": 0,
+          "weight_g": 2348,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1026-SAN-S",
+          "product_id": "OPS-1026",
+          "title": "Sand Performance Legging",
+          "options": {
+            "size": "S",
+            "color": "Sand"
+          },
+          "price_cents": 2300,
+          "stock": 2,
+          "weight_g": 256,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1027",
+      "title": "Olive Training Short",
+      "brand": "OpsFlow",
+      "category": "Bottoms",
+      "variants": [
+        {
+          "sku": "OPS-1027-BLA-M",
+          "product_id": "OPS-1027",
+          "title": "Olive Training Short",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 4650,
+          "stock": 3,
+          "weight_g": 1265,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1027-BLU-L",
+          "product_id": "OPS-1027",
+          "title": "Olive Training Short",
+          "options": {
+            "size": "L",
+            "color": "Blue"
+          },
+          "price_cents": 4050,
+          "stock": 75,
+          "weight_g": 524,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1027-SAN-XS",
+          "product_id": "OPS-1027",
+          "title": "Olive Training Short",
+          "options": {
+            "size": "XS",
+            "color": "Sand"
+          },
+          "price_cents": 900,
+          "stock": 37,
+          "weight_g": 1890,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1028",
+      "title": "Black Studio Jogger",
+      "brand": "NorthRange",
+      "category": "Dresses",
+      "variants": [
+        {
+          "sku": "OPS-1028-BLU-XS",
+          "product_id": "OPS-1028",
+          "title": "Black Studio Jogger",
+          "options": {
+            "size": "XS",
+            "color": "Blue"
+          },
+          "price_cents": 2350,
+          "stock": 64,
+          "weight_g": 961,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1028-CRI-M",
+          "product_id": "OPS-1028",
+          "title": "Black Studio Jogger",
+          "options": {
+            "size": "M",
+            "color": "Crimson"
+          },
+          "price_cents": 900,
+          "stock": 71,
+          "weight_g": 2270,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1028-SAN-XL",
+          "product_id": "OPS-1028",
+          "title": "Black Studio Jogger",
+          "options": {
+            "size": "XL",
+            "color": "Sand"
+          },
+          "price_cents": 4000,
+          "stock": 13,
+          "weight_g": 642,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1029",
+      "title": "Blue Lightweight Hoodie",
+      "brand": "Cedar & Thread",
+      "category": "Knitwear",
+      "variants": [
+        {
+          "sku": "OPS-1029-BLA-S",
+          "product_id": "OPS-1029",
+          "title": "Blue Lightweight Hoodie",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 3150,
+          "stock": 28,
+          "weight_g": 685,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1029-OLI-M",
+          "product_id": "OPS-1029",
+          "title": "Blue Lightweight Hoodie",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 4200,
+          "stock": 62,
+          "weight_g": 2240,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1029-OLI-S",
+          "product_id": "OPS-1029",
+          "title": "Blue Lightweight Hoodie",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 750,
+          "stock": 16,
+          "weight_g": 1094,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1030",
+      "title": "Crimson Sports Bra",
+      "brand": "Harbor Line",
+      "category": "Activewear",
+      "variants": [
+        {
+          "sku": "OPS-1030-BLU-XS",
+          "product_id": "OPS-1030",
+          "title": "Crimson Sports Bra",
+          "options": {
+            "size": "XS",
+            "color": "Blue"
+          },
+          "price_cents": 3900,
+          "stock": 0,
+          "weight_g": 2123,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1030-OLI-XS",
+          "product_id": "OPS-1030",
+          "title": "Crimson Sports Bra",
+          "options": {
+            "size": "XS",
+            "color": "Olive"
+          },
+          "price_cents": 800,
+          "stock": 1,
+          "weight_g": 808,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1030-SAN-XL",
+          "product_id": "OPS-1030",
+          "title": "Crimson Sports Bra",
+          "options": {
+            "size": "XL",
+            "color": "Sand"
+          },
+          "price_cents": 2150,
+          "stock": 39,
+          "weight_g": 477,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1031",
+      "title": "Sand Suede Chelsea Boot",
+      "brand": "Harbor Line",
+      "category": "Footwear",
+      "variants": [
+        {
+          "sku": "OPS-1031-BLA-XS",
+          "product_id": "OPS-1031",
+          "title": "Sand Suede Chelsea Boot",
+          "options": {
+            "size": "XS",
+            "color": "Black"
+          },
+          "price_cents": 700,
+          "stock": 0,
+          "weight_g": 1615,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1031-BLU-XL",
+          "product_id": "OPS-1031",
+          "title": "Sand Suede Chelsea Boot",
+          "options": {
+            "size": "XL",
+            "color": "Blue"
+          },
+          "price_cents": 1300,
+          "stock": 12,
+          "weight_g": 1415,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1031-OLI-S",
+          "product_id": "OPS-1031",
+          "title": "Sand Suede Chelsea Boot",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 4650,
+          "stock": 32,
+          "weight_g": 1375,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1032",
+      "title": "Olive Trail Sneaker",
+      "brand": "OpsFlow",
+      "category": "Accessories",
+      "variants": [
+        {
+          "sku": "OPS-1032-BLU-XL",
+          "product_id": "OPS-1032",
+          "title": "Olive Trail Sneaker",
+          "options": {
+            "size": "XL",
+            "color": "Blue"
+          },
+          "price_cents": 2900,
+          "stock": 26,
+          "weight_g": 896,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1032-CRI-XS",
+          "product_id": "OPS-1032",
+          "title": "Olive Trail Sneaker",
+          "options": {
+            "size": "XS",
+            "color": "Crimson"
+          },
+          "price_cents": 1600,
+          "stock": 0,
+          "weight_g": 438,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1032-OLI-S",
+          "product_id": "OPS-1032",
+          "title": "Olive Trail Sneaker",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 3000,
+          "stock": 16,
+          "weight_g": 425,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1033",
+      "title": "Black Leather Loafer",
+      "brand": "NorthRange",
+      "category": "Denim",
+      "variants": [
+        {
+          "sku": "OPS-1033-CRI-XL",
+          "product_id": "OPS-1033",
+          "title": "Black Leather Loafer",
+          "options": {
+            "size": "XL",
+            "color": "Crimson"
+          },
+          "price_cents": 4600,
+          "stock": 42,
+          "weight_g": 856,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1033-OLI-XL",
+          "product_id": "OPS-1033",
+          "title": "Black Leather Loafer",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 2850,
+          "stock": 66,
+          "weight_g": 128,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1033-SAN-XS",
+          "product_id": "OPS-1033",
+          "title": "Black Leather Loafer",
+          "options": {
+            "size": "XS",
+            "color": "Sand"
+          },
+          "price_cents": 4350,
+          "stock": 0,
+          "weight_g": 687,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1034",
+      "title": "Blue Canvas Slip-On",
+      "brand": "Harbor Line",
+      "category": "Swimwear",
+      "variants": [
+        {
+          "sku": "OPS-1034-CRI-S",
+          "product_id": "OPS-1034",
+          "title": "Blue Canvas Slip-On",
+          "options": {
+            "size": "S",
+            "color": "Crimson"
+          },
+          "price_cents": 3800,
+          "stock": 4,
+          "weight_g": 2205,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1034-OLI-XS",
+          "product_id": "OPS-1034",
+          "title": "Blue Canvas Slip-On",
+          "options": {
+            "size": "XS",
+            "color": "Olive"
+          },
+          "price_cents": 3850,
+          "stock": 6,
+          "weight_g": 1054,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1034-SAN-M",
+          "product_id": "OPS-1034",
+          "title": "Blue Canvas Slip-On",
+          "options": {
+            "size": "M",
+            "color": "Sand"
+          },
+          "price_cents": 2400,
+          "stock": 62,
+          "weight_g": 1625,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1035",
+      "title": "Crimson Running Shoe",
+      "brand": "Harbor Line",
+      "category": "Loungewear",
+      "variants": [
+        {
+          "sku": "OPS-1035-BLA-M",
+          "product_id": "OPS-1035",
+          "title": "Crimson Running Shoe",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 2400,
+          "stock": 7,
+          "weight_g": 762,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1035-BLA-S",
+          "product_id": "OPS-1035",
+          "title": "Crimson Running Shoe",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 1850,
+          "stock": 5,
+          "weight_g": 1521,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1035-BLU-S",
+          "product_id": "OPS-1035",
+          "title": "Crimson Running Shoe",
+          "options": {
+            "size": "S",
+            "color": "Blue"
+          },
+          "price_cents": 1250,
+          "stock": 76,
+          "weight_g": 2151,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1036",
+      "title": "Sand Woven Tote Bag",
+      "brand": "OpsFlow",
+      "category": "Workwear",
+      "variants": [
+        {
+          "sku": "OPS-1036-BLA-S",
+          "product_id": "OPS-1036",
+          "title": "Sand Woven Tote Bag",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 4400,
+          "stock": 4,
+          "weight_g": 1164,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1036-CRI-L",
+          "product_id": "OPS-1036",
+          "title": "Sand Woven Tote Bag",
+          "options": {
+            "size": "L",
+            "color": "Crimson"
+          },
+          "price_cents": 950,
+          "stock": 9,
+          "weight_g": 2230,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1036-SAN-XL",
+          "product_id": "OPS-1036",
+          "title": "Sand Woven Tote Bag",
+          "options": {
+            "size": "XL",
+            "color": "Sand"
+          },
+          "price_cents": 3800,
+          "stock": 28,
+          "weight_g": 2197,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1037",
+      "title": "Olive Crossbody Sling",
+      "brand": "Cedar & Thread",
+      "category": "Outerwear",
+      "variants": [
+        {
+          "sku": "OPS-1037-BLA-L",
+          "product_id": "OPS-1037",
+          "title": "Olive Crossbody Sling",
+          "options": {
+            "size": "L",
+            "color": "Black"
+          },
+          "price_cents": 1250,
+          "stock": 10,
+          "weight_g": 1633,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1037-BLA-XL",
+          "product_id": "OPS-1037",
+          "title": "Olive Crossbody Sling",
+          "options": {
+            "size": "XL",
+            "color": "Black"
+          },
+          "price_cents": 700,
+          "stock": 0,
+          "weight_g": 135,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1037-OLI-M",
+          "product_id": "OPS-1037",
+          "title": "Olive Crossbody Sling",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 1300,
+          "stock": 2,
+          "weight_g": 922,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1038",
+      "title": "Black Leather Belt",
+      "brand": "NorthRange",
+      "category": "Tops",
+      "variants": [
+        {
+          "sku": "OPS-1038-BLA-XS",
+          "product_id": "OPS-1038",
+          "title": "Black Leather Belt",
+          "options": {
+            "size": "XS",
+            "color": "Black"
+          },
+          "price_cents": 3400,
+          "stock": 25,
+          "weight_g": 620,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1038-BLU-XS",
+          "product_id": "OPS-1038",
+          "title": "Black Leather Belt",
+          "options": {
+            "size": "XS",
+            "color": "Blue"
+          },
+          "price_cents": 4350,
+          "stock": 0,
+          "weight_g": 1389,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1038-OLI-L",
+          "product_id": "OPS-1038",
+          "title": "Black Leather Belt",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 3500,
+          "stock": 36,
+          "weight_g": 1107,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1039",
+      "title": "Blue Embroidered Cap",
+      "brand": "Harbor Line",
+      "category": "Bottoms",
+      "variants": [
+        {
+          "sku": "OPS-1039-BLU-S",
+          "product_id": "OPS-1039",
+          "title": "Blue Embroidered Cap",
+          "options": {
+            "size": "S",
+            "color": "Blue"
+          },
+          "price_cents": 2100,
+          "stock": 28,
+          "weight_g": 1909,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1039-OLI-S",
+          "product_id": "OPS-1039",
+          "title": "Blue Embroidered Cap",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 3950,
+          "stock": 69,
+          "weight_g": 761,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1039-OLI-XL",
+          "product_id": "OPS-1039",
+          "title": "Blue Embroidered Cap",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 3800,
+          "stock": 23,
+          "weight_g": 963,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1040",
+      "title": "Crimson Wool Beanie",
+      "brand": "Harbor Line",
+      "category": "Dresses",
+      "variants": [
+        {
+          "sku": "OPS-1040-BLU-M",
+          "product_id": "OPS-1040",
+          "title": "Crimson Wool Beanie",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 1750,
+          "stock": 52,
+          "weight_g": 193,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1040-CRI-L",
+          "product_id": "OPS-1040",
+          "title": "Crimson Wool Beanie",
+          "options": {
+            "size": "L",
+            "color": "Crimson"
+          },
+          "price_cents": 1100,
+          "stock": 57,
+          "weight_g": 251,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1040-OLI-L",
+          "product_id": "OPS-1040",
+          "title": "Crimson Wool Beanie",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 2950,
+          "stock": 74,
+          "weight_g": 253,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1041",
+      "title": "Sand Slim Straight Jean",
+      "brand": "Cedar & Thread",
+      "category": "Knitwear",
+      "variants": [
+        {
+          "sku": "OPS-1041-BLA-M",
+          "product_id": "OPS-1041",
+          "title": "Sand Slim Straight Jean",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 2000,
+          "stock": 0,
+          "weight_g": 2370,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1041-BLU-XS",
+          "product_id": "OPS-1041",
+          "title": "Sand Slim Straight Jean",
+          "options": {
+            "size": "XS",
+            "color": "Blue"
+          },
+          "price_cents": 4600,
+          "stock": 0,
+          "weight_g": 777,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1041-CRI-S",
+          "product_id": "OPS-1041",
+          "title": "Sand Slim Straight Jean",
+          "options": {
+            "size": "S",
+            "color": "Crimson"
+          },
+          "price_cents": 1000,
+          "stock": 1,
+          "weight_g": 1613,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1042",
+      "title": "Olive Selvedge Denim Jacket",
+      "brand": "OpsFlow",
+      "category": "Activewear",
+      "variants": [
+        {
+          "sku": "OPS-1042-BLA-L",
+          "product_id": "OPS-1042",
+          "title": "Olive Selvedge Denim Jacket",
+          "options": {
+            "size": "L",
+            "color": "Black"
+          },
+          "price_cents": 3950,
+          "stock": 0,
+          "weight_g": 534,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1042-CRI-XL",
+          "product_id": "OPS-1042",
+          "title": "Olive Selvedge Denim Jacket",
+          "options": {
+            "size": "XL",
+            "color": "Crimson"
+          },
+          "price_cents": 3300,
+          "stock": 11,
+          "weight_g": 903,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1042-OLI-XS",
+          "product_id": "OPS-1042",
+          "title": "Olive Selvedge Denim Jacket",
+          "options": {
+            "size": "XS",
+            "color": "Olive"
+          },
+          "price_cents": 1800,
+          "stock": 63,
+          "weight_g": 173,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1043",
+      "title": "Black Coated Skinny Jean",
+      "brand": "Field Study",
+      "category": "Footwear",
+      "variants": [
+        {
+          "sku": "OPS-1043-BLU-XL",
+          "product_id": "OPS-1043",
+          "title": "Black Coated Skinny Jean",
+          "options": {
+            "size": "XL",
+            "color": "Blue"
+          },
+          "price_cents": 2650,
+          "stock": 30,
+          "weight_g": 670,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1043-OLI-XL",
+          "product_id": "OPS-1043",
+          "title": "Black Coated Skinny Jean",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 3850,
+          "stock": 0,
+          "weight_g": 729,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1043-SAN-S",
+          "product_id": "OPS-1043",
+          "title": "Black Coated Skinny Jean",
+          "options": {
+            "size": "S",
+            "color": "Sand"
+          },
+          "price_cents": 2100,
+          "stock": 5,
+          "weight_g": 1485,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1044",
+      "title": "Blue Denim Overshirt",
+      "brand": "OpsFlow",
+      "category": "Accessories",
+      "variants": [
+        {
+          "sku": "OPS-1044-OLI-M",
+          "product_id": "OPS-1044",
+          "title": "Blue Denim Overshirt",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 4450,
+          "stock": 0,
+          "weight_g": 344,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1044-OLI-XL",
+          "product_id": "OPS-1044",
+          "title": "Blue Denim Overshirt",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 3850,
+          "stock": 2,
+          "weight_g": 342,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1044-SAN-XS",
+          "product_id": "OPS-1044",
+          "title": "Blue Denim Overshirt",
+          "options": {
+            "size": "XS",
+            "color": "Sand"
+          },
+          "price_cents": 4150,
+          "stock": 59,
+          "weight_g": 1108,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1045",
+      "title": "Crimson Denim Utility Pant",
+      "brand": "Field Study",
+      "category": "Denim",
+      "variants": [
+        {
+          "sku": "OPS-1045-BLA-L",
+          "product_id": "OPS-1045",
+          "title": "Crimson Denim Utility Pant",
+          "options": {
+            "size": "L",
+            "color": "Black"
+          },
+          "price_cents": 3300,
+          "stock": 67,
+          "weight_g": 697,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1045-CRI-XL",
+          "product_id": "OPS-1045",
+          "title": "Crimson Denim Utility Pant",
+          "options": {
+            "size": "XL",
+            "color": "Crimson"
+          },
+          "price_cents": 2450,
+          "stock": 10,
+          "weight_g": 1128,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1045-CRI-XS",
+          "product_id": "OPS-1045",
+          "title": "Crimson Denim Utility Pant",
+          "options": {
+            "size": "XS",
+            "color": "Crimson"
+          },
+          "price_cents": 1100,
+          "stock": 3,
+          "weight_g": 281,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1046",
+      "title": "Sand One-Piece Swimsuit",
+      "brand": "OpsFlow",
+      "category": "Swimwear",
+      "variants": [
+        {
+          "sku": "OPS-1046-BLA-L",
+          "product_id": "OPS-1046",
+          "title": "Sand One-Piece Swimsuit",
+          "options": {
+            "size": "L",
+            "color": "Black"
+          },
+          "price_cents": 1400,
+          "stock": 0,
+          "weight_g": 1501,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1046-BLA-XS",
+          "product_id": "OPS-1046",
+          "title": "Sand One-Piece Swimsuit",
+          "options": {
+            "size": "XS",
+            "color": "Black"
+          },
+          "price_cents": 2250,
+          "stock": 37,
+          "weight_g": 1508,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1046-CRI-M",
+          "product_id": "OPS-1046",
+          "title": "Sand One-Piece Swimsuit",
+          "options": {
+            "size": "M",
+            "color": "Crimson"
+          },
+          "price_cents": 1700,
+          "stock": 29,
+          "weight_g": 1335,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1047",
+      "title": "Olive Board Short",
+      "brand": "NorthRange",
+      "category": "Loungewear",
+      "variants": [
+        {
+          "sku": "OPS-1047-BLU-L",
+          "product_id": "OPS-1047",
+          "title": "Olive Board Short",
+          "options": {
+            "size": "L",
+            "color": "Blue"
+          },
+          "price_cents": 4600,
+          "stock": 0,
+          "weight_g": 1228,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1047-BLU-S",
+          "product_id": "OPS-1047",
+          "title": "Olive Board Short",
+          "options": {
+            "size": "S",
+            "color": "Blue"
+          },
+          "price_cents": 4150,
+          "stock": 8,
+          "weight_g": 377,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1047-OLI-XL",
+          "product_id": "OPS-1047",
+          "title": "Olive Board Short",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 1050,
+          "stock": 23,
+          "weight_g": 185,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1048",
+      "title": "Black Bikini Top",
+      "brand": "Harbor Line",
+      "category": "Workwear",
+      "variants": [
+        {
+          "sku": "OPS-1048-BLA-XL",
+          "product_id": "OPS-1048",
+          "title": "Black Bikini Top",
+          "options": {
+            "size": "XL",
+            "color": "Black"
+          },
+          "price_cents": 3400,
+          "stock": 0,
+          "weight_g": 380,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1048-BLU-M",
+          "product_id": "OPS-1048",
+          "title": "Black Bikini Top",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 1150,
+          "stock": 47,
+          "weight_g": 676,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1048-OLI-S",
+          "product_id": "OPS-1048",
+          "title": "Black Bikini Top",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 3650,
+          "stock": 5,
+          "weight_g": 167,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1049",
+      "title": "Blue Rash Guard",
+      "brand": "NorthRange",
+      "category": "Outerwear",
+      "variants": [
+        {
+          "sku": "OPS-1049-BLA-M",
+          "product_id": "OPS-1049",
+          "title": "Blue Rash Guard",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 2100,
+          "stock": 43,
+          "weight_g": 2106,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1049-BLA-XS",
+          "product_id": "OPS-1049",
+          "title": "Blue Rash Guard",
+          "options": {
+            "size": "XS",
+            "color": "Black"
+          },
+          "price_cents": 3950,
+          "stock": 1,
+          "weight_g": 724,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1049-SAN-L",
+          "product_id": "OPS-1049",
+          "title": "Blue Rash Guard",
+          "options": {
+            "size": "L",
+            "color": "Sand"
+          },
+          "price_cents": 1050,
+          "stock": 51,
+          "weight_g": 1415,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1050",
+      "title": "Crimson Swim Trunk",
+      "brand": "Cedar & Thread",
+      "category": "Tops",
+      "variants": [
+        {
+          "sku": "OPS-1050-BLA-S",
+          "product_id": "OPS-1050",
+          "title": "Crimson Swim Trunk",
+          "options": {
+            "size": "S",
+            "color": "Black"
+          },
+          "price_cents": 2250,
+          "stock": 0,
+          "weight_g": 2293,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1050-OLI-L",
+          "product_id": "OPS-1050",
+          "title": "Crimson Swim Trunk",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 3550,
+          "stock": 27,
+          "weight_g": 2266,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1050-OLI-M",
+          "product_id": "OPS-1050",
+          "title": "Crimson Swim Trunk",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 1900,
+          "stock": 59,
+          "weight_g": 2325,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1051",
+      "title": "Sand French Terry Sweatsuit",
+      "brand": "NorthRange",
+      "category": "Bottoms",
+      "variants": [
+        {
+          "sku": "OPS-1051-CRI-L",
+          "product_id": "OPS-1051",
+          "title": "Sand French Terry Sweatsuit",
+          "options": {
+            "size": "L",
+            "color": "Crimson"
+          },
+          "price_cents": 2200,
+          "stock": 0,
+          "weight_g": 1258,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1051-OLI-M",
+          "product_id": "OPS-1051",
+          "title": "Sand French Terry Sweatsuit",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 4450,
+          "stock": 3,
+          "weight_g": 962,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1051-OLI-XL",
+          "product_id": "OPS-1051",
+          "title": "Sand French Terry Sweatsuit",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 850,
+          "stock": 4,
+          "weight_g": 2009,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1052",
+      "title": "Olive Lounge Pant",
+      "brand": "Cedar & Thread",
+      "category": "Dresses",
+      "variants": [
+        {
+          "sku": "OPS-1052-BLA-XL",
+          "product_id": "OPS-1052",
+          "title": "Olive Lounge Pant",
+          "options": {
+            "size": "XL",
+            "color": "Black"
+          },
+          "price_cents": 900,
+          "stock": 0,
+          "weight_g": 921,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1052-BLU-L",
+          "product_id": "OPS-1052",
+          "title": "Olive Lounge Pant",
+          "options": {
+            "size": "L",
+            "color": "Blue"
+          },
+          "price_cents": 4000,
+          "stock": 1,
+          "weight_g": 616,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1052-CRI-XS",
+          "product_id": "OPS-1052",
+          "title": "Olive Lounge Pant",
+          "options": {
+            "size": "XS",
+            "color": "Crimson"
+          },
+          "price_cents": 2600,
+          "stock": 0,
+          "weight_g": 1845,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1053",
+      "title": "Black Cozy Hoodie",
+      "brand": "NorthRange",
+      "category": "Knitwear",
+      "variants": [
+        {
+          "sku": "OPS-1053-BLU-M",
+          "product_id": "OPS-1053",
+          "title": "Black Cozy Hoodie",
+          "options": {
+            "size": "M",
+            "color": "Blue"
+          },
+          "price_cents": 4350,
+          "stock": 80,
+          "weight_g": 2365,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1053-OLI-XS",
+          "product_id": "OPS-1053",
+          "title": "Black Cozy Hoodie",
+          "options": {
+            "size": "XS",
+            "color": "Olive"
+          },
+          "price_cents": 2550,
+          "stock": 8,
+          "weight_g": 887,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1053-SAN-XL",
+          "product_id": "OPS-1053",
+          "title": "Black Cozy Hoodie",
+          "options": {
+            "size": "XL",
+            "color": "Sand"
+          },
+          "price_cents": 1200,
+          "stock": 22,
+          "weight_g": 2258,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1054",
+      "title": "Blue Sleep Set",
+      "brand": "Harbor Line",
+      "category": "Activewear",
+      "variants": [
+        {
+          "sku": "OPS-1054-CRI-XL",
+          "product_id": "OPS-1054",
+          "title": "Blue Sleep Set",
+          "options": {
+            "size": "XL",
+            "color": "Crimson"
+          },
+          "price_cents": 2850,
+          "stock": 9,
+          "weight_g": 1339,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1054-OLI-M",
+          "product_id": "OPS-1054",
+          "title": "Blue Sleep Set",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 2800,
+          "stock": 3,
+          "weight_g": 1764,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1054-SAN-S",
+          "product_id": "OPS-1054",
+          "title": "Blue Sleep Set",
+          "options": {
+            "size": "S",
+            "color": "Sand"
+          },
+          "price_cents": 1350,
+          "stock": 4,
+          "weight_g": 1598,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1055",
+      "title": "Crimson Fleece Pullover",
+      "brand": "Field Study",
+      "category": "Footwear",
+      "variants": [
+        {
+          "sku": "OPS-1055-BLU-XL",
+          "product_id": "OPS-1055",
+          "title": "Crimson Fleece Pullover",
+          "options": {
+            "size": "XL",
+            "color": "Blue"
+          },
+          "price_cents": 950,
+          "stock": 52,
+          "weight_g": 503,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1055-OLI-XL",
+          "product_id": "OPS-1055",
+          "title": "Crimson Fleece Pullover",
+          "options": {
+            "size": "XL",
+            "color": "Olive"
+          },
+          "price_cents": 1300,
+          "stock": 0,
+          "weight_g": 1546,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1055-SAN-XL",
+          "product_id": "OPS-1055",
+          "title": "Crimson Fleece Pullover",
+          "options": {
+            "size": "XL",
+            "color": "Sand"
+          },
+          "price_cents": 4400,
+          "stock": 40,
+          "weight_g": 1453,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1056",
+      "title": "Sand Utility Coverall",
+      "brand": "OpsFlow",
+      "category": "Accessories",
+      "variants": [
+        {
+          "sku": "OPS-1056-BLA-XL",
+          "product_id": "OPS-1056",
+          "title": "Sand Utility Coverall",
+          "options": {
+            "size": "XL",
+            "color": "Black"
+          },
+          "price_cents": 2500,
+          "stock": 48,
+          "weight_g": 1340,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1056-BLU-XL",
+          "product_id": "OPS-1056",
+          "title": "Sand Utility Coverall",
+          "options": {
+            "size": "XL",
+            "color": "Blue"
+          },
+          "price_cents": 2150,
+          "stock": 1,
+          "weight_g": 578,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1056-BLU-XS",
+          "product_id": "OPS-1056",
+          "title": "Sand Utility Coverall",
+          "options": {
+            "size": "XS",
+            "color": "Blue"
+          },
+          "price_cents": 1700,
+          "stock": 71,
+          "weight_g": 1862,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1057",
+      "title": "Olive Work Jacket",
+      "brand": "Harbor Line",
+      "category": "Denim",
+      "variants": [
+        {
+          "sku": "OPS-1057-CRI-M",
+          "product_id": "OPS-1057",
+          "title": "Olive Work Jacket",
+          "options": {
+            "size": "M",
+            "color": "Crimson"
+          },
+          "price_cents": 3750,
+          "stock": 1,
+          "weight_g": 1155,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1057-OLI-L",
+          "product_id": "OPS-1057",
+          "title": "Olive Work Jacket",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 3950,
+          "stock": 4,
+          "weight_g": 1280,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1057-OLI-M",
+          "product_id": "OPS-1057",
+          "title": "Olive Work Jacket",
+          "options": {
+            "size": "M",
+            "color": "Olive"
+          },
+          "price_cents": 4550,
+          "stock": 0,
+          "weight_g": 587,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1058",
+      "title": "Black Ripstop Pant",
+      "brand": "Cedar & Thread",
+      "category": "Swimwear",
+      "variants": [
+        {
+          "sku": "OPS-1058-BLA-M",
+          "product_id": "OPS-1058",
+          "title": "Black Ripstop Pant",
+          "options": {
+            "size": "M",
+            "color": "Black"
+          },
+          "price_cents": 4700,
+          "stock": 0,
+          "weight_g": 800,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1058-OLI-L",
+          "product_id": "OPS-1058",
+          "title": "Black Ripstop Pant",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 650,
+          "stock": 77,
+          "weight_g": 2078,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1058-SAN-M",
+          "product_id": "OPS-1058",
+          "title": "Black Ripstop Pant",
+          "options": {
+            "size": "M",
+            "color": "Sand"
+          },
+          "price_cents": 2050,
+          "stock": 0,
+          "weight_g": 892,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1059",
+      "title": "Blue Carpenter Jean",
+      "brand": "Cedar & Thread",
+      "category": "Loungewear",
+      "variants": [
+        {
+          "sku": "OPS-1059-BLU-L",
+          "product_id": "OPS-1059",
+          "title": "Blue Carpenter Jean",
+          "options": {
+            "size": "L",
+            "color": "Blue"
+          },
+          "price_cents": 1400,
+          "stock": 80,
+          "weight_g": 2004,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1059-OLI-L",
+          "product_id": "OPS-1059",
+          "title": "Blue Carpenter Jean",
+          "options": {
+            "size": "L",
+            "color": "Olive"
+          },
+          "price_cents": 3550,
+          "stock": 5,
+          "weight_g": 534,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1059-SAN-M",
+          "product_id": "OPS-1059",
+          "title": "Blue Carpenter Jean",
+          "options": {
+            "size": "M",
+            "color": "Sand"
+          },
+          "price_cents": 1200,
+          "stock": 73,
+          "weight_g": 330,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    },
+    {
+      "id": "OPS-1060",
+      "title": "Crimson Canvas Apron",
+      "brand": "Field Study",
+      "category": "Workwear",
+      "variants": [
+        {
+          "sku": "OPS-1060-BLA-XL",
+          "product_id": "OPS-1060",
+          "title": "Crimson Canvas Apron",
+          "options": {
+            "size": "XL",
+            "color": "Black"
+          },
+          "price_cents": 3300,
+          "stock": 13,
+          "weight_g": 1066,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1060-BLA-XS",
+          "product_id": "OPS-1060",
+          "title": "Crimson Canvas Apron",
+          "options": {
+            "size": "XS",
+            "color": "Black"
+          },
+          "price_cents": 4500,
+          "stock": 5,
+          "weight_g": 516,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        },
+        {
+          "sku": "OPS-1060-OLI-S",
+          "product_id": "OPS-1060",
+          "title": "Crimson Canvas Apron",
+          "options": {
+            "size": "S",
+            "color": "Olive"
+          },
+          "price_cents": 1500,
+          "stock": 77,
+          "weight_g": 1316,
+          "low_stock_threshold": 5,
+          "synthetic": true
+        }
+      ],
+      "synthetic": true
+    }
+  ]
+}

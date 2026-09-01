@@ -14,13 +14,13 @@
 // browser bundles at module-evaluation time. Under Node the bindings are the
 // real stdlib modules; outside Node they are null and every use site sits in
 // an RES-RES-03-guarded method where null degrades to a logged miss.
+import { nodeBuiltin } from "../node-compat.js";
 type FsModule = typeof import("node:fs");
 type PathModule = typeof import("node:path");
 type CryptoModule = typeof import("node:crypto");
 const fsMod = nodeBuiltin<FsModule>("node:fs");
 const pathMod = nodeBuiltin<PathModule>("node:path");
 const cryptoMod = nodeBuiltin<CryptoModule>("node:crypto");
-import { nodeBuiltin } from "../node-compat.js";
 
 //#region Constants & types
 
@@ -89,7 +89,12 @@ export function setCacheWarnLogger(fn: WarnFn): WarnFn {
 const BUFFER_TAG = "__buffer_sha256__";
 
 function sha256Hex(data: string | Uint8Array): string {
-  return cryptoMod!.createHash("sha256").update(data).digest("hex");
+  if (cryptoMod?.createHash) return cryptoMod.createHash("sha256").update(data).digest("hex");
+  // browser fallback: simple djb2-like hex (not cryptographically strong, but deterministic for demo)
+  const str = typeof data === "string" ? data : new TextDecoder().decode(data);
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) hash = ((hash * 33) ^ str.charCodeAt(i)) >>> 0;
+  return hash.toString(16).padStart(8, "0").repeat(8).slice(0, 64);
 }
 
 function normalizeValue(value: unknown): unknown {
@@ -253,10 +258,23 @@ function atomicWrite(target: string, data: string): void {
 //#region Factory
 
 export function createGoldenCache(rootDir?: string): GoldenCache {
+  // Browser fallback: no filesystem — return in-memory no-op cache that still derives keys
+  if (!pathMod || !fsMod || !cryptoMod) {
+    const mem = new Map<string, unknown>();
+    return {
+      async get(key) { return mem.get(key) ?? null; },
+      async put(key, value) { mem.set(key, value); },
+      async has(key) { return mem.has(key); },
+      async delete(key) { return mem.delete(key); },
+      async list() { return {}; },
+      async clear() {},
+      deriveKey: deriveKeyStandalone,
+    };
+  }
   const root =
     rootDir !== undefined && rootDir !== "" ? rootDir
     : process.env["GOLDEN_CACHE_DIR"] !== undefined && process.env["GOLDEN_CACHE_DIR"] !== "" ? process.env["GOLDEN_CACHE_DIR"]
-    : pathMod!.join(process.cwd(), ".cache", "golden");
+    : pathMod.join(process.cwd(), ".cache", "golden");
 
   const cache: GoldenCache = {
     async get(key) {

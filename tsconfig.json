@@ -10,17 +10,21 @@
     "jsx": "react-jsx",
     "paths": {
       "src/*": ["./src/*", "./src/*/index.ts"],
-      "examples/*": ["./examples/*"]
+      "examples/*": ["./examples/*"],
+      "data/*": ["./data/*"]
     },
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "strict": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true,
     "types": ["node"],
     "noEmit": true
   },
-  "include": ["src"]
+  "include": ["src", "api", "tests", "scripts", "vite.config.ts"],
+  "exclude": ["node_modules", "**/node_modules", "dist", "src/resilience/node_modules"]
 }

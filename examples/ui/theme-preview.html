@@ -1,0 +1,16 @@
+<!doctype html>
+<!-- Requirement IDs: UI-03, UI-04 | DP-B §6.4 (Playwright capture surface) -->
+<!-- Screenshot-only preview: ?theme=<id> picks the theme, ?populated=1 loads
+     the backend-a dummy fixture. Consumed by
+     scripts/capture-theme-screenshots.mjs — not part of the app. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Theme preview</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/examples/ui/theme-preview.tsx"></script>
+  </body>
+</html>

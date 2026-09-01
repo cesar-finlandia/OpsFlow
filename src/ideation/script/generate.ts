@@ -295,6 +295,7 @@ export function composeScriptMarkdown(parts: ComposeParts): { markdown: string; 
   lines.push("");
   lines.push("> Requirement IDs: SCRIPT-01, SCRIPT-02, SCRIPT-03, SCRIPT-04");
   lines.push(`> Timing: total ${totalDisplay} | sections ${windows.length} | live cue: \u25B6 LIVE DEMO`);
+  lines.push(`<!-- total: ${Math.round(totalMinutes * 60)}s -->`);
   lines.push("");
   lines.push("| Time | Section | Spoken | Visual |");
   lines.push("|------|---------|--------|--------|");

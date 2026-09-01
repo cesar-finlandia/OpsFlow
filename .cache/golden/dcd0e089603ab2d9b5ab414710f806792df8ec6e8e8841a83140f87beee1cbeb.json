@@ -1,0 +1,93 @@
+{
+  "step_id": "agent.plan",
+  "status": "done",
+  "payload": {
+    "planner": "deterministic",
+    "steps": [
+      {
+        "tool": "search_inventory",
+        "args": {
+          "query": "blue",
+          "inStockOnly": false,
+          "limit": 25
+        },
+        "rationale": "find blue variants"
+      },
+      {
+        "tool": "filter_variants",
+        "args": {
+          "options": {
+            "color": "Blue"
+          },
+          "maxPriceCents": 1200,
+          "minStock": 1,
+          "maxStock": 5,
+          "limit": 25
+        },
+        "rationale": "narrow to low-stock Blues under $12"
+      },
+      {
+        "tool": "calculate_shipping",
+        "args": {
+          "items": [
+            {
+              "sku": "OPS-1002-BLU-M",
+              "qty": 1
+            },
+            {
+              "sku": "OPS-1005-BLU-M",
+              "qty": 1
+            },
+            {
+              "sku": "OPS-1007-BLU-M",
+              "qty": 1
+            },
+            {
+              "sku": "OPS-1009-BLU-L",
+              "qty": 1
+            }
+          ],
+          "zone": 4,
+          "service": "ground"
+        },
+        "rationale": "quote zone 4 ground"
+      },
+      {
+        "tool": "hold_order",
+        "args": {
+          "lineItems": [
+            {
+              "sku": "OPS-1002-BLU-M",
+              "qty": 1
+            },
+            {
+              "sku": "OPS-1005-BLU-M",
+              "qty": 1
+            },
+            {
+              "sku": "OPS-1007-BLU-M",
+              "qty": 1
+            },
+            {
+              "sku": "OPS-1009-BLU-L",
+              "qty": 1
+            }
+          ],
+          "ttlMinutes": 15,
+          "note": "demo batch \u2014 low-stock blues"
+        },
+        "rationale": "hold the batch"
+      },
+      {
+        "tool": "confirm_fulfillment",
+        "args": {
+          "holdId": "HOLD-ABCD1234"
+        },
+        "rationale": "confirm after human gate"
+      }
+    ],
+    "degraded": false
+  },
+  "trace_id": "opsflow-golden",
+  "degraded": false
+}

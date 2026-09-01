@@ -1,16 +1,24 @@
 <!doctype html>
-<!-- Requirement IDs: UI-03, UI-06, UI-AC-02 | DP-B §10.8 item 1 -->
-<!-- Minimal dev shell for the platform UI library: THEME env selects the
-     theme at bootstrap (single config change); layout is single-focus per
-     docs/ui-layout.md. Not a product app — demo/smoke surface only. -->
+<!-- Requirement IDs: FR-01, FR-13, MAN-03, NFR-10 | DP-UI §2.7 -->
+<!-- OpsFlow — WebMCP agent-native fulfillment console. The five WebMCP tools are
+     registered from src/webmcp/register.ts before first paint (FR-01); this shell
+     stays deliberately minimal so cold load to "five tools registered" stays under
+     1.5 s (NFR-10). Origin isolation and the `tools` Permissions Policy are set by
+     response headers (vercel.json, MAN-03), not by markup. -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Platform UI — dev shell</title>
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="OpsFlow — an agent-native fulfillment console for solo operators. Five WebMCP tools let a browser agent search, filter, quote, hold and confirm a fulfillment batch, with every state change gated behind a human confirmation click."
+    />
+    <title>OpsFlow — WebMCP Fulfillment Console</title>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/examples/ui/dev-main.tsx"></script>
+    <noscript>OpsFlow is a WebMCP console and requires JavaScript.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

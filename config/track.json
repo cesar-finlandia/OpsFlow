@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "chain": [
+    { "artifact": "winning_project_plan.md", "source": null, "produced_by": "human" },
+    { "artifact": "assembly.manifest.json", "source": "winning_project_plan.md", "produced_by": "chassis: assembly" },
+    { "artifact": "disclosure.md", "source": "assembly.manifest.json", "produced_by": "npx vite-node src/provenance/prov/cli.ts generate" },
+    { "artifact": "deck/", "source": "assembly.manifest.json", "produced_by": "npx vite-node src/ideation/deckgen/cli.ts populate" },
+    { "artifact": "script.md", "source": "winning_project_plan.md", "produced_by": "npx vite-node src/ideation/script/cli.ts generate --config timing.yaml" },
+    { "artifact": "submission.md", "source": "winning_project_plan.md", "produced_by": "npx vite-node src/provenance/submit/cli.ts format" }
+  ]
+}
