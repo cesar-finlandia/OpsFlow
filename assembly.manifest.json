@@ -1,0 +1,192 @@
+{
+  "manifest_version": "1.0.0",
+  "created_at": "2026-09-01T09:54:35.017Z",
+  "chassis_version": "v0.0.0-unresolved",
+  "components": [
+    {
+      "id": "resilience",
+      "included": true,
+      "version": "1.0.0",
+      "requires_env": [],
+      "requires_providers": []
+    },
+    {
+      "id": "platform",
+      "included": true,
+      "version": "1.0.0",
+      "requires_env": [
+        "VERCEL_TOKEN",
+        "VERCEL_PROJECT_ID"
+      ],
+      "requires_providers": [
+        "vercel"
+      ]
+    },
+    {
+      "id": "media",
+      "included": false,
+      "version": "1.0.0",
+      "requires_env": [
+        "OPENAI_API_KEY"
+      ],
+      "requires_providers": [
+        "openai",
+        "replicate",
+        "elevenlabs"
+      ]
+    },
+    {
+      "id": "ideation",
+      "included": true,
+      "version": "1.0.0",
+      "requires_env": [
+        "OPENAI_API_KEY"
+      ],
+      "requires_providers": [
+        "openai",
+        "playwright"
+      ]
+    },
+    {
+      "id": "context",
+      "included": true,
+      "version": "1.0.0",
+      "requires_env": [],
+      "requires_providers": []
+    },
+    {
+      "id": "dev-tooling",
+      "included": true,
+      "version": "1.0.0",
+      "requires_env": [],
+      "requires_providers": []
+    },
+    {
+      "id": "assembly-advisory",
+      "included": false,
+      "version": "1.0.0",
+      "requires_env": [
+        "OPENAI_API_KEY",
+        "ANTHROPIC_API_KEY"
+      ],
+      "requires_providers": [
+        "openai",
+        "anthropic"
+      ]
+    },
+    {
+      "id": "data",
+      "included": true,
+      "version": "1.0.0",
+      "requires_env": [
+        "OPENAI_API_KEY"
+      ],
+      "requires_providers": [
+        "openai"
+      ]
+    },
+    {
+      "id": "cost",
+      "included": true,
+      "version": "1.0.0",
+      "requires_env": [],
+      "requires_providers": []
+    },
+    {
+      "id": "provenance",
+      "included": true,
+      "version": "1.0.0",
+      "requires_env": [],
+      "requires_providers": []
+    },
+    {
+      "id": "pgm",
+      "included": false,
+      "version": "1.0.0",
+      "requires_env": [
+        "OPENAI_API_KEY"
+      ],
+      "requires_providers": [
+        "openai",
+        "reddit"
+      ]
+    },
+    {
+      "id": "profile",
+      "included": false,
+      "version": "1.0.0",
+      "requires_env": [
+        "OPENAI_API_KEY"
+      ],
+      "requires_providers": [
+        "openai"
+      ]
+    }
+  ],
+  "selection_rationale": [
+    {
+      "id": "resilience",
+      "decision": "include",
+      "reason": "WebMCP Leverage requires 5 non-trivial tools; \"execute: async (input) => { /* ... */ }\" can abort mid-demo. withResilience/DegradedResult prevents blank-screen per \"must be capable of being successfully installed and running consistently\""
+    },
+    {
+      "id": "platform",
+      "decision": "include",
+      "reason": "Submission requires deployed app; \"Provide a working live URL that judges can access using ChatGPT's in-app browser\" mandates hosting via Vercel/Cloudflare/any provider with origin-isolated tools policy self"
+    },
+    {
+      "id": "media",
+      "decision": "exclude",
+      "reason": "No source 1 clause requires STT/TTS/vision/PDF; mandatory tools are typed JSON \"search_inventory, filter_variants, calculate_shipping\"; accepting risk of losing voice/multimodal bonus but not disqualification, avoids extra REPLICATE/ELEVENLABS keys"
+    },
+    {
+      "id": "ideation",
+      "decision": "include",
+      "reason": "Submission field 4 mandates \"must include a clear demo of your project functioning and with audio that covers what you built and how you used WebMCP\" plus 4-prompt text; deckgen/script/demodrive/faqdef produce deck, timed script, Q&A and <3-min YouTube capture"
+    },
+    {
+      "id": "context",
+      "decision": "include",
+      "reason": "Co-task is multi-step human+agent flow; \"humans and agents can interact, collaborate, and create together\" requires provider-agnostic message buffer to hold tool outputs across search→filter→hold→confirm without context-length error"
+    },
+    {
+      "id": "dev-tooling",
+      "decision": "include",
+      "reason": "Testing gate: \"test your deployed app in ChatGPT's in-app browser or Google Chrome with WebMCP enabled\" — doctor catches flag/origin-trial misconfig, mock replays tool-call envelopes offline, track prevents deck/submission staleness"
+    },
+    {
+      "id": "assembly-advisory",
+      "decision": "exclude",
+      "reason": "Already consumed pre-assembly to propose manifest; no source 1 clause requires ASM/ADV CLI inside delivered app; accepting risk of losing in-app advisory but not Stage One, keeps bundle minimal"
+    },
+    {
+      "id": "data",
+      "decision": "include",
+      "reason": "Golden path needs seeded fixtures for judges without Shopify tenant; \"hold all low-stock variants under $12 shipping to zone 4\" requires synthetic catalog/inventory/itinerary with synthetic:true watermark for offline rehearsal"
+    },
+    {
+      "id": "cost",
+      "decision": "include",
+      "reason": "Winning plan uses \"Gemini 2.5 Flash via Gemini API parses multi-constraint intent\" — LLM token burn risk; plus hosting \"Vercel $30 in build credits (first 1000 builders)\" cap; cost metering with CTX-02 counter prevents credit burn mid-demo"
+    },
+    {
+      "id": "provenance",
+      "decision": "include",
+      "reason": "Rules require \"Must be open source by including an open source license file\" and \"This license should be detectable and visible at the top\"; prov/submit generate disclosure.md and enforce repo hygiene before public push"
+    },
+    {
+      "id": "pgm",
+      "decision": "exclude",
+      "reason": "pgm is pre-assembly market research only, never part of the delivered app (NONGOAL-12) — Reddit-grounded winning_project_plan.md producer not judged as deployed application"
+    },
+    {
+      "id": "profile",
+      "decision": "exclude",
+      "reason": "already run pre-assembly, not part of delivered app — event_profile.json already extracted from brief; no source 1 clause requires re-running profile inside working copy"
+    }
+  ],
+  "git": {
+    "initialized": true,
+    "baseline_commit": "539d35ebe681af36ac725ac5780c93c0ea8fdff2"
+  }
+}
