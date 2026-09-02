@@ -2,6 +2,7 @@ import { planGoal } from "./planner.ts";
 import { executeToolCompat } from "../webmcp/policy.ts";
 import { emitToolEvent, newTraceId } from "../engine/envelopes.ts";
 import { appendTranscript } from "../engine/context.ts";
+import { beginTrace } from "../ui/state/session.ts";
 import type { ToolPlan, ToolOutcome, ToolName } from "../engine/types.ts";
 
 let ctrl: AbortController | null = null;
@@ -41,6 +42,8 @@ export const orchestrator: {
   abort(): void;
 } = {
   async run(goal: string, opts?: { signal?: AbortSignal }): Promise<{ plan: ToolPlan; results: Array<ToolOutcome<unknown>>; traceId: string }> {
+    // Reset degraded banner for new trace — otherwise it sticks forever after one degraded envelope (user-reported)
+    try { beginTrace(); } catch {}
     const traceId = newTraceId();
     await emitToolEvent("agent.plan", "started", { goal }, { traceId });
     const skus = getCurrentSkus();

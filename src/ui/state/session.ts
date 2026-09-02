@@ -177,3 +177,12 @@ export function resetSessionForTests(): void {
   _degraded = false;
   publishSessionAccessors();
 }
+
+export function beginTrace(): void {
+  // Banner "Replaying cached results" must reflect the *current* trace, not sticky history (FR-18).
+  // User reported it stayed forever after one degraded run — reset at each new batch.
+  _degraded = false;
+  _traceStartMs = Date.now();
+  publishSessionAccessors();
+  notify();
+}
