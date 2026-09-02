@@ -10,18 +10,22 @@ function formatCents(cents: number): string {
 }
 
 export function ShippingScreen(): JSX.Element {
-  const { resultSkus, lastQuote } = useSession();
+  const { resultSkus = [], selectedSkus = [], effectiveSkus: eff, lastQuote } = useSession() as { resultSkus?: string[]; selectedSkus?: string[]; effectiveSkus?: string[]; lastQuote: import("src/engine/types.ts").ShippingQuote | null };
   const [zone, setZone] = React.useState<ShippingZone>(4);
   const [service, setService] = React.useState<ServiceLevel>("ground");
   const [skusText, setSkusText] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
   const [showExplain, setShowExplain] = React.useState(false);
 
+  // Effective set is what Batch checkboxes selected, or the last search/filter result if none selected
+  const displaySkus = eff ?? (selectedSkus.length > 0 ? selectedSkus : resultSkus) ?? [];
+  const hasSelection = (selectedSkus?.length ?? 0) > 0;
+
   async function handleDeclarativeSubmit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     setSubmitting(true);
     try {
-      const skus = (skusText || resultSkus.join(",")).split(",").map((s) => s.trim()).filter(Boolean);
+      const skus = (skusText || displaySkus.join(",")).split(",").map((s) => s.trim()).filter(Boolean);
       const items = skus.map((sku) => ({ sku, qty: 1 }));
       await executeToolCompat("calculate_shipping", { items, zone, service });
     } finally {
@@ -95,9 +99,12 @@ export function ShippingScreen(): JSX.Element {
             <option value="overnight">Overnight</option>
           </select>
         </label>
+        <div className="opsflow-count" data-testid="effective-skus-info">
+          {displaySkus.length === 0 ? "No SKUs from Batch — run a batch or enter SKUs" : hasSelection ? `${displaySkus.length} selected from Batch — ${displaySkus.slice(0,3).join(", ")}${displaySkus.length>3?"…":""} (quote will use your selection)` : `${displaySkus.length} from last Batch result — ${displaySkus.slice(0,3).join(", ")}${displaySkus.length>3?"…":""} (all matched, or select subset in Batch)`}
+        </div>
         <label>
           SKUs (comma-separated, 1–50 items)
-          <input name="skus" type="text" value={skusText} placeholder={resultSkus.slice(0, 3).join(", ") || "OPS-1042-BLU-M, OPS-1050-RED-S"} onChange={(e) => setSkusText(e.target.value)} tooldescription="Comma-separated variant SKUs to quote; defaults to current result set from Batch tab" />
+          <input name="skus" type="text" value={skusText} placeholder={displaySkus.slice(0, 3).join(", ") || "OPS-1042-BLU-M, OPS-1050-RED-S"} onChange={(e) => setSkusText(e.target.value)} tooldescription="Comma-separated variant SKUs to quote; defaults to selected SKUs from Batch tab, or the full Batch result if none selected" />
         </label>
         <span className="of-form__actions">
           <button className="opsflow-primary" type="submit" disabled={submitting}>{submitting ? "Quoting…" : "Calculate shipping (declarative)"}</button>

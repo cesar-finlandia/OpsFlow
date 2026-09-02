@@ -1,19 +1,22 @@
 import * as React from "react";
 import { orchestrator } from "src/agent/orchestrator.ts";
-import { useSession } from "src/ui/state/session.ts";
+import { useSession, setSelectedSkus } from "src/ui/state/session.ts";
 import type { VariantMatch } from "src/engine/types.ts";
 import { AgentActivity } from "src/ui/components/AgentActivity.tsx";
 import { SignalMark } from "src/ui/components/Icons.tsx";
 import { HelpTip } from "src/ui/components/HelpTip.tsx";
 
 export function BatchScreen(): JSX.Element {
-  const { envelopes } = useSession();
+  const { envelopes, selectedSkus: sessionSelected = [] } = useSession() as { envelopes: import("src/platform/transport").EventEnvelope[]; selectedSkus?: string[] };
   const [goal, setGoal] = React.useState("");
   const [running, setRunning] = React.useState(false);
   const [hasRun, setHasRun] = React.useState(false);
-  const [selectedSkus, setSelectedSkus] = React.useState<string[]>([]);
+  const [selectedSkus, setSelectedLocal] = React.useState<string[]>([]);
   const [toast, setToast] = React.useState<string | null>(null);
   const [showDetails, setShowDetails] = React.useState(false);
+
+  // Keep local selection in sync with session (session is source of truth for Shipping)
+  React.useEffect(() => { setSelectedLocal([...(sessionSelected ?? [])]); }, [sessionSelected]);
 
   // derive plan steps for running message
   let planSteps: Array<{ tool: string; rationale: string }> = [];
@@ -100,18 +103,21 @@ export function BatchScreen(): JSX.Element {
   total = totalVariants;
 
   function toggleSku(sku: string, checked: boolean): void {
-    setSelectedSkus((prev) => {
+    setSelectedLocal((prev) => {
+      let next: string[];
       if (checked) {
         if (prev.includes(sku)) return prev;
         if (prev.length >= 50) {
           setToast("Selection capped at 50 SKUs — deselect some to add others");
           return prev;
         }
-        return [...prev, sku];
+        next = [...prev, sku];
       } else {
         setToast(null);
-        return prev.filter((s) => s !== sku);
+        next = prev.filter((s) => s !== sku);
       }
+      setSelectedSkus(next);
+      return next;
     });
   }
 
@@ -134,15 +140,17 @@ export function BatchScreen(): JSX.Element {
 
   return (
     <div>
-      <div className="opsflow-goalbar">
+      <form className="opsflow-goalbar" onSubmit={(e) => { e.preventDefault(); handleRun(); }}>
       <input
         data-testid="goal-input"
         placeholder="e.g. hold all low-stock blue variants under $12 shipping to zone 4 for 15 minutes"
         value={goal}
         onChange={(e) => setGoal(e.target.value)}
+        onKeyDown={(e) => { if (e.key === "Enter" && !running && goal.trim()) { e.preventDefault(); handleRun(); } }}
         aria-label="Goal"
+        autoFocus
       />
-      <button className="opsflow-primary" onClick={handleRun} disabled={running} aria-label="Run batch">{running ? "Running…" : "Run batch"}</button>
+      <button className="opsflow-primary" type="submit" disabled={running} aria-label="Run batch" autoFocus>{running ? "Running…" : "Run batch"}</button>
       <button onClick={handleRun} disabled={running} style={{ display: "none" }} aria-hidden="true">Run with agent</button>
       {/* The label deliberately avoids the word "goal": the input's own
           aria-label is "Goal", and getByLabel matches on substring, so a help
@@ -152,7 +160,7 @@ export function BatchScreen(): JSX.Element {
         <p>Describe the outcome, not the steps: <em>&quot;hold all low-stock blue variants under $12 shipping to zone 4 for 15 minutes&quot;</em>. The agent picks which tools to call, in what order, and shows you each one as it goes.</p>
         <p>Starting a batch only reads and quotes. Anything that reserves stock or commits a fulfilment stops and asks you first, with the exact arguments on screen.</p>
       </HelpTip>
-      </div>
+      </form>
       {toast && <div role="status">{toast}</div>}
       {running && (
         <AgentActivity

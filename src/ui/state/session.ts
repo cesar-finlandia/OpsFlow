@@ -16,6 +16,7 @@ let _envelopes: EventEnvelope[] = [];
 let _seen = new Set<string>();
 let _holds: Hold[] = [];
 let _resultSkus: string[] = [];
+let _selectedSkus: string[] = [];
 let _lastQuote: ShippingQuote | null = null;
 let _meter: SavingsMeter = emptyMeter();
 let _traceStartMs: number | null = null;
@@ -34,6 +35,8 @@ function publishSessionAccessors(): void {
   try {
     const g = globalThis as unknown as Record<string, unknown>;
     g["__opsflow_getLastResultSkus"] = (): string[] => [..._resultSkus];
+    g["__opsflow_getSelectedSkus"] = (): string[] => [..._selectedSkus];
+    g["__opsflow_getEffectiveSkus"] = (): string[] => [...(_selectedSkus.length > 0 ? _selectedSkus : _resultSkus)];
     g["__opsflow_lastQuote"] = _lastQuote;
   } catch {
     // a locked-down global object must never break the session
@@ -42,10 +45,20 @@ function publishSessionAccessors(): void {
 
 function notify(): void {
   publishSessionAccessors();
-  listeners.forEach((fn) => fn());
+  // Defer React bumps to next microtask to avoid "Cannot update a component while rendering another"
+  // when BatchScreen's checkbox handler triggers both local setState and session notify in same tick
+  queueMicrotask(() => listeners.forEach((fn) => fn()));
 }
 
 export function sessionResultSkus(): string[] { return [..._resultSkus]; }
+export function selectedSkus(): string[] { return [..._selectedSkus]; }
+export function effectiveSkus(): string[] { return [...(_selectedSkus.length > 0 ? _selectedSkus : _resultSkus)]; }
+export function setSelectedSkus(skus: string[]): void {
+  const normalized = [...new Set(skus.filter(Boolean))].slice(0, 50);
+  if (normalized.length === _selectedSkus.length && normalized.every((v, i) => v === _selectedSkus[i])) return;
+  _selectedSkus = normalized;
+  notify();
+}
 export function lastQuote(): ShippingQuote | null { return _lastQuote; }
 
 function envelopeKey(e: EventEnvelope): string {
@@ -77,7 +90,16 @@ function ingest(env: EventEnvelope): boolean {
 
   if ((env.step_id === "tool.search_inventory" || env.step_id === "tool.filter_variants") && env.status === "done") {
     const outcome = (env.payload as { outcome?: { ok: boolean; data?: { matches?: Array<{ sku: string }> } } })?.outcome;
-    if (outcome?.ok && outcome.data?.matches) _resultSkus = outcome.data.matches.map((m) => m.sku);
+    if (outcome?.ok && outcome.data?.matches) {
+      _resultSkus = outcome.data.matches.map((m) => m.sku);
+      // New result invalidates prior checkbox selection (Batch → Shipping carry-over is per-batch)
+      // Keep selection only if it is still a subset of the new result, otherwise clear
+      if (_selectedSkus.length > 0) {
+        const set = new Set(_resultSkus);
+        const stillValid = _selectedSkus.every((s) => set.has(s));
+        if (!stillValid) _selectedSkus = [];
+      }
+    }
   }
   if (env.step_id === "tool.calculate_shipping" && env.status === "done") {
     const outcome = (env.payload as { outcome?: { ok: boolean; data?: ShippingQuote } })?.outcome;
@@ -103,7 +125,7 @@ onEnvelope((env) => {
 
 publishSessionAccessors();
 
-export function useSession(): { envelopes: EventEnvelope[]; degraded: boolean; holds: Hold[]; meter: SavingsMeter; lastQuote: ShippingQuote | null; resultSkus: string[] } {
+export function useSession(): { envelopes: EventEnvelope[]; degraded: boolean; holds: Hold[]; meter: SavingsMeter; lastQuote: ShippingQuote | null; resultSkus: string[]; selectedSkus: string[]; effectiveSkus: string[] } {
   const [, bump] = React.useState(0);
 
   React.useEffect(() => {
@@ -140,7 +162,7 @@ export function useSession(): { envelopes: EventEnvelope[]; degraded: boolean; h
     return () => { cancelled = true; };
   }, []);
 
-  return { envelopes: _envelopes, degraded: _degraded, holds: _holds, meter: _meter, lastQuote: _lastQuote, resultSkus: _resultSkus };
+  return { envelopes: _envelopes, degraded: _degraded, holds: _holds, meter: _meter, lastQuote: _lastQuote, resultSkus: _resultSkus, selectedSkus: _selectedSkus, effectiveSkus: _selectedSkus.length > 0 ? _selectedSkus : _resultSkus };
 }
 
 export function resetSessionForTests(): void {
@@ -148,6 +170,7 @@ export function resetSessionForTests(): void {
   _seen = new Set<string>();
   _holds = [];
   _resultSkus = [];
+  _selectedSkus = [];
   _lastQuote = null;
   _meter = emptyMeter();
   _traceStartMs = null;

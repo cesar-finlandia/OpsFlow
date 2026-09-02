@@ -21,7 +21,6 @@ function validateSearch(body: Record<string, unknown>): Array<{ message: string;
   else {
     const q = body["query"];
     if (typeof q !== "string") errs.push({ path: "/query", message: "must be string", code: "type" });
-    else if (q.length < 1) errs.push({ path: "/query", message: "must NOT have fewer than 1 characters", code: "minLength" });
     else if (q.length > 200) errs.push({ path: "/query", message: "must NOT have more than 200 characters", code: "maxLength" });
   }
   if ("inStockOnly" in body && typeof body["inStockOnly"] !== "boolean") errs.push({ path: "/inStockOnly", message: "must be boolean", code: "type" });
@@ -40,7 +39,8 @@ function isLowStock(v: { stock: number; low_stock_threshold: number }): boolean 
 
 function searchVariants(catalog: ReturnType<typeof loadCatalog>, input: { query: string; inStockOnly?: boolean; limit?: number }): { matches: unknown[]; total: number; truncated: boolean; query_echo: string } {
   const query_echo = (input.query ?? "").slice(0, 200);
-  const terms = query_echo.toLowerCase().trim() === "" ? [] : query_echo.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const lower = query_echo.toLowerCase().trim();
+  const terms = lower === "" || lower === "*" || lower === "all" ? [] : lower.split(/\s+/).filter(Boolean);
   const survivors: Array<{ product: { title: string; brand: string; category: string }; variant: { sku: string; title: string; options: { size: string; color: string }; price_cents: number; stock: number; low_stock_threshold: number } }> = [];
   for (const product of catalog.products ?? []) {
     for (const variant of product.variants ?? []) {

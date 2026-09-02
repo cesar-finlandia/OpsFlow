@@ -27,7 +27,7 @@ export const SEARCH_INVENTORY_SCHEMA: JSONSchema7 = {
   additionalProperties: false,
   required: ["query"],
   properties: {
-    query: { type: "string", minLength: 1, maxLength: 200, description: "Free-text query, truncated to 200 chars before validation" },
+    query: { type: "string", minLength: 0, maxLength: 200, description: "Free-text query; use '*' or 'all' or empty for full catalog, truncated to 200 chars before validation" },
     inStockOnly: { type: "boolean" },
     limit: { type: "integer", minimum: 1, maximum: 50, description: "Result limit, default 25 from config.tools.default_limit" }
   }

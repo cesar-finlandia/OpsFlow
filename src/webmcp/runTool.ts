@@ -4,6 +4,7 @@ import { emitToolEvent, newTraceId, currentTraceId } from "src/engine/envelopes.
 import { isDegradedResult } from "src/engine/resilience.ts";
 import { apiClient } from "src/engine/apiClient.ts";
 import { holdsStore } from "src/engine/domain/holdsStore.ts";
+import { loadCatalog, variantBySku } from "src/engine/domain/catalog.ts";
 import { TOOL_SCHEMAS } from "./schemas.ts";
 import { requestConfirmation } from "./confirm.ts";
 import type {
@@ -53,7 +54,7 @@ function resolveSessionCollections(name: ToolName, input: unknown, maxItems: num
   const obj = input as Record<string, unknown>;
   const current = obj[key];
   if (Array.isArray(current) && current.length > 0) return input;
-  const skus = sessionResultSkus();
+  const skus = sessionEffectiveSkus();
   if (!skus || skus.length === 0) return input;
   return { ...obj, [key]: skus.slice(0, maxItems).map((sku) => ({ sku, qty: 1 })) };
 }
@@ -63,7 +64,39 @@ function summariseConfirmationArgs(tool: ToolName, args: Record<string, unknown>
     const items = (args["lineItems"] as Array<{ sku: string; qty: number }>) ?? [];
     const ttl = args["ttlMinutes"];
     const note = args["note"] ? ` with note '${String(args["note"]).slice(0, 60)}'` : "";
-    return `Hold ${items.length} SKU(s) for ${String(ttl)} minutes${note}.`;
+    let details = "";
+    try {
+      const catalog = loadCatalog();
+      if (items.length > 0) {
+        const maxShow = 8;
+        const showCount = Math.min(items.length, maxShow);
+        const lines = items.slice(0, showCount).map(({ sku, qty }) => {
+          const variant = variantBySku(catalog, sku);
+          if (variant) return `- ${sku}: ${variant.title} — ${variant.options.size}/${variant.options.color} — $${(variant.price_cents/100).toFixed(2)} ×${qty} (stock ${variant.stock})`;
+          return `- ${sku} ×${qty}`;
+        });
+        details = "\n" + lines.join("\n");
+        if (items.length > maxShow) details += `\n… and ${items.length - maxShow} more`;
+      }
+    } catch {}
+    return `Hold ${items.length} SKU(s) for ${String(ttl)} minutes${note}.${details}`;
+  }
+  if (tool === "confirm_fulfillment") {
+    const holdId = String(args["holdId"] ?? "");
+    try {
+      const hold = holdsStore.get(holdId);
+      if (hold && Array.isArray(hold.line_items) && hold.line_items.length > 0) {
+        const catalog = loadCatalog();
+        const preview = hold.line_items.slice(0, 5).map(({ sku, qty }) => {
+          const v = variantBySku(catalog, sku);
+          if (v) return `- ${sku}: ${v.title} — ${v.options.size}/${v.options.color} ×${qty}`;
+          return `- ${sku} ×${qty}`;
+        }).join("\n");
+        const more = hold.line_items.length > 5 ? `\n… and ${hold.line_items.length - 5} more` : "";
+        return `Confirm hold ${holdId} — ${hold.line_items.length} SKU(s):\n${preview}${more}`;
+      }
+    } catch {}
+    return `Confirm hold ${holdId}.`;
   }
   return `Confirm hold ${String(args["holdId"] ?? "")}.`;
 }
@@ -84,6 +117,24 @@ function sessionResultSkus(): string[] | undefined {
     }
   } catch {}
   return undefined;
+}
+
+function sessionEffectiveSkus(): string[] | undefined {
+  try {
+    const g = (globalThis as unknown as Record<string, unknown>)["__opsflow_getEffectiveSkus"];
+    if (typeof g === "function") {
+      const v = (g as () => unknown)();
+      if (Array.isArray(v) && v.length > 0) return v as string[];
+    }
+  } catch {}
+  try {
+    const g2 = (globalThis as unknown as Record<string, unknown>)["__opsflow_getSelectedSkus"];
+    if (typeof g2 === "function") {
+      const v2 = (g2 as () => unknown)();
+      if (Array.isArray(v2) && v2.length > 0) return v2 as string[];
+    }
+  } catch {}
+  return sessionResultSkus();
 }
 
 function lastQuote(): ShippingQuote | null {

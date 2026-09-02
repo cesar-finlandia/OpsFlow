@@ -42,7 +42,7 @@ export function buildHaystack(product: Product, variant: Variant): string {
 export function parseQuery(q: string): string[] {
   const truncated = q.slice(0, 200);
   const lower = truncated.toLowerCase().trim();
-  if (lower === "") return [];
+  if (lower === "" || lower === "*" || lower === "all") return [];
   return lower.split(/\s+/).filter(Boolean);
 }
 
