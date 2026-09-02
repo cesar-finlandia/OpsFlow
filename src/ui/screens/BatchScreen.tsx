@@ -15,6 +15,7 @@ export function BatchScreen(): JSX.Element {
   const [toast, setToast] = React.useState<string | null>(null);
   const [showDetails, setShowDetails] = React.useState(false);
   const [aiAnswer, setAiAnswer] = React.useState<string | null>(null);
+  const [aiAnswerPlanner, setAiAnswerPlanner] = React.useState<string | null>(null);
   const [aiAnswerLoading, setAiAnswerLoading] = React.useState(false);
 
   // Keep local selection in sync with session (session is source of truth for Shipping)
@@ -137,7 +138,7 @@ export function BatchScreen(): JSX.Element {
       return {
         title: "Agent Insight",
         body: aiAnswer,
-        planner: lastPlan?.planner ?? "gemini-3.5-flash-lite",
+        planner: aiAnswerPlanner ?? lastPlan?.planner ?? "gemini-3.5-flash-lite",
       };
     }
     if (aiAnswerLoading) {
@@ -185,6 +186,7 @@ export function BatchScreen(): JSX.Element {
     setHasRun(true);
     setShowDetails(false);
     setAiAnswer(null);
+    setAiAnswerPlanner(null);
     try {
       await orchestrator.run(goal);
       // For informational questions, fetch a Gemini-generated summary after the search (catalog, low-stock, date)
@@ -222,8 +224,11 @@ export function BatchScreen(): JSX.Element {
             body: JSON.stringify({ goal, matches: currentMatches }),
           });
           if (res.ok) {
-            const data = await res.json() as { ok: boolean; answer?: string };
-            if (data.ok && data.answer) setAiAnswer(data.answer);
+            const data = await res.json() as { ok: boolean; answer?: string; planner?: string };
+            if (data.ok && data.answer) {
+              setAiAnswer(data.answer);
+              if (data.planner) setAiAnswerPlanner(data.planner);
+            }
           }
         } catch {}
         setAiAnswerLoading(false);

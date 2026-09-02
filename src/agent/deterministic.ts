@@ -55,9 +55,9 @@ export function planDeterministic(goal: string, catalog: Catalog): ToolPlan {
     for (const p of catalog.products ?? []) for (const v of p.variants ?? []) { if (v.options?.size) sizeSet.add(v.options.size.toLowerCase()); }
     const foundSizes = [...sizeSet].filter((s) => new RegExp(`\\b${escapeRegExp(s)}\\b`, "i").test(g));
 
-    // 4) price cap
+    // 4) price cap — also handles "lower than / less than / cheaper than" phrasing seen in demo ("prices lower than 7$")
     let maxPriceCents: number | null = null;
-    const priceMatch = g.match(/(?:under|below|<)\s*\$?\s*(\d+(?:\.\d{1,2})?)/);
+    const priceMatch = g.match(/(?:under|below|lower than|less than|cheaper than|<)\s*\$?\s*(\d+(?:\.\d{1,2})?)/);
     if (priceMatch && priceMatch[1]) {
       const v = parseFloat(priceMatch[1]);
       if (!Number.isNaN(v)) maxPriceCents = Math.round(v * 100);
@@ -88,7 +88,7 @@ export function planDeterministic(goal: string, catalog: Catalog): ToolPlan {
     const lowStock = /low[- ]?stock/.test(g);
 
     // 9) Build the query string: take g, split on whitespace/punctuation, drop stop-words, drop pure numbers/prices/zones/TTLs, drop colour/size tokens, fallback
-    const stopWords = new Set(["the","a","an","and","or","for","with","all","hold","reserve","confirm","commit","fulfil","fulfill","shipping","zone","stock","low","under","below","minutes","minute","ground","expedited","overnight","express","variants","variant","dollars","dollar","usd","price","show","me","my","full","catalog","entire","list","display","view","see","items","item","products","product","what","which","kind","kinds","type","types","are","is","of","in","this","that","there","was","were","be","been","being","have","has","had","do","does","did","will","would","could","should","can","may","might","must","shall","when","where","why","how","are","is","whats","what's"]);
+    const stopWords = new Set(["the","a","an","and","or","for","with","all","hold","reserve","confirm","commit","fulfil","fulfill","shipping","zone","stock","low","under","below","lower","less","cheaper","than","minutes","minute","ground","expedited","overnight","express","variants","variant","dollars","dollar","usd","price","prices","show","me","my","full","catalog","entire","list","display","view","see","items","item","products","product","what","which","kind","kinds","type","types","are","is","of","in","this","that","there","was","were","be","been","being","have","has","had","do","does","did","will","would","could","should","can","may","might","must","shall","when","where","why","how","are","is","whats","what's"]);
     // Broad catalog intent: "what kind of products are in this catalog?" -> wildcard
     const isBroadCatalog = /what kind of products|what products|show.*catalog|full catalog|entire catalog|list.*catalog|what.*in.*catalog/i.test(g);
     const rawTokens = g.split(/[^a-z0-9\$]+/).filter(Boolean);
