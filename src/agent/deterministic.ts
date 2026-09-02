@@ -88,7 +88,7 @@ export function planDeterministic(goal: string, catalog: Catalog): ToolPlan {
     const lowStock = /low[- ]?stock/.test(g);
 
     // 9) Build the query string: take g, split on whitespace/punctuation, drop stop-words, drop pure numbers/prices/zones/TTLs, drop colour/size tokens, fallback
-    const stopWords = new Set(["the","a","an","and","or","for","with","all","hold","reserve","confirm","commit","fulfil","fulfill","shipping","zone","stock","low","under","below","minutes","minute","ground","expedited","overnight","express","variants","variant","dollars","dollar","usd","price"]);
+    const stopWords = new Set(["the","a","an","and","or","for","with","all","hold","reserve","confirm","commit","fulfil","fulfill","shipping","zone","stock","low","under","below","minutes","minute","ground","expedited","overnight","express","variants","variant","dollars","dollar","usd","price","show","me","my","full","catalog","entire","list","display","view","see","items","item","products","product"]);
     const rawTokens = g.split(/[^a-z0-9\$]+/).filter(Boolean);
     const filtered: string[] = [];
     // helpers to know which tokens to drop for numbers/prices/zones/TTLs

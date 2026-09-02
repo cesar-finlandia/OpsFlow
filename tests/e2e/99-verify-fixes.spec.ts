@@ -52,15 +52,19 @@ test.describe("Verify user fixes", () => {
     const info = page.getByTestId("effective-skus-info");
     await expect(info).toBeVisible();
     await expect(info).toContainText("5");
-    // Should contain olive SKUs (OLI), not hardcoded fallback
+    // Should not be hardcoded fallback
     const infoText = await info.innerText();
     expect(infoText).not.toContain("OPS-1042-BLU-M, OPS-1050-RED-S");
-    // The display should show OLI SKUs (olive)
-    await expect(info).toContainText("OLI");
-    // Also check input placeholder is not hardcoded fallback when we have SKUs
+    // Shipping panel should show OLI SKUs fully disclosed
+    const panel = page.getByTestId("shipping-selected-panel");
+    await expect(panel).toBeVisible();
+    await expect(panel).toContainText("OLI");
+    // Input should be prefilled with SKUs, not placeholder
     const input = page.locator('input[name="skus"]');
     const placeholder = await input.getAttribute("placeholder");
-    expect(placeholder).not.toBe("OPS-1042-BLU-M, OPS-1050-RED-S");
+    expect(placeholder).toBe(""); // no SKU placeholder when empty
+    const inputValue = await input.inputValue();
+    expect(inputValue).toContain("OLI");
   });
 
   test("Manual checkbox selection carries to Shipping", async ({ webmcpPage: page }) => {
@@ -83,11 +87,16 @@ test.describe("Verify user fixes", () => {
     await page.getByRole("tab", { name: "Shipping" }).click();
     const info = page.getByTestId("effective-skus-info");
     await expect(info).toContainText("2 selected from Batch");
-    await expect(info).toContainText(firstSku);
-    await expect(info).toContainText(secondSku);
-    // Input placeholder should be those 2
+    // Info no longer contains SKUs, panel does
+    const panel = page.getByTestId("shipping-selected-panel");
+    await expect(panel).toContainText(firstSku);
+    await expect(panel).toContainText(secondSku);
+    // Input should be prefilled, not placeholder
     const input = page.locator('input[name="skus"]');
+    const inputValue = await input.inputValue();
+    expect(inputValue).toContain(firstSku);
+    expect(inputValue).toContain(secondSku);
     const placeholder = await input.getAttribute("placeholder");
-    expect(placeholder).toContain(firstSku);
+    expect(placeholder).toBe("");
   });
 });

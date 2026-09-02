@@ -4,6 +4,7 @@ import { useSession } from "src/ui/state/session.ts";
 import type { ShippingZone, ServiceLevel } from "src/engine/types.ts";
 import { SignalMark } from "src/ui/components/Icons.tsx";
 import { HelpTip } from "src/ui/components/HelpTip.tsx";
+import { loadCatalog, variantBySku } from "src/engine/domain/catalog.ts";
 
 function formatCents(cents: number): string {
   return "$" + (cents / 100).toFixed(2);
@@ -20,6 +21,24 @@ export function ShippingScreen(): JSX.Element {
   // Effective set is what Batch checkboxes selected, or the last search/filter result if none selected
   const displaySkus = eff ?? (selectedSkus.length > 0 ? selectedSkus : resultSkus) ?? [];
   const hasSelection = (selectedSkus?.length ?? 0) > 0;
+
+  // Prefill textbox with effective SKUs when Batch changes and textbox is empty (user hasn't typed)
+  React.useEffect(() => {
+    if (displaySkus.length > 0 && skusText === "") {
+      setSkusText(displaySkus.join(", "));
+    }
+  }, [displaySkus.join(",")]);
+  // If effective SKUs change to a different set and textbox currently equals old display, update it
+  const prevDisplayRef = React.useRef<string>("");
+  React.useEffect(() => {
+    const cur = displaySkus.join(", ");
+    if (cur !== prevDisplayRef.current) {
+      if (skusText === prevDisplayRef.current || skusText === "") {
+        setSkusText(cur);
+      }
+      prevDisplayRef.current = cur;
+    }
+  }, [displaySkus]);
 
   async function handleDeclarativeSubmit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
@@ -100,11 +119,34 @@ export function ShippingScreen(): JSX.Element {
           </select>
         </label>
         <div className="opsflow-count" data-testid="effective-skus-info">
-          {displaySkus.length === 0 ? "No SKUs from Batch — run a batch or enter SKUs" : hasSelection ? `${displaySkus.length} selected from Batch — ${displaySkus.slice(0,3).join(", ")}${displaySkus.length>3?"…":""} (quote will use your selection)` : `${displaySkus.length} from last Batch result — ${displaySkus.slice(0,3).join(", ")}${displaySkus.length>3?"…":""} (all matched, or select subset in Batch)`}
+          {displaySkus.length === 0 ? "No SKUs from Batch — run a batch or enter SKUs" : hasSelection ? `${displaySkus.length} selected from Batch (quote will use your selection)` : `${displaySkus.length} from last Batch result (all matched, or select subset in Batch)`}
         </div>
+        {displaySkus.length > 0 && (
+          <div className="of-table-wrap" data-testid="shipping-selected-panel">
+            <div className="opsflow-count">{displaySkus.length} SKU(s) ready to quote — fully disclosed:</div>
+            <table>
+              <thead><tr><th>SKU</th><th>Title</th><th>Size</th><th>Color</th><th className="of-num">Price</th><th className="of-num">Stock</th></tr></thead>
+              <tbody>
+                {displaySkus.map((sku) => {
+                  const variant = (() => { try { const cat = loadCatalog(); return variantBySku(cat, sku); } catch { return null; } })();
+                  return (
+                    <tr key={sku}>
+                      <td className="of-mono">{sku}</td>
+                      <td>{variant?.title ?? "—"}</td>
+                      <td>{variant?.options.size ?? "—"}</td>
+                      <td>{variant?.options.color ?? "—"}</td>
+                      <td className="of-num">{variant ? formatCents(variant.price_cents) : "—"}</td>
+                      <td className="of-num">{variant ? `${variant.stock}${variant.stock <= variant.low_stock_threshold ? " (low)" : ""}` : "—"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
         <label>
           SKUs (comma-separated, 1–50 items)
-          <input name="skus" type="text" value={skusText} placeholder={displaySkus.slice(0, 3).join(", ") || "OPS-1042-BLU-M, OPS-1050-RED-S"} onChange={(e) => setSkusText(e.target.value)} tooldescription="Comma-separated variant SKUs to quote; defaults to selected SKUs from Batch tab, or the full Batch result if none selected" />
+          <input name="skus" type="text" value={skusText} placeholder="" onChange={(e) => setSkusText(e.target.value)} tooldescription="Comma-separated variant SKUs to quote; defaults to selected SKUs from Batch tab, or the full Batch result if none selected" />
         </label>
         <span className="of-form__actions">
           <button className="opsflow-primary" type="submit" disabled={submitting}>{submitting ? "Quoting…" : "Calculate shipping (declarative)"}</button>
