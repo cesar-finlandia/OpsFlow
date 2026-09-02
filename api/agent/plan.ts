@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { sendJson, withCors, methodGuard } from "../_shared.js";
+import { vertexAvailable, vertexConfig, vertexAccessToken, vertexGenerateContentUrl } from "../_vertex.js";
 import type { ToolName, PlanStep, ToolPlan } from "../../src/engine/types.js";
 
 const PLANNER_MODEL = "gemini-2.5-flash" as const;
@@ -84,10 +85,79 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     }
     const rawGoal = typeof body.goal === "string" ? body.goal : "";
     const goal = rawGoal.slice(0, 400);
-    const plan = planDeterministicInline(goal, loadCatalog());
+    const ctx = (body.context ?? {}) as { skus?: string[] };
+
+    // If Vertex is not configured, use deterministic immediately (NFR-11 clean clone)
+    let useVertex = false;
+    try { useVertex = vertexAvailable(); } catch { useVertex = false; }
+    if (!useVertex) {
+      const plan = planDeterministicInline(goal, loadCatalog());
+      sendJson(res, 200, plan);
+      return;
+    }
+
+    // Vertex is configured → try Gemini 2.5 Flash (cheapest), fallback to deterministic on any error
+    const { system, user } = buildPlannerPromptInline(goal, ctx);
+    let text: string | null = null;
+    try {
+      const cfg = vertexConfig();
+      if (!cfg) throw new Error("vertex unconfigured");
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      try {
+        const token = await vertexAccessToken(controller.signal);
+        const vertexBody = {
+          systemInstruction: { parts: [{ text: system }] },
+          contents: [{ role: "user", parts: [{ text: user }] }],
+          generationConfig: { temperature: 0.1, maxOutputTokens: 1024, responseMimeType: "application/json" },
+        };
+        const r = await fetch(vertexGenerateContentUrl(cfg, PLANNER_MODEL), {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify(vertexBody),
+          signal: controller.signal,
+        });
+        if (!r.ok) throw new Error(`vertex ${r.status} ${await r.text().then(t=>t.slice(0,200)).catch(()=>"")}`);
+        const j = (await r.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
+        text = j.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+      } finally { clearTimeout(timeout); }
+    } catch (e) {
+      // Vertex failed → degraded deterministic
+      text = null;
+    }
+    if (!text) {
+      sendJson(res, 200, { ...planDeterministicInline(goal, loadCatalog()), degraded: true });
+      return;
+    }
+    let parsed: { steps?: Array<{ tool: string; args: Record<string, unknown>; rationale?: string }> };
+    try { parsed = JSON.parse(text); } catch {
+      sendJson(res, 200, { ...planDeterministicInline(goal, loadCatalog()), degraded: true });
+      return;
+    }
+    const rawSteps = Array.isArray(parsed.steps) ? parsed.steps : [];
+    const valid: PlanStep[] = [];
+    for (const s of rawSteps) {
+      if (!s.tool || !isValidTool(s.tool)) continue;
+      if (typeof s.args !== "object" || s.args === null) continue;
+      valid.push({ tool: s.tool as ToolName, args: s.args as Record<string, unknown>, rationale: typeof s.rationale === "string" ? s.rationale : "gemini" });
+    }
+    if (valid.length === 0) {
+      sendJson(res, 200, { ...planDeterministicInline(goal, loadCatalog()), degraded: true });
+      return;
+    }
+    const plan: ToolPlan = { goal, steps: valid, planner: PLANNER_MODEL, degraded: false, created_at: new Date().toISOString() };
     sendJson(res, 200, plan);
   } catch (err: unknown) {
     const msg = err instanceof Error ? `${err.message} ${err.stack ?? ""}` : String(err);
-    sendJson(res, 500, { ok: false, error: { code: "DEGRADED", message: msg.slice(0,500) } });
+    try {
+      const rawBody2: unknown = (req as { body?: unknown }).body;
+      let g = "";
+      if (typeof rawBody2 === "string") { try { g = (JSON.parse(rawBody2) as { goal?: string }).goal ?? ""; } catch {} }
+      else if (rawBody2 && typeof rawBody2 === "object") g = (rawBody2 as { goal?: string }).goal ?? "";
+      const fb = planDeterministicInline(g, loadCatalog());
+      sendJson(res, 200, { ...fb, degraded: true });
+    } catch {
+      sendJson(res, 500, { ok: false, error: { code: "DEGRADED", message: msg.slice(0, 500) } });
+    }
   }
 }
