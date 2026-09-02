@@ -15,11 +15,30 @@ function loadCatalog(): { products: Array<{ id: string; title: string; brand: st
 
 function buildAnswerPrompt(goal: string, matches: Array<{ sku: string; title: string; options: { size: string; color: string }; price_cents: number }>): { system: string; user: string } {
   const catalog = loadCatalog();
+  const total = catalog.products.reduce((n,p)=>n+p.variants.length,0);
+  // Date question: answer directly without catalog hallucination
+  if (/what day|today|current date|date today/i.test(goal)) {
+    const now = new Date();
+    const formatted = now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+    const system = `You are OpsFlow's helpful assistant, powered by ${ANSWER_MODEL}. Answer the user's date question accurately. Today is ${formatted}. Respond concisely (1-2 sentences).`;
+    const user = `Goal: "${goal}"\n\nToday is ${formatted}. Answer what day is today.`;
+    return { system, user };
+  }
+  // Low-stock informational: summarize count and sample
+  if (/low[- ]?stock/i.test(goal)) {
+    const allCategories = [...new Set(catalog.products.map(p => p.category))].join(", ");
+    const sample = matches.slice(0, 10).map(m => `${m.sku}: ${m.title} (${m.options.color}/${m.options.size}) stock ${m.price_cents ? "" : ""}`).join("\n");
+    // count low-stock from matches (search already filtered)
+    const count = matches.length;
+    const system = `You are OpsFlow's catalog assistant, powered by ${ANSWER_MODEL}. The user asked about low-stock items. You have searched the catalog and found ${count} low-stock variants (stock <= threshold). Summarize concisely (2-3 sentences): state how many low-stock items, mention a few examples, and note categories (${allCategories}). Do not invent SKUs beyond the sample.`;
+    const user = `Goal: "${goal}"\n\nLow-stock result: ${count} variants (showing ${Math.min(count,10)}):\n${sample || "(no matches)"}\nTotal catalog: ${total} variants.\n\nProvide a concise answer: how many items are low stock and examples.`;
+    return { system, user };
+  }
   const allCategories = [...new Set(catalog.products.map(p => p.category))].join(", ");
   const allBrands = [...new Set(catalog.products.map(p => p.brand))].join(", ");
   const sample = matches.slice(0, 20).map(m => `${m.sku}: ${m.title} (${m.options.color}/${m.options.size}) $${(m.price_cents/100).toFixed(2)}`).join("\n");
-  const system = `You are OpsFlow's catalog assistant, powered by gemini-2.0-flash. The user asked an informational question about the catalog. You have just searched the catalog and have these results. Summarize what kind of products are in the catalog in a concise, helpful way (2-4 sentences). Mention categories (${allCategories}), brands (${allBrands}), variant diversity, and price range. Do not invent SKUs. Base your answer only on the provided sample.`;
-  const user = `Goal: "${goal}"\n\nSearch result sample (${matches.length} shown of ${catalog.products.reduce((n,p)=>n+p.variants.length,0)} total):\n${sample || "(no matches)"}\n\nProvide a concise answer about what kind of products are in this catalog.`;
+  const system = `You are OpsFlow's catalog assistant, powered by ${ANSWER_MODEL}. The user asked an informational question about the catalog. You have just searched the catalog and have these results. Summarize in a concise, helpful way (2-4 sentences). Mention categories (${allCategories}), brands (${allBrands}), variant diversity, and price range when relevant. Do not invent SKUs. Base your answer only on the provided sample.`;
+  const user = `Goal: "${goal}"\n\nSearch result sample (${matches.length} shown of ${total} total):\n${sample || "(no matches)"}\n\nProvide a concise answer about the catalog for the user's goal.`;
   return { system, user };
 }
 
@@ -102,7 +121,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       }
     }
 
-    // Deterministic fallback - template based on catalog
+    // Deterministic fallback - template based on catalog / date
+    if (/what day|today|current date|date today/i.test(goal)) {
+      const now = new Date();
+      const formatted = now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+      sendJson(res, 200, { ok: true, answer: `Today is ${formatted}.`, planner: "deterministic", degraded: true });
+      return;
+    }
+    if (/low[- ]?stock/i.test(goal)) {
+      const catalog = loadCatalog();
+      const fallback = `Found ${matches.length} low-stock variants (stock at or below threshold) out of ${catalog.products.reduce((n,p)=>n+p.variants.length,0)} total. Sample: ${matches.slice(0,3).map(m=>`${m.title} (${m.options.color})`).join(", ")}${matches.length>3?"…":""}.`;
+      sendJson(res, 200, { ok: true, answer: fallback, planner: "deterministic", degraded: true });
+      return;
+    }
     const catalog = loadCatalog();
     const total = catalog.products.reduce((n,p)=>n+p.variants.length,0);
     const categories = [...new Set(catalog.products.map(p=>p.category))].join(", ");

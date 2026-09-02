@@ -121,29 +121,30 @@ export function BatchScreen(): JSX.Element {
   const isMetaModelQuestion = lastGoal ? /which ai model|what model are you|who are you|which model/i.test(lastGoal) : /which ai model|what model are you|who are you/i.test(goal);
   const hasRunDerived = hasRun || envelopes.some((e) => e.step_id.startsWith("tool.") && (e.status === "done" || e.status === "error"));
   const isGeminiPlan = (lastPlan?.planner === "gemini-2.5-flash" || lastPlan?.planner === "gemini-2.0-flash" || lastPlan?.planner === "gemini-3.6-flash" || lastPlan?.planner === "gemini-3.5-flash-lite") && !lastPlan?.degraded;
-  // Warning only if no Gemini answer is available — if we have a Gemini-generated aiAnswer, don't warn even if plan was deterministic
-  const showAiWarning = hasRunDerived && lastPlan && !isGeminiPlan && !aiAnswer;
+  const isInformationalForWarning = lastGoal ? /low[- ]?stock|what day|today|what kind|which kind|catalog|show me/i.test(lastGoal) : false;
+  // Warning only if no Gemini answer is available — suppress while we are loading an answer for informational queries
+  const showAiWarning = hasRunDerived && lastPlan && !isGeminiPlan && !aiAnswer && !aiAnswerLoading && !isInformationalForWarning;
   const aiInsight = (() => {
     if (isMetaModelQuestion) {
       return {
         title: "Agent Insight",
-        body: `I am gemini-2.5-flash via Vertex AI, powering OpsFlow's fulfillment planner. I translate your single-sentence goal into 5 typed WebMCP tools (search → filter → quote → hold → confirm). Try: "show me the full catalog" or "hold all Olive variants under $10".`,
-        planner: "gemini-2.5-flash",
+        body: `I am ${lastPlan?.planner ?? "gemini-3.5-flash-lite"} via Vertex AI, powering OpsFlow's fulfillment planner. I translate your single-sentence goal into 5 typed WebMCP tools (search → filter → quote → hold → confirm). Try: "show me the full catalog" or "hold all Olive variants under $10".`,
+        planner: lastPlan?.planner ?? "gemini-3.5-flash-lite",
       };
     }
-    // For informational catalog questions, show the Gemini-generated answer if available (even if plan was deterministic, answer may be from Gemini)
+    // For informational questions, show the Gemini-generated answer if available (even if plan was deterministic, answer may be from Gemini)
     if (aiAnswer) {
       return {
         title: "Agent Insight",
         body: aiAnswer,
-        planner: "gemini-2.5-flash",
+        planner: lastPlan?.planner ?? "gemini-3.5-flash-lite",
       };
     }
     if (aiAnswerLoading) {
       return {
         title: "Agent Insight",
         body: "Generating summary from catalog…",
-        planner: "gemini-2.5-flash",
+        planner: lastPlan?.planner ?? "gemini-3.5-flash-lite",
       };
     }
     // Only Gemini plan logs belong here — deterministic fallback without aiAnswer shows warning, not a log
@@ -153,7 +154,7 @@ export function BatchScreen(): JSX.Element {
       return {
         title: "Agent Insight",
         body: `${steps.map(s => `${s.tool}`).join(" → ") || "pending"} — ${lastPlan.planner}`,
-        planner: "gemini-2.5-flash",
+        planner: lastPlan.planner ?? "gemini-3.5-flash-lite",
       };
     }
     return null;
@@ -186,9 +187,12 @@ export function BatchScreen(): JSX.Element {
     setAiAnswer(null);
     try {
       await orchestrator.run(goal);
-      // For informational catalog questions, fetch a Gemini-generated summary after the search
+      // For informational questions, fetch a Gemini-generated summary after the search (catalog, low-stock, date)
       const isCatalogQuestion = /what kind of products|which kind of products|what products.*catalog|show.*catalog|full catalog|entire catalog|what.*in.*catalog/i.test(goal);
-      if (isCatalogQuestion) {
+      const isLowStockQuestion = /low[- ]?stock/i.test(goal);
+      const isDateQuestion = /what day|today|current date|date today/i.test(goal);
+      const shouldFetchAnswer = isCatalogQuestion || isLowStockQuestion || isDateQuestion;
+      if (shouldFetchAnswer) {
         setAiAnswerLoading(true);
         try {
           // Wait for envelopes to settle and read fresh matches via global accessor (avoids stale closure)
