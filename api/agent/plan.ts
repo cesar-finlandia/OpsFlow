@@ -5,7 +5,7 @@ import { sendJson, withCors, methodGuard } from "../_shared.js";
 import { vertexAvailable, vertexConfig, vertexAccessToken, vertexGenerateContentUrl } from "../_vertex.js";
 import type { ToolName, PlanStep, ToolPlan } from "../../src/engine/types.js";
 
-const PLANNER_MODEL = "gemini-2.5-flash" as const;
+const PLANNER_MODEL = "gemini-2.0-flash" as const;
 
 // Inline minimal catalog + deterministic planner to avoid src/* alias imports in Vercel runtime
 function loadCatalog(): { products: Array<{ id: string; variants: Array<{ options: { size: string; color: string }; sku: string }> }> } {
@@ -145,7 +145,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
       let text: string | null = null;
       try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 8000);
+        const timeout = setTimeout(() => controller.abort(), 4000);
         try {
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${PLANNER_MODEL}:generateContent?key=${encodeURIComponent(geminiKey)}`;
           const r = await fetch(url, {
@@ -158,7 +158,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
             }),
             signal: controller.signal,
           });
-          if (!r.ok) throw new Error(`gemini ${r.status} ${await r.text().then(t=>t.slice(0,300)).catch(()=>"")}`);
+          if (!r.ok) throw new Error(`gemini ${r.status} ${await r.text().then(t=>t.slice(0,200)).catch(()=>"")}`);
           const j = (await r.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
           text = j.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
         } finally { clearTimeout(timeout); }

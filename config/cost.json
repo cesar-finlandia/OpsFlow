@@ -4,6 +4,7 @@
   "cap_cost_usd": 5.00,
   "max_entries": 1000,
   "model_pricing": {
-    "gemini-2.5-flash": { "input_per_1k": 0.00015, "output_per_1k": 0.0006 }
+    "gemini-2.5-flash": { "input_per_1k": 0.00015, "output_per_1k": 0.0006 },
+    "gemini-2.0-flash": { "input_per_1k": 0.00015, "output_per_1k": 0.0006 }
   }
 }

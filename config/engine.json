@@ -3,7 +3,7 @@
   "app": { "name": "OpsFlow", "theme": "operator", "trace_prefix": "opsflow" },
   "planner": {
     "provider": "gemini",
-    "model": "gemini-2.5-flash",
+    "model": "gemini-2.0-flash",
     "max_output_tokens": 1024,
     "temperature": 0.1,
     "fallback": "deterministic"

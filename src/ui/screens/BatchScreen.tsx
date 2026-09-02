@@ -120,7 +120,7 @@ export function BatchScreen(): JSX.Element {
   // Heuristic: meta question about the model
   const isMetaModelQuestion = lastGoal ? /which ai model|what model are you|who are you|which model/i.test(lastGoal) : /which ai model|what model are you|who are you/i.test(goal);
   const hasRunDerived = hasRun || envelopes.some((e) => e.step_id.startsWith("tool.") && (e.status === "done" || e.status === "error"));
-  const isGeminiPlan = lastPlan?.planner === "gemini-2.5-flash" && !lastPlan?.degraded;
+  const isGeminiPlan = (lastPlan?.planner === "gemini-2.5-flash" || lastPlan?.planner === "gemini-2.0-flash") && !lastPlan?.degraded;
   // Warning only if no Gemini answer is available — if we have a Gemini-generated aiAnswer, don't warn even if plan was deterministic
   const showAiWarning = hasRunDerived && lastPlan && !isGeminiPlan && !aiAnswer;
   const aiInsight = (() => {

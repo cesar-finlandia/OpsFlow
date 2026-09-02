@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { sendJson, withCors, methodGuard } from "../_shared.js";
 import { vertexAvailable, vertexConfig, vertexAccessToken, vertexGenerateContentUrl } from "../_vertex.js";
 
-const ANSWER_MODEL = "gemini-2.5-flash" as const;
+const ANSWER_MODEL = "gemini-2.0-flash" as const;
 
 function loadCatalog(): { products: Array<{ id: string; title: string; brand: string; category: string; variants: Array<{ sku: string; title: string; options: { size: string; color: string }; price_cents: number; stock: number }> }> } {
   try { const raw = readFileSync(join(process.cwd(), "data/catalog.json"), "utf8"); return JSON.parse(raw) as never; } catch {}
@@ -17,7 +17,7 @@ function buildAnswerPrompt(goal: string, matches: Array<{ sku: string; title: st
   const allCategories = [...new Set(catalog.products.map(p => p.category))].join(", ");
   const allBrands = [...new Set(catalog.products.map(p => p.brand))].join(", ");
   const sample = matches.slice(0, 20).map(m => `${m.sku}: ${m.title} (${m.options.color}/${m.options.size}) $${(m.price_cents/100).toFixed(2)}`).join("\n");
-  const system = `You are OpsFlow's catalog assistant, powered by gemini-2.5-flash. The user asked an informational question about the catalog. You have just searched the catalog and have these results. Summarize what kind of products are in the catalog in a concise, helpful way (2-4 sentences). Mention categories (${allCategories}), brands (${allBrands}), variant diversity, and price range. Do not invent SKUs. Base your answer only on the provided sample.`;
+  const system = `You are OpsFlow's catalog assistant, powered by gemini-2.0-flash. The user asked an informational question about the catalog. You have just searched the catalog and have these results. Summarize what kind of products are in the catalog in a concise, helpful way (2-4 sentences). Mention categories (${allCategories}), brands (${allBrands}), variant diversity, and price range. Do not invent SKUs. Base your answer only on the provided sample.`;
   const user = `Goal: "${goal}"\n\nSearch result sample (${matches.length} shown of ${catalog.products.reduce((n,p)=>n+p.variants.length,0)} total):\n${sample || "(no matches)"}\n\nProvide a concise answer about what kind of products are in this catalog.`;
   return { system, user };
 }
@@ -77,7 +77,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     if (geminiKey) {
       try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 8000);
+        const timeout = setTimeout(() => controller.abort(), 4000);
         try {
           const url = `https://generativelanguage.googleapis.com/v1beta/models/${ANSWER_MODEL}:generateContent?key=${encodeURIComponent(geminiKey)}`;
           const r = await fetch(url, {

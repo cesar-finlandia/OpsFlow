@@ -29,7 +29,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   const vercelEnv = process.env as Record<string, string | undefined>;
   const hasVertex = !!(vercelEnv.GOOGLE_VERTEX_PROJECT || vercelEnv.GOOGLE_VERTEX_CREDENTIALS || vercelEnv.GOOGLE_CLOUD_PROJECT);
   const hasGeminiKey = !!vercelEnv.GEMINI_API_KEY;
-  const planner = hasVertex || hasGeminiKey ? "gemini-2.5-flash" : "deterministic";
+  const planner = hasVertex || hasGeminiKey ? "gemini-2.0-flash" : "deterministic";
   const body: HealthResponse = {
     ok: true,
     version: APP_VERSION,
