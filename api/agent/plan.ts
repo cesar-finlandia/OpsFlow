@@ -87,66 +87,105 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     const goal = rawGoal.slice(0, 400);
     const ctx = (body.context ?? {}) as { skus?: string[] };
 
-    // If Vertex is not configured, use deterministic immediately (NFR-11 clean clone)
+    // 1) Try Vertex (preferred, scoped) if configured
     let useVertex = false;
     try { useVertex = vertexAvailable(); } catch { useVertex = false; }
-    if (!useVertex) {
-      const plan = planDeterministicInline(goal, loadCatalog());
-      sendJson(res, 200, plan);
-      return;
+    if (useVertex) {
+      const { system, user } = buildPlannerPromptInline(goal, ctx);
+      let text: string | null = null;
+      try {
+        const cfg = vertexConfig();
+        if (!cfg) throw new Error("vertex unconfigured");
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
+        try {
+          const token = await vertexAccessToken(controller.signal);
+          const vertexBody = {
+            systemInstruction: { parts: [{ text: system }] },
+            contents: [{ role: "user", parts: [{ text: user }] }],
+            generationConfig: { temperature: 0.1, maxOutputTokens: 1024, responseMimeType: "application/json" },
+          };
+          const r = await fetch(vertexGenerateContentUrl(cfg, PLANNER_MODEL), {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify(vertexBody),
+            signal: controller.signal,
+          });
+          if (!r.ok) throw new Error(`vertex ${r.status} ${await r.text().then(t=>t.slice(0,200)).catch(()=>"")}`);
+          const j = (await r.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
+          text = j.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+        } finally { clearTimeout(timeout); }
+      } catch {}
+      if (text) {
+        try {
+          const parsed = JSON.parse(text) as { steps?: Array<{ tool: string; args: Record<string, unknown>; rationale?: string }> };
+          const rawSteps = Array.isArray(parsed.steps) ? parsed.steps : [];
+          const valid: PlanStep[] = [];
+          for (const s of rawSteps) {
+            if (!s.tool || !isValidTool(s.tool)) continue;
+            if (typeof s.args !== "object" || s.args === null) continue;
+            valid.push({ tool: s.tool as ToolName, args: s.args as Record<string, unknown>, rationale: typeof s.rationale === "string" ? s.rationale : "gemini" });
+          }
+          if (valid.length > 0) {
+            const plan: ToolPlan = { goal, steps: valid, planner: PLANNER_MODEL, degraded: false, created_at: new Date().toISOString() };
+            sendJson(res, 200, plan);
+            return;
+          }
+        } catch {}
+      }
+      // Vertex failed or returned no valid steps → fall through to Gemini API key / deterministic
     }
 
-    // Vertex is configured → try Gemini 2.5 Flash (cheapest), fallback to deterministic on any error
-    const { system, user } = buildPlannerPromptInline(goal, ctx);
-    let text: string | null = null;
-    try {
-      const cfg = vertexConfig();
-      if (!cfg) throw new Error("vertex unconfigured");
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8000);
+    // 2) Try Gemini API key (Generative Language API) if set - works even when Vertex key creation is blocked by org policy
+    const geminiKey = (process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY ?? "").trim();
+    if (geminiKey) {
+      const { system, user } = buildPlannerPromptInline(goal, ctx);
+      let text: string | null = null;
       try {
-        const token = await vertexAccessToken(controller.signal);
-        const vertexBody = {
-          systemInstruction: { parts: [{ text: system }] },
-          contents: [{ role: "user", parts: [{ text: user }] }],
-          generationConfig: { temperature: 0.1, maxOutputTokens: 1024, responseMimeType: "application/json" },
-        };
-        const r = await fetch(vertexGenerateContentUrl(cfg, PLANNER_MODEL), {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify(vertexBody),
-          signal: controller.signal,
-        });
-        if (!r.ok) throw new Error(`vertex ${r.status} ${await r.text().then(t=>t.slice(0,200)).catch(()=>"")}`);
-        const j = (await r.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
-        text = j.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-      } finally { clearTimeout(timeout); }
-    } catch (e) {
-      // Vertex failed → degraded deterministic
-      text = null;
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${PLANNER_MODEL}:generateContent?key=${encodeURIComponent(geminiKey)}`;
+          const r = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              systemInstruction: { parts: [{ text: system }] },
+              contents: [{ role: "user", parts: [{ text: user }] }],
+              generationConfig: { temperature: 0.1, maxOutputTokens: 1024, responseMimeType: "application/json" },
+            }),
+            signal: controller.signal,
+          });
+          if (!r.ok) throw new Error(`gemini ${r.status} ${await r.text().then(t=>t.slice(0,300)).catch(()=>"")}`);
+          const j = (await r.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
+          text = j.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+        } finally { clearTimeout(timeout); }
+      } catch {}
+      if (text) {
+        try {
+          const parsed = JSON.parse(text) as { steps?: Array<{ tool: string; args: Record<string, unknown>; rationale?: string }> };
+          const rawSteps = Array.isArray(parsed.steps) ? parsed.steps : [];
+          const valid: PlanStep[] = [];
+          for (const s of rawSteps) {
+            if (!s.tool || !isValidTool(s.tool)) continue;
+            if (typeof s.args !== "object" || s.args === null) continue;
+            valid.push({ tool: s.tool as ToolName, args: s.args as Record<string, unknown>, rationale: typeof s.rationale === "string" ? s.rationale : "gemini" });
+          }
+          if (valid.length > 0) {
+            const plan: ToolPlan = { goal, steps: valid, planner: PLANNER_MODEL, degraded: false, created_at: new Date().toISOString() };
+            sendJson(res, 200, plan);
+            return;
+          }
+        } catch {}
+      }
+      // Gemini API key failed → fall through to deterministic
     }
-    if (!text) {
-      sendJson(res, 200, { ...planDeterministicInline(goal, loadCatalog()), degraded: true });
-      return;
-    }
-    let parsed: { steps?: Array<{ tool: string; args: Record<string, unknown>; rationale?: string }> };
-    try { parsed = JSON.parse(text); } catch {
-      sendJson(res, 200, { ...planDeterministicInline(goal, loadCatalog()), degraded: true });
-      return;
-    }
-    const rawSteps = Array.isArray(parsed.steps) ? parsed.steps : [];
-    const valid: PlanStep[] = [];
-    for (const s of rawSteps) {
-      if (!s.tool || !isValidTool(s.tool)) continue;
-      if (typeof s.args !== "object" || s.args === null) continue;
-      valid.push({ tool: s.tool as ToolName, args: s.args as Record<string, unknown>, rationale: typeof s.rationale === "string" ? s.rationale : "gemini" });
-    }
-    if (valid.length === 0) {
-      sendJson(res, 200, { ...planDeterministicInline(goal, loadCatalog()), degraded: true });
-      return;
-    }
-    const plan: ToolPlan = { goal, steps: valid, planner: PLANNER_MODEL, degraded: false, created_at: new Date().toISOString() };
-    sendJson(res, 200, plan);
+
+    // 3) No Vertex/Gemini or both failed → deterministic (NFR-11 clean clone, always works)
+    const plan = planDeterministicInline(goal, loadCatalog());
+    // Mark degraded if we tried Vertex/Gemini and failed, so UI can show degraded chip
+    const triedLLM = useVertex || !!geminiKey;
+    sendJson(res, 200, triedLLM ? { ...plan, degraded: true } : plan);
   } catch (err: unknown) {
     const msg = err instanceof Error ? `${err.message} ${err.stack ?? ""}` : String(err);
     try {
