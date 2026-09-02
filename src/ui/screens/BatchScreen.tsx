@@ -239,19 +239,19 @@ export function BatchScreen(): JSX.Element {
 
   return (
     <div>
-      {/* AI response box — only Gemini replies, empty otherwise */}
-      <div className="opsflow-ai-insight" data-testid="ai-insight-box" style={{ border: showAiWarning ? "1px solid #f59e0b" : "1px solid #e2e8f0", borderRadius: 8, padding: 12, marginBottom: 12, background: showAiWarning ? "#fffbeb" : "#f8fafc", opacity: showAiWarning ? 0.9 : 1 }}>
-        <div style={{ fontWeight: 600, marginBottom: 4, display: "flex", alignItems: "center", gap: 8 }}>
+      {/* AI response box — only Gemini replies, empty otherwise. Subtle signal tint (26% mix) makes important info legible without attention-grab. Uses tokens so light/dark both fit palette. */}
+      <div className="opsflow-ai-insight" data-testid="ai-insight-box" style={{ border: showAiWarning ? "1px solid color-mix(in srgb, var(--of-gate) 55%, transparent)" : "1px solid var(--of-border)", borderRadius: 8, padding: 12, marginBottom: 12, background: showAiWarning ? "var(--of-gate-soft)" : "color-mix(in srgb, var(--of-signal-soft) 26%, var(--of-panel-bg))", opacity: showAiWarning ? 0.95 : 1 }}>
+        <div style={{ fontWeight: 600, marginBottom: 4, display: "flex", alignItems: "center", gap: 8, color: "var(--of-text)" }}>
           <span>Agent Insight</span>
           <HelpTip label="About Agent Insight" title="What is this box?">
             <p>You can use an AI agent to interact with this website, via an external AI chatbot via WebMCP, or in the text box below. What you type there will be read by an AI and replied by the AI. The replies will show here. The AI will also interact with this website, for example to show the catalog items you selected, to hold catalog items, etc. That will show in the panel below the chat box.</p>
           </HelpTip>
-          {showAiWarning && <span style={{ fontSize: 11, fontWeight: 600, color: "#b45309", background: "#fde68a", padding: "2px 6px", borderRadius: 4, marginLeft: 8 }}>AI unavailable — fallback to deterministic</span>}
+          {showAiWarning && <span style={{ fontSize: 11, fontWeight: 600, color: "var(--of-gate)", background: "color-mix(in srgb, var(--of-gate) 18%, var(--of-gate-soft))", padding: "2px 6px", borderRadius: 4, marginLeft: 8, border: "1px solid color-mix(in srgb, var(--of-gate) 25%, transparent)" }}>AI unavailable — fallback to deterministic</span>}
         </div>
-        <div style={{ fontSize: 13, color: "#334155", minHeight: 18 }}>
+        <div style={{ fontSize: 13, color: "var(--of-text-2)", minHeight: 18 }}>
           {aiInsight ? aiInsight.body : ""}
         </div>
-        {aiInsight && <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>planner: {aiInsight.planner}</div>}
+        {aiInsight && <div style={{ fontSize: 11, color: "var(--of-text-3)", marginTop: 4 }}>planner: {aiInsight.planner}</div>}
       </div>
 
       <div style={{ fontWeight: 600, marginBottom: 4 }}>Batch Task — Fulfillment Goal</div>
