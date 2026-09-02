@@ -36,10 +36,12 @@ function planDeterministicInline(goal: string, catalog: ReturnType<typeof loadCa
     let service: string | null = null; for (const s of [{w:"overnight",m:"overnight"},{w:"expedited",m:"expedited"},{w:"express",m:"expedited"},{w:"ground",m:"ground"}]) if (new RegExp(`\\b${escapeRegExp(s.w)}\\b`).test(g)) { service = s.m; break; }
     let ttl = defaultTtl; const tm = g.match(/(\d{1,3})\s*(?:min|minute)/); if (tm && tm[1]) { const n=parseInt(tm[1],10); if (!Number.isNaN(n)) ttl=Math.max(minTtl,Math.min(maxTtl,n)); }
     const lowStock = /low[- ]?stock/.test(g);
-    const stopWords = new Set(["the","a","an","and","or","for","with","all","hold","reserve","confirm","commit","fulfil","fulfill","shipping","zone","stock","low","under","below","minutes","minute","ground","expedited","overnight","express","variants","variant","dollars","dollar","usd","price","show","me","my","full","catalog","entire","list","display","view","see","items","item","products","product"]);
+    const stopWords = new Set(["the","a","an","and","or","for","with","all","hold","reserve","confirm","commit","fulfil","fulfill","shipping","zone","stock","low","under","below","minutes","minute","ground","expedited","overnight","express","variants","variant","dollars","dollar","usd","price","show","me","my","full","catalog","entire","list","display","view","see","items","item","products","product","what","which","kind","kinds","type","types","are","is","of","in","this","that","there","was","were","be","been","being","have","has","had","do","does","did","will","would","could","should","can","may","might","must","shall","when","where","why","how","are","is","whats","what's"]);
+    const isBroadCatalog = /what kind of products|what products|show.*catalog|full catalog|entire catalog|list.*catalog|what.*in.*catalog/i.test(g);
     const rawTokens = g.split(/[^a-z0-9\$]+/).filter(Boolean); const filtered: string[] = []; const ttlTok = tm?.[1] ?? null;
     for (const tok of rawTokens) { if (stopWords.has(tok)) continue; if (/^\d+(\.\d+)?$/.test(tok)) continue; if (tok.startsWith("$") && /^\$\d/.test(tok)) continue; if (pm && tok === pm[1]) continue; if (zone!==null && tok===String(zone) && /zone/.test(g)) continue; if (ttlTok && tok===ttlTok) continue; if (foundColors.includes(tok)) continue; if (foundSizes.includes(tok)) continue; if (tok==="to"||tok==="search"||tok==="my"||tok==="last") continue; if (/^\d+$/.test(tok)) continue; filtered.push(tok); }
-    let query = filtered.join(" ").trim(); if (!query) { if (foundColors.length>0) query=foundColors[0]!; else if (foundSizes.length>0) query=foundSizes[0]!; else query="*"; } query=query.slice(0,200);
+    let query = filtered.join(" ").trim(); if (isBroadCatalog) query = "*";
+    if (!query) { if (foundColors.length>0) query=foundColors[0]!; else if (foundSizes.length>0) query=foundSizes[0]!; else query="*"; } query=query.slice(0,200);
     const steps: PlanStep[] = []; const first50 = original.slice(0,50); const searchRationale = query==="*" ? "search fallback for unparseable goal" : `search because goal says '${first50}'`;
     const searchArgs: Record<string, unknown> = { query, limit: defaultLimit }; if (lowStock) (searchArgs as Record<string, unknown>)["inStockOnly"]=true; steps.push({ tool: "search_inventory", args: searchArgs, rationale: searchRationale });
     const shouldFilterBase = foundColors.length>0 || foundSizes.length>0 || maxPriceCents!==null || lowStock;
@@ -62,7 +64,7 @@ function buildPlannerPromptInline(goal: string, ctx: { skus?: string[] }): { sys
 - calculate_shipping: {items:[{sku,qty}], zone:1..5, service:ground|expedited|overnight}
 - hold_order: {lineItems:[{sku,qty}], ttlMinutes:1..120, note?:string}
 - confirm_fulfillment: {holdId:string}`;
-  const system = `You are OpsFlow's fulfillment planner. Translate goal into JSON {goal,steps:[{tool,args,rationale}]}. Tools:\n${schemasBlock}\nRules: 1) Return ONLY JSON. 2) tool enum check. 3) args valid. 4) hold/confirm last. 5) Order search>filter>calculate>hold>confirm. 6) rationale names goal phrase.`;
+  const system = `You are OpsFlow's fulfillment planner. Translate goal into JSON {goal,steps:[{tool,args,rationale}]}. Tools:\n${schemasBlock}\nRules: 1) Return ONLY JSON. 2) tool enum check. 3) args valid. 4) hold/confirm last. 5) Order search>filter>calculate>hold>confirm. 6) rationale names goal phrase. 7) For broad catalog questions like "what kind of products are in this catalog?" or "show me the full catalog", use search_inventory query:"*" (wildcard).`;
   const skuPart = ctx.skus?.slice(0,50).join(", ") || "(none)";
   const user = `Goal: ${truncated}\nCurrent SKUs: ${skuPart}`;
   return { system, user };
