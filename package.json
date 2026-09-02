@@ -5,7 +5,7 @@
   "private": true,
   "$type-note": "ESM repo root: scripts/*.ts compile as NodeNext ESM so import.meta resolves (bench-token-overhead).",
   "type": "module",
-  "packageManager": "pnpm@9.12.3",
+  "packageManager": "pnpm@10.12.3",
   "engines": {
     "node": ">=20"
   },
