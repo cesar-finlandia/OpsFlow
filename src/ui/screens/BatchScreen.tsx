@@ -14,6 +14,8 @@ export function BatchScreen(): JSX.Element {
   const [selectedSkus, setSelectedLocal] = React.useState<string[]>([]);
   const [toast, setToast] = React.useState<string | null>(null);
   const [showDetails, setShowDetails] = React.useState(false);
+  const [aiAnswer, setAiAnswer] = React.useState<string | null>(null);
+  const [aiAnswerLoading, setAiAnswerLoading] = React.useState(false);
 
   // Keep local selection in sync with session (session is source of truth for Shipping)
   React.useEffect(() => { setSelectedLocal([...(sessionSelected ?? [])]); }, [sessionSelected]);
@@ -118,24 +120,40 @@ export function BatchScreen(): JSX.Element {
   // Heuristic: meta question about the model
   const isMetaModelQuestion = lastGoal ? /which ai model|what model are you|who are you|which model/i.test(lastGoal) : /which ai model|what model are you|who are you/i.test(goal);
   const hasRunDerived = hasRun || envelopes.some((e) => e.step_id.startsWith("tool.") && (e.status === "done" || e.status === "error"));
+  const isGeminiPlan = lastPlan?.planner === "gemini-2.5-flash" && !lastPlan?.degraded;
+  // Warning only if no Gemini answer is available — if we have a Gemini-generated aiAnswer, don't warn even if plan was deterministic
+  const showAiWarning = hasRunDerived && lastPlan && !isGeminiPlan && !aiAnswer;
   const aiInsight = (() => {
-    if (!lastPlan && !hasRunDerived) return null;
     if (isMetaModelQuestion) {
-      const plannerName = "gemini-2.5-flash";
       return {
-        title: "Agent Insight — Model Info",
-        body: `I am ${plannerName} via Vertex AI, powering OpsFlow's fulfillment planner. I translate your single-sentence goal into 5 typed WebMCP tools (search → filter → quote → hold → confirm). Try: "show me the full catalog" or "hold all Olive variants under $10".`,
-        planner: plannerName,
+        title: "Agent Insight",
+        body: `I am gemini-2.5-flash via Vertex AI, powering OpsFlow's fulfillment planner. I translate your single-sentence goal into 5 typed WebMCP tools (search → filter → quote → hold → confirm). Try: "show me the full catalog" or "hold all Olive variants under $10".`,
+        planner: "gemini-2.5-flash",
       };
     }
-    if (lastPlan) {
-      const planner = lastPlan.planner ?? "deterministic";
-      const steps = lastPlan.steps ?? [];
-      const degraded = lastPlan.degraded ? " (fallback)" : "";
+    // For informational catalog questions, show the Gemini-generated answer if available (even if plan was deterministic, answer may be from Gemini)
+    if (aiAnswer) {
       return {
-        title: "Agent Insight — Plan",
-        body: `${planner}${degraded}: ${steps.map(s => `${s.tool} (${s.rationale})`).join(" → ") || "pending"}`,
-        planner,
+        title: "Agent Insight",
+        body: aiAnswer,
+        planner: "gemini-2.5-flash",
+      };
+    }
+    if (aiAnswerLoading) {
+      return {
+        title: "Agent Insight",
+        body: "Generating summary from catalog…",
+        planner: "gemini-2.5-flash",
+      };
+    }
+    // Only Gemini plan logs belong here — deterministic fallback without aiAnswer shows warning, not a log
+    if (!isGeminiPlan) return null;
+    if (lastPlan) {
+      const steps = lastPlan.steps ?? [];
+      return {
+        title: "Agent Insight",
+        body: `${steps.map(s => `${s.tool}`).join(" → ") || "pending"} — ${lastPlan.planner}`,
+        planner: "gemini-2.5-flash",
       };
     }
     return null;
@@ -165,8 +183,47 @@ export function BatchScreen(): JSX.Element {
     setRunning(true);
     setHasRun(true);
     setShowDetails(false);
+    setAiAnswer(null);
     try {
       await orchestrator.run(goal);
+      // For informational catalog questions, fetch a Gemini-generated summary after the search
+      const isCatalogQuestion = /what kind of products|which kind of products|what products.*catalog|show.*catalog|full catalog|entire catalog|what.*in.*catalog/i.test(goal);
+      if (isCatalogQuestion) {
+        setAiAnswerLoading(true);
+        try {
+          // Wait for envelopes to settle and read fresh matches via global accessor (avoids stale closure)
+          await new Promise(r => setTimeout(r, 400));
+          const getSkus = (globalThis as unknown as Record<string, unknown>)["__opsflow_getLastResultSkus"] as (() => string[]) | undefined;
+          const getEffective = (globalThis as unknown as Record<string, unknown>)["__opsflow_getEffectiveSkus"] as (() => string[]) | undefined;
+          const skus = (getEffective?.() ?? getSkus?.() ?? []) as string[];
+          // Build minimal VariantMatch-like objects for the answer endpoint from catalog
+          let currentMatches: Array<{ sku: string; title: string; options: { size: string; color: string }; price_cents: number }> = [];
+          if (skus.length > 0) {
+            try {
+              const { loadCatalog, variantBySku } = await import("src/engine/domain/catalog.ts");
+              const cat = loadCatalog();
+              currentMatches = skus.slice(0, 20).map(sku => {
+                const v = variantBySku(cat, sku);
+                return v ? { sku: v.sku, title: v.title, options: { ...v.options }, price_cents: v.price_cents } : null;
+              }).filter((v): v is NonNullable<typeof v> => v !== null);
+            } catch {}
+            if (currentMatches.length === 0) {
+              // Fallback to raw SKUs as minimal objects
+              currentMatches = skus.slice(0, 20).map(sku => ({ sku, title: sku, options: { size: "", color: "" }, price_cents: 0 }));
+            }
+          }
+          const res = await fetch("/api/agent/answer", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ goal, matches: currentMatches }),
+          });
+          if (res.ok) {
+            const data = await res.json() as { ok: boolean; answer?: string };
+            if (data.ok && data.answer) setAiAnswer(data.answer);
+          }
+        } catch {}
+        setAiAnswerLoading(false);
+      }
     } finally {
       setRunning(false);
     }
@@ -178,16 +235,23 @@ export function BatchScreen(): JSX.Element {
 
   return (
     <div>
-      {/* AI response box — shows what Gemini/deterministic actually did */}
-      <div className="opsflow-ai-insight" data-testid="ai-insight-box" style={{ border: "1px solid #e2e8f0", borderRadius: 8, padding: 12, marginBottom: 12, background: "#f8fafc" }}>
-        <div style={{ fontWeight: 600, marginBottom: 4 }}>{aiInsight ? aiInsight.title : "Agent Insight — AI Plan"}</div>
-        <div style={{ fontSize: 13, color: "#334155" }}>
-          {aiInsight ? aiInsight.body : "No AI response yet — type a fulfillment goal (e.g., 'hold all Olive variants under $10') or a question and press Enter. The planner will show its steps here."}
+      {/* AI response box — only Gemini replies, empty otherwise */}
+      <div className="opsflow-ai-insight" data-testid="ai-insight-box" style={{ border: showAiWarning ? "1px solid #f59e0b" : "1px solid #e2e8f0", borderRadius: 8, padding: 12, marginBottom: 12, background: showAiWarning ? "#fffbeb" : "#f8fafc", opacity: showAiWarning ? 0.9 : 1 }}>
+        <div style={{ fontWeight: 600, marginBottom: 4, display: "flex", alignItems: "center", gap: 8 }}>
+          <span>Agent Insight</span>
+          <HelpTip label="About Agent Insight" title="What is this box?">
+            <p>You can use an AI agent to interact with this website, via an external AI chatbot via WebMCP, or in the text box below. What you type there will be read by an AI and replied by the AI. The replies will show here. The AI will also interact with this website, for example to show the catalog items you selected, to hold catalog items, etc. That will show in the panel below the chat box.</p>
+          </HelpTip>
+          {showAiWarning && <span style={{ fontSize: 11, fontWeight: 600, color: "#b45309", background: "#fde68a", padding: "2px 6px", borderRadius: 4, marginLeft: 8 }}>AI unavailable — fallback to deterministic</span>}
         </div>
-        {lastPlan && <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>planner: {lastPlan.planner ?? "unknown"}{lastPlan.degraded ? " (degraded fallback)" : ""}</div>}
+        <div style={{ fontSize: 13, color: "#334155", minHeight: 18 }}>
+          {aiInsight ? aiInsight.body : ""}
+        </div>
+        {aiInsight && <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>planner: {aiInsight.planner}</div>}
       </div>
 
       <div style={{ fontWeight: 600, marginBottom: 4 }}>Batch Task — Fulfillment Goal</div>
+      <div style={{ fontSize: 12, color: "#64748b", marginBottom: 4 }}>Describe what you want the agent to do — search, filter, hold, or ask about the catalog. Press Enter or click Run batch.</div>
       <form className="opsflow-goalbar" onSubmit={(e) => { e.preventDefault(); handleRun(); }}>
       <input
         data-testid="goal-input"

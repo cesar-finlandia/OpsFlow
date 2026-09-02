@@ -7,13 +7,14 @@ import { defineConfig, type Plugin } from "vite";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 
-/** Route path → handler module, mirroring §2.6's frozen HTTP API. */
+/** Route path → handler module, mirroring §2.6's frozen HTTP API + answer extension. */
 const API_ROUTES: Record<string, string> = {
   "/api/health": "/api/health.ts",
   "/api/inventory/search": "/api/inventory/search.ts",
   "/api/inventory/filter": "/api/inventory/filter.ts",
   "/api/shipping/quote": "/api/shipping/quote.ts",
   "/api/agent/plan": "/api/agent/plan.ts",
+  "/api/agent/answer": "/api/agent/answer.ts",
 };
 
 /** Headers frozen in §2.6.3 / vercel.json, applied in dev so MAN-03 is testable locally. */
