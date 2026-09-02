@@ -102,6 +102,45 @@ export function BatchScreen(): JSX.Element {
   }
   total = totalVariants;
 
+  // Derive last AI plan for the new Agent Insight box (must be before hasRunDerived/showEmpty which use isMetaModelQuestion)
+  let lastPlan: { planner?: string; steps?: Array<{ tool: string; rationale: string }>; goal?: string; degraded?: boolean } | null = null;
+  let lastGoal: string | null = null;
+  for (const env of [...envelopes].reverse()) {
+    if (env.step_id === "agent.plan" && env.status === "done") {
+      lastPlan = env.payload as { planner?: string; steps?: Array<{ tool: string; rationale: string }>; goal?: string; degraded?: boolean };
+      lastGoal = (lastPlan as { goal?: string })?.goal ?? null;
+      break;
+    }
+    if (env.step_id === "agent.plan" && env.status === "started") {
+      lastGoal = (env.payload as { goal?: string })?.goal ?? null;
+    }
+  }
+  // Heuristic: meta question about the model
+  const isMetaModelQuestion = lastGoal ? /which ai model|what model are you|who are you|which model/i.test(lastGoal) : /which ai model|what model are you|who are you/i.test(goal);
+  const hasRunDerived = hasRun || envelopes.some((e) => e.step_id.startsWith("tool.") && (e.status === "done" || e.status === "error"));
+  const aiInsight = (() => {
+    if (!lastPlan && !hasRunDerived) return null;
+    if (isMetaModelQuestion) {
+      const plannerName = "gemini-2.5-flash";
+      return {
+        title: "Agent Insight — Model Info",
+        body: `I am ${plannerName} via Vertex AI, powering OpsFlow's fulfillment planner. I translate your single-sentence goal into 5 typed WebMCP tools (search → filter → quote → hold → confirm). Try: "show me the full catalog" or "hold all Olive variants under $10".`,
+        planner: plannerName,
+      };
+    }
+    if (lastPlan) {
+      const planner = lastPlan.planner ?? "deterministic";
+      const steps = lastPlan.steps ?? [];
+      const degraded = lastPlan.degraded ? " (fallback)" : "";
+      return {
+        title: "Agent Insight — Plan",
+        body: `${planner}${degraded}: ${steps.map(s => `${s.tool} (${s.rationale})`).join(" → ") || "pending"}`,
+        planner,
+      };
+    }
+    return null;
+  })();
+
   function toggleSku(sku: string, checked: boolean): void {
     setSelectedLocal((prev) => {
       let next: string[];
@@ -133,13 +172,22 @@ export function BatchScreen(): JSX.Element {
     }
   }
 
-  const hasRunDerived = hasRun || envelopes.some((e) => e.step_id.startsWith("tool.") && (e.status === "done" || e.status === "error"));
-  const showEmptyBeforeRun = !hasRunDerived && !running && matches.length === 0 && !toolError;
-  const showZeroMatches = hasRunDerived && !running && !toolError && matches.length === 0;
+  const showEmptyBeforeRun = !hasRunDerived && !running && matches.length === 0 && !toolError && !isMetaModelQuestion;
+  const showZeroMatches = hasRunDerived && !running && !toolError && matches.length === 0 && !isMetaModelQuestion;
   const showTable = matches.length > 0;
 
   return (
     <div>
+      {/* AI response box — shows what Gemini/deterministic actually did */}
+      <div className="opsflow-ai-insight" data-testid="ai-insight-box" style={{ border: "1px solid #e2e8f0", borderRadius: 8, padding: 12, marginBottom: 12, background: "#f8fafc" }}>
+        <div style={{ fontWeight: 600, marginBottom: 4 }}>{aiInsight ? aiInsight.title : "Agent Insight — AI Plan"}</div>
+        <div style={{ fontSize: 13, color: "#334155" }}>
+          {aiInsight ? aiInsight.body : "No AI response yet — type a fulfillment goal (e.g., 'hold all Olive variants under $10') or a question and press Enter. The planner will show its steps here."}
+        </div>
+        {lastPlan && <div style={{ fontSize: 11, color: "#64748b", marginTop: 4 }}>planner: {lastPlan.planner ?? "unknown"}{lastPlan.degraded ? " (degraded fallback)" : ""}</div>}
+      </div>
+
+      <div style={{ fontWeight: 600, marginBottom: 4 }}>Batch Task — Fulfillment Goal</div>
       <form className="opsflow-goalbar" onSubmit={(e) => { e.preventDefault(); handleRun(); }}>
       <input
         data-testid="goal-input"
@@ -153,9 +201,9 @@ export function BatchScreen(): JSX.Element {
       <button className="opsflow-primary" type="submit" disabled={running} aria-label="Run batch" autoFocus>{running ? "Running…" : "Run batch"}</button>
       <button onClick={handleRun} disabled={running} style={{ display: "none" }} aria-hidden="true">Run with agent</button>
       {/* The label deliberately avoids the word "goal": the input's own
-          aria-label is "Goal", and getByLabel matches on substring, so a help
-          button naming it would make the input ambiguous to assistive tech and
-          to the E2E suite alike (§11.1). */}
+           aria-label is "Goal", and getByLabel matches on substring, so a help
+           button naming it would make the input ambiguous to assistive tech and
+           to the E2E suite alike (§11.1). */}
       <HelpTip align="end" label="About the instruction box" title="One sentence, one batch">
         <p>Describe the outcome, not the steps: <em>&quot;hold all low-stock blue variants under $12 shipping to zone 4 for 15 minutes&quot;</em>. The agent picks which tools to call, in what order, and shows you each one as it goes.</p>
         <p>Starting a batch only reads and quotes. Anything that reserves stock or commits a fulfilment stops and asks you first, with the exact arguments on screen.</p>
