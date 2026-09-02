@@ -5,7 +5,8 @@ import { sendJson, withCors, methodGuard } from "../_shared.js";
 import { vertexAvailable, vertexConfig, vertexAccessToken, vertexGenerateContentUrl } from "../_vertex.js";
 import type { ToolName, PlanStep, ToolPlan } from "../../src/engine/types.js";
 
-const PLANNER_MODEL = "gemini-2.0-flash" as const;
+const PLANNER_MODEL = "gemini-3.5-flash-lite" as const;
+const PLANNER_FALLBACK = "gemini-3.6-flash" as const;
 
 // Inline minimal catalog + deterministic planner to avoid src/* alias imports in Vercel runtime
 function loadCatalog(): { products: Array<{ id: string; variants: Array<{ options: { size: string; color: string }; sku: string }> }> } {
@@ -142,43 +143,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     const geminiKey = (process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY ?? "").trim();
     if (geminiKey) {
       const { system, user } = buildPlannerPromptInline(goal, ctx);
-      let text: string | null = null;
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 4000);
+      for (const model of [PLANNER_MODEL, PLANNER_FALLBACK] as const) {
+        let text: string | null = null;
         try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${PLANNER_MODEL}:generateContent?key=${encodeURIComponent(geminiKey)}`;
-          const r = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              systemInstruction: { parts: [{ text: system }] },
-              contents: [{ role: "user", parts: [{ text: user }] }],
-              generationConfig: { temperature: 0.1, maxOutputTokens: 1024, responseMimeType: "application/json" },
-            }),
-            signal: controller.signal,
-          });
-          if (!r.ok) throw new Error(`gemini ${r.status} ${await r.text().then(t=>t.slice(0,200)).catch(()=>"")}`);
-          const j = (await r.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
-          text = j.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
-        } finally { clearTimeout(timeout); }
-      } catch {}
-      if (text) {
-        try {
-          const parsed = JSON.parse(text) as { steps?: Array<{ tool: string; args: Record<string, unknown>; rationale?: string }> };
-          const rawSteps = Array.isArray(parsed.steps) ? parsed.steps : [];
-          const valid: PlanStep[] = [];
-          for (const s of rawSteps) {
-            if (!s.tool || !isValidTool(s.tool)) continue;
-            if (typeof s.args !== "object" || s.args === null) continue;
-            valid.push({ tool: s.tool as ToolName, args: s.args as Record<string, unknown>, rationale: typeof s.rationale === "string" ? s.rationale : "gemini" });
-          }
-          if (valid.length > 0) {
-            const plan: ToolPlan = { goal, steps: valid, planner: PLANNER_MODEL, degraded: false, created_at: new Date().toISOString() };
-            sendJson(res, 200, plan);
-            return;
-          }
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 12000);
+          try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(geminiKey)}`;
+            const r = await fetch(url, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                systemInstruction: { parts: [{ text: system }] },
+                contents: [{ role: "user", parts: [{ text: user }] }],
+                generationConfig: { temperature: 0.1, maxOutputTokens: 1024, responseMimeType: "application/json" },
+              }),
+              signal: controller.signal,
+            });
+            if (!r.ok) throw new Error(`gemini ${r.status} ${await r.text().then(t=>t.slice(0,200)).catch(()=>"")}`);
+            const j = (await r.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
+            text = j.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+          } finally { clearTimeout(timeout); }
         } catch {}
+        if (text) {
+          try {
+            const parsed = JSON.parse(text) as { steps?: Array<{ tool: string; args: Record<string, unknown>; rationale?: string }> };
+            const rawSteps = Array.isArray(parsed.steps) ? parsed.steps : [];
+            const valid: PlanStep[] = [];
+            for (const s of rawSteps) {
+              if (!s.tool || !isValidTool(s.tool)) continue;
+              if (typeof s.args !== "object" || s.args === null) continue;
+              valid.push({ tool: s.tool as ToolName, args: s.args as Record<string, unknown>, rationale: typeof s.rationale === "string" ? s.rationale : "gemini" });
+            }
+            if (valid.length > 0) {
+              const plan: ToolPlan = { goal, steps: valid, planner: model as unknown as ToolPlan["planner"], degraded: false, created_at: new Date().toISOString() };
+              sendJson(res, 200, plan);
+              return;
+            }
+          } catch {}
+        }
       }
       // Gemini API key failed → fall through to deterministic
     }

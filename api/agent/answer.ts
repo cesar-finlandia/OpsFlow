@@ -4,7 +4,8 @@ import { join } from "node:path";
 import { sendJson, withCors, methodGuard } from "../_shared.js";
 import { vertexAvailable, vertexConfig, vertexAccessToken, vertexGenerateContentUrl } from "../_vertex.js";
 
-const ANSWER_MODEL = "gemini-2.0-flash" as const;
+const ANSWER_MODEL = "gemini-3.5-flash-lite" as const;
+const ANSWER_FALLBACK = "gemini-3.6-flash" as const;
 
 function loadCatalog(): { products: Array<{ id: string; title: string; brand: string; category: string; variants: Array<{ sku: string; title: string; options: { size: string; color: string }; price_cents: number; stock: number }> }> } {
   try { const raw = readFileSync(join(process.cwd(), "data/catalog.json"), "utf8"); return JSON.parse(raw) as never; } catch {}
@@ -75,28 +76,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
     // Gemini API key
     const geminiKey = (process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY ?? "").trim();
     if (geminiKey) {
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 4000);
+      for (const model of [ANSWER_MODEL, ANSWER_FALLBACK] as const) {
         try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${ANSWER_MODEL}:generateContent?key=${encodeURIComponent(geminiKey)}`;
-          const r = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              systemInstruction: { parts: [{ text: system }] },
-              contents: [{ role: "user", parts: [{ text: user }] }],
-              generationConfig: { temperature: 0.3, maxOutputTokens: 512 },
-            }),
-            signal: controller.signal,
-          });
-          if (r.ok) {
-            const j = await r.json() as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
-            const text = j.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-            if (text) { sendJson(res, 200, { ok: true, answer: text, planner: ANSWER_MODEL }); return; }
-          }
-        } finally { clearTimeout(timeout); }
-      } catch {}
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 12000);
+          try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(geminiKey)}`;
+            const r = await fetch(url, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                systemInstruction: { parts: [{ text: system }] },
+                contents: [{ role: "user", parts: [{ text: user }] }],
+                generationConfig: { temperature: 0.3, maxOutputTokens: 512 },
+              }),
+              signal: controller.signal,
+            });
+            if (r.ok) {
+              const j = await r.json() as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
+              const text = j.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+              if (text) { sendJson(res, 200, { ok: true, answer: text, planner: model as unknown as string }); return; }
+            }
+          } finally { clearTimeout(timeout); }
+        } catch {}
+      }
     }
 
     // Deterministic fallback - template based on catalog

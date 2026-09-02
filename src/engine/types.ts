@@ -4,7 +4,7 @@ export const APP_VERSION = "1.0.0";
 export type ShippingZone = 1 | 2 | 3 | 4 | 5;
 export type ServiceLevel = "ground" | "expedited" | "overnight";
 export type HoldStatus = "held" | "confirmed" | "released" | "expired";
-export type PlannerKind = "gemini-2.5-flash" | "gemini-2.0-flash" | "deterministic";
+export type PlannerKind = "gemini-2.5-flash" | "gemini-2.0-flash" | "gemini-3.6-flash" | "gemini-3.5-flash-lite" | "deterministic";
 export type ToolName =
   | "search_inventory" | "filter_variants" | "calculate_shipping"
   | "hold_order" | "confirm_fulfillment";
