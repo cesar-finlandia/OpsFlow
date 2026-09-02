@@ -90,3 +90,13 @@ export function CommittedIcon({ size = 18, className }: IconProps): JSX.Element 
     </svg>
   );
 }
+
+/** The product story — an open document, used by the header "How it works". */
+export function StoryIcon({ size = 15, className }: IconProps): JSX.Element {
+  return (
+    <svg width={size} height={size} viewBox="0 0 16 16" className={className} aria-hidden="true" focusable="false">
+      <path d="M8 4.1C6.9 3.1 5.4 2.7 3.6 2.9a.7.7 0 0 0-.6.7v7.6c0 .4.4.8.8.7 1.5-.1 3 .3 4.2 1.2 1.2-.9 2.7-1.3 4.2-1.2.4 0 .8-.3.8-.7V3.6a.7.7 0 0 0-.6-.7c-1.8-.2-3.3.2-4.4 1.2Z" {...stroke} />
+      <path d="M8 4.1v9" {...stroke} />
+    </svg>
+  );
+}

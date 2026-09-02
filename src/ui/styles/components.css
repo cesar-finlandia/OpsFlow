@@ -1574,3 +1574,307 @@ tbody tr:hover {
   stroke: var(--of-gate);
   stroke-width: 2;
 }
+
+/* =========================================================================
+   18. Inline help (§7.10) — the "?" affordance and its popover
+   The button is Slate at rest and Signal on hover: help is offered by the
+   product, never demanded, so it must not compete with a live status colour.
+   ========================================================================= */
+
+.of-help {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.of-help__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: var(--of-radius-full);
+  background: transparent;
+  box-shadow: none;
+  color: var(--of-text-3);
+  opacity: 0.7;
+  transition:
+    color var(--of-dur-1) var(--of-ease-out),
+    background-color var(--of-dur-1) var(--of-ease-out),
+    opacity var(--of-dur-1) var(--of-ease-out);
+}
+
+.of-help__btn:hover:not(:disabled),
+.of-help__btn[aria-expanded="true"] {
+  background: var(--of-signal-soft);
+  border-color: transparent;
+  color: var(--of-signal);
+  opacity: 1;
+  transform: none;
+  box-shadow: none;
+}
+
+.of-help__btn svg {
+  display: block;
+  overflow: visible;
+}
+
+.of-help__ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  opacity: 0.55;
+}
+
+.of-help__glyph {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.of-help__dot {
+  fill: currentColor;
+}
+
+/* Portalled to <body>: the tab strip and the table wrappers both clip on
+   overflow, and a help popover that gets cut in half is worse than none. */
+.of-help__pop {
+  position: fixed;
+  z-index: 1100;
+  padding: var(--of-space-3) var(--of-space-4);
+  border: 1px solid var(--of-border);
+  border-top: 2px solid var(--of-signal);
+  border-radius: var(--of-radius-md);
+  background: var(--of-surface);
+  color: var(--of-text-2);
+  box-shadow: var(--of-shadow-3);
+  font-size: var(--of-text-body-sm);
+  line-height: var(--of-lh-normal);
+  animation: of-rise var(--of-dur-2) var(--of-ease-out) both;
+}
+
+.of-help__title {
+  display: block;
+  margin-bottom: var(--of-space-2);
+  color: var(--of-text);
+  font-size: var(--of-text-meta);
+  font-weight: 640;
+  letter-spacing: var(--of-track-tight);
+}
+
+.of-help__body p {
+  margin: 0 0 var(--of-space-2);
+}
+
+.of-help__body p:last-child {
+  margin-bottom: 0;
+}
+
+.of-help__body code {
+  font-size: 0.92em;
+  color: var(--of-signal);
+}
+
+/* A help icon riding a table header inherits the header's uppercase micro-type,
+   which would shrink the glyph; reset it back to its own scale. */
+.of-th-help {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.opsflow-tab-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding-right: var(--of-space-2);
+}
+
+.opsflow-panel__head {
+  display: flex;
+  align-items: center;
+  gap: var(--of-space-2);
+  margin-bottom: var(--of-space-3);
+}
+
+.opsflow-panel__head h2 {
+  margin: 0;
+  font-size: var(--of-text-label);
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  color: var(--of-text-3);
+  font-weight: 600;
+}
+
+.of-quote__actions,
+.of-form__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--of-space-2);
+}
+
+/* =========================================================================
+   19. The product story (§7.11) — "How it works" and its Markdown reader
+   ========================================================================= */
+
+.opsflow-story-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-color: color-mix(in srgb, var(--of-signal) 40%, transparent);
+  background: var(--of-signal-soft);
+  color: var(--of-signal);
+  font-size: var(--of-text-meta);
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.opsflow-story-btn:hover:not(:disabled) {
+  background: var(--of-signal-soft);
+  border-color: var(--of-signal);
+  color: var(--of-signal);
+}
+
+.opsflow-story-btn svg {
+  flex: none;
+}
+
+/* The story is a document, not a decision: Signal at the top edge, never the
+   gate's amber rail (§3.1). */
+.of-story {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  width: min(760px, calc(100vw - var(--of-space-8)));
+  max-height: min(82vh, 860px);
+  border: 1px solid var(--of-border);
+  border-top: 3px solid var(--of-signal);
+  border-radius: var(--of-radius-lg);
+  background: var(--of-surface);
+  box-shadow: var(--of-shadow-3);
+  animation: of-dialog-in 240ms var(--of-ease-spring) both;
+}
+
+.of-story__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--of-space-4);
+  padding: var(--of-space-5) var(--of-space-6) var(--of-space-4);
+  border-bottom: 1px solid var(--of-border);
+}
+
+.of-story__eyebrow {
+  display: block;
+  font-size: var(--of-text-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--of-track-label);
+  color: var(--of-signal);
+}
+
+.of-story__head h2 {
+  margin: var(--of-space-1) 0 0;
+  font-size: var(--of-text-h2);
+}
+
+.of-story__body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--of-space-5) var(--of-space-6) var(--of-space-8);
+}
+
+/* Reading measure, not console density: this is prose (§5). */
+.of-md {
+  max-width: 62ch;
+  color: var(--of-text-2);
+  font-size: var(--of-text-lead);
+  line-height: 1.65;
+}
+
+.of-md h2 {
+  margin: var(--of-space-8) 0 var(--of-space-2);
+  font-size: var(--of-text-h2);
+  color: var(--of-text);
+}
+
+.of-md h2:first-child {
+  margin-top: 0;
+}
+
+.of-md h3 {
+  margin: var(--of-space-8) 0 var(--of-space-2);
+  font-size: var(--of-text-h3);
+  color: var(--of-text);
+}
+
+.of-md h4 {
+  margin: var(--of-space-6) 0 var(--of-space-2);
+  font-size: var(--of-text-lead);
+  color: var(--of-text);
+}
+
+.of-md p {
+  margin: 0 0 var(--of-space-4);
+}
+
+.of-md strong {
+  color: var(--of-text);
+  font-weight: 640;
+}
+
+.of-md code {
+  padding: 1px 5px;
+  border-radius: var(--of-radius-xs);
+  background: var(--of-signal-soft);
+  color: var(--of-signal);
+  font-size: 0.88em;
+}
+
+.of-md blockquote {
+  margin: 0 0 var(--of-space-5);
+  padding: var(--of-space-3) var(--of-space-4);
+  border-left: 3px solid var(--of-signal);
+  border-radius: 0 var(--of-radius-sm) var(--of-radius-sm) 0;
+  background: var(--of-canvas-2);
+  color: var(--of-text-2);
+  font-size: var(--of-text-body);
+}
+
+.of-md ul {
+  margin: 0 0 var(--of-space-4);
+  padding-left: var(--of-space-5);
+}
+
+.of-md li {
+  margin-bottom: var(--of-space-2);
+}
+
+.of-md li::marker {
+  color: var(--of-signal);
+}
+
+.of-md hr {
+  height: 1px;
+  margin: var(--of-space-6) 0;
+  border: 0;
+  background: linear-gradient(90deg, var(--of-border-strong), transparent);
+}
+
+@media (max-width: 720px) {
+  .of-story__body {
+    padding: var(--of-space-4) var(--of-space-4) var(--of-space-8);
+  }
+
+  .of-md {
+    font-size: var(--of-text-body);
+  }
+}

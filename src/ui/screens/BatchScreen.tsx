@@ -4,6 +4,7 @@ import { useSession } from "src/ui/state/session.ts";
 import type { VariantMatch } from "src/engine/types.ts";
 import { AgentActivity } from "src/ui/components/AgentActivity.tsx";
 import { SignalMark } from "src/ui/components/Icons.tsx";
+import { HelpTip } from "src/ui/components/HelpTip.tsx";
 
 export function BatchScreen(): JSX.Element {
   const { envelopes } = useSession();
@@ -143,6 +144,14 @@ export function BatchScreen(): JSX.Element {
       />
       <button className="opsflow-primary" onClick={handleRun} disabled={running} aria-label="Run batch">{running ? "Running…" : "Run batch"}</button>
       <button onClick={handleRun} disabled={running} style={{ display: "none" }} aria-hidden="true">Run with agent</button>
+      {/* The label deliberately avoids the word "goal": the input's own
+          aria-label is "Goal", and getByLabel matches on substring, so a help
+          button naming it would make the input ambiguous to assistive tech and
+          to the E2E suite alike (§11.1). */}
+      <HelpTip align="end" label="About the instruction box" title="One sentence, one batch">
+        <p>Describe the outcome, not the steps: <em>&quot;hold all low-stock blue variants under $12 shipping to zone 4 for 15 minutes&quot;</em>. The agent picks which tools to call, in what order, and shows you each one as it goes.</p>
+        <p>Starting a batch only reads and quotes. Anything that reserves stock or commits a fulfilment stops and asks you first, with the exact arguments on screen.</p>
+      </HelpTip>
       </div>
       {toast && <div role="status">{toast}</div>}
       {running && (
@@ -207,7 +216,16 @@ export function BatchScreen(): JSX.Element {
             <table>
               <thead>
                 <tr>
-                  <th>SKU</th><th>Title</th><th>Size</th><th>Color</th><th className="of-num">Price</th><th className="of-num">Stock</th><th>Select</th>
+                  <th>SKU</th><th>Title</th><th>Size</th><th>Color</th><th className="of-num">Price</th><th className="of-num">Stock</th>
+                  <th>
+                    <span className="of-th-help">
+                      Select
+                      <HelpTip align="end" label="About the selection column" title="Correcting the agent">
+                        <p>The agent&apos;s filter decided these rows. Ticking and unticking is how you overrule it before anything is reserved.</p>
+                        <p>Your selection carries over to the Shipping screen, where it becomes the set that gets quoted. Up to 50 SKUs per batch.</p>
+                      </HelpTip>
+                    </span>
+                  </th>
                 </tr>
               </thead>
               <tbody>

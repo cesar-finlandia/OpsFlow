@@ -3,6 +3,7 @@ import { executeToolCompat } from "src/webmcp/policy.ts";
 import { useSession } from "src/ui/state/session.ts";
 import type { ShippingZone, ServiceLevel } from "src/engine/types.ts";
 import { SignalMark } from "src/ui/components/Icons.tsx";
+import { HelpTip } from "src/ui/components/HelpTip.tsx";
 
 function formatCents(cents: number): string {
   return "$" + (cents / 100).toFixed(2);
@@ -58,7 +59,13 @@ export function ShippingScreen(): JSX.Element {
               </ul>
             </div>
           )}
-          <button onClick={() => setShowExplain((v) => !v)}>{showExplain ? "Hide breakdown" : `Show breakdown (${lastQuote.explain.length} rules)`}</button>
+          <span className="of-quote__actions">
+            <button onClick={() => setShowExplain((v) => !v)}>{showExplain ? "Hide breakdown" : `Show breakdown (${lastQuote.explain.length} rules)`}</button>
+            <HelpTip label="About the rule breakdown" title="Where the number came from">
+              <p>Expands the quote into the ordered list of rules that produced it — base rate for the zone, weight bands, each surcharge, and the reason any variant was dropped from the set.</p>
+              <p>This is the difference between a rate you can defend to a customer and one you have to trust.</p>
+            </HelpTip>
+          </span>
           {showExplain && (
             <ol>
               {lastQuote.explain.slice(0, 12).map((line, idx) => (
@@ -92,7 +99,13 @@ export function ShippingScreen(): JSX.Element {
           SKUs (comma-separated, 1–50 items)
           <input name="skus" type="text" value={skusText} placeholder={resultSkus.slice(0, 3).join(", ") || "OPS-1042-BLU-M, OPS-1050-RED-S"} onChange={(e) => setSkusText(e.target.value)} tooldescription="Comma-separated variant SKUs to quote; defaults to current result set from Batch tab" />
         </label>
-        <button className="opsflow-primary" type="submit" disabled={submitting}>{submitting ? "Quoting…" : "Calculate shipping (declarative)"}</button>
+        <span className="of-form__actions">
+          <button className="opsflow-primary" type="submit" disabled={submitting}>{submitting ? "Quoting…" : "Calculate shipping (declarative)"}</button>
+          <HelpTip label="About this form" title="Quote without the agent">
+            <p>Quotes the SKUs in the box — or, if you leave it empty, whatever your last batch produced. Use it to re-price a set after changing the zone or service level.</p>
+            <p>The same form is the declarative WebMCP surface: its fields are annotated, so an outside agent can fill and submit it without this page running any custom JavaScript.</p>
+          </HelpTip>
+        </span>
         <p className="hint">Declarative WebMCP: this form is annotated with <code>{"tool" + "name"}</code> and per-field <code>tooldescription</code> so a WebMCP-aware agent can invoke <code>calculate_shipping</code> without imperative JS.</p>
       </form>
     </div>

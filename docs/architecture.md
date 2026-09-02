@@ -1,12 +1,14 @@
 ```mermaid
-flowchart LR
+flowchart TD
   subgraph AGENTS["Agents that call the tools"]
+    direction LR
     CGPT["ChatGPT in-app browser agent<br/>(WebMCP by default)"]
     CHR["Chrome 149+<br/>chrome://flags/#enable-webmcp-testing"]
     INP["In-page Agent Console (DP-AGENT)<br/>orchestrator.ts · executeTool"]
   end
 
   subgraph DOC["Origin-isolated document — MAN-03<br/>Origin-Agent-Cluster: ?1 · Permissions-Policy: tools=(self)"]
+    direction TB
     MC["document.modelContext — MAN-01<br/>src/webmcp/register.ts"]
     T1["search_inventory<br/>readOnlyHint"]
     T2["filter_variants<br/>readOnlyHint"]
@@ -17,6 +19,12 @@ flowchart LR
     DOM["Domain logic (DP-DOM)<br/>catalog · filter · shipping · holds"]
     UI["Console UI (DP-UI)<br/>Batch · Shipping · Holds + Tool Inspector"]
     CORE["Engine core (DP-CORE)<br/>types · envelopes · withResilience · golden cache · context · usage"]
+    MC --> T1 & T2 & T3 & T4 & T5
+    T1 & T2 & T3 & T4 & T5 --> DOM
+    FORM --> DOM
+    T1 & T2 & T3 & T4 & T5 -- "EventEnvelope started/done/error" --> CORE
+    CORE --> UI
+    UI -- "confirmation dialog before hold/confirm" --> T4 & T5
   end
 
   subgraph VRC["Vercel (DP-SRV / DP-SHIP)"]
@@ -30,16 +38,10 @@ flowchart LR
   CGPT --> MC
   CHR --> MC
   INP --> MC
-  MC --> T1 & T2 & T3 & T4 & T5
-  T1 & T2 & T3 & T4 & T5 --> DOM
-  FORM --> DOM
   DOM --> DATA
   DOM -- "network path, read-only tools" --> API
   API --> DATA
   INP -- "POST /api/agent/plan" --> API
   API -- "withResilience · NFR-06" --> GEM
-  T1 & T2 & T3 & T4 & T5 -- "EventEnvelope started/done/error" --> CORE
-  CORE --> UI
   CORE -. "degraded replay (FR-18)" .-> CACHE
-  UI -- "confirmation dialog before hold/confirm" --> T4 & T5
 ```

@@ -5,6 +5,7 @@ import { executeToolCompat } from "src/webmcp/policy.ts";
 import type { Hold, Fulfillment } from "src/engine/types.ts";
 import { TtlRing } from "src/ui/components/TtlRing.tsx";
 import { CommittedIcon, SignalMark } from "src/ui/components/Icons.tsx";
+import { HelpTip } from "src/ui/components/HelpTip.tsx";
 
 function formatCents(cents: number): string {
   return "$" + (cents / 100).toFixed(2);
@@ -141,8 +142,24 @@ export function HoldsScreen(): JSX.Element {
             <th>Hold ID</th>
             <th>Items</th>
             <th>Status</th>
-            <th>TTL</th>
-            <th>Actions</th>
+            <th>
+              <span className="of-th-help">
+                TTL
+                <HelpTip label="About the countdown" title="How long the stock is yours">
+                  <p>A hold reserves stock for a fixed window — the ring drains as it runs out. When it reaches zero the hold expires on its own and the stock goes back to the pool.</p>
+                  <p>An expired hold can no longer be committed. That is deliberate: it fails closed rather than shipping against a reservation nobody is watching.</p>
+                </HelpTip>
+              </span>
+            </th>
+            <th>
+              <span className="of-th-help">
+                Actions
+                <HelpTip align="end" label="About these two actions" title="Let it go, or commit it">
+                  <p>The first action drops the hold and returns its stock immediately — use it when the batch was wrong or you no longer need the reservation.</p>
+                  <p>The second commits the fulfilment. It never fires straight away: a gate dialog opens first with the literal arguments about to be sent, and nothing is written until you approve them.</p>
+                </HelpTip>
+              </span>
+            </th>
           </tr>
         </thead>
         <tbody>

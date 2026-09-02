@@ -1,6 +1,7 @@
 import * as React from "react";
 import type { ToolName } from "src/engine/types.ts";
 import { GateIcon } from "src/ui/components/Icons.tsx";
+import { HelpTip } from "src/ui/components/HelpTip.tsx";
 
 type Req = { tool: ToolName; args: Record<string, unknown>; summary: string };
 
@@ -107,7 +108,14 @@ export function ConfirmDialog({ request, onResolve }: { request: Req | null; onR
           makes the app visibly stop, the amber rail marks it as the one place a
           human decides, and the arguments stay literal — never summarised. */}
       <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="confirm-title" tabIndex={-1} className="opsflow-dialog">
-        <span className="opsflow-dialog__eyebrow"><GateIcon />Awaiting your confirmation</span>
+        <span className="opsflow-dialog__eyebrow">
+          <GateIcon />
+          Awaiting your confirmation
+          <HelpTip label="Why this stopped" title="The one place a human decides">
+            <p>Three of the five tools only read data and run unattended. This is one of the two that change something real, so it stops here every time — for the console&apos;s own agent and for any outside agent alike.</p>
+            <p>What you see below is not a summary. It is the literal, already-validated payload about to be sent. Dismissing this window sends nothing.</p>
+          </HelpTip>
+        </span>
         <h2 id="confirm-title">Confirm <span className="of-mono">{request.tool}</span></h2>
         <p>{request.summary}</p>
         <pre>{JSON.stringify(request.args, null, 2)}</pre>

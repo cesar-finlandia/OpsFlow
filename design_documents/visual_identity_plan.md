@@ -434,6 +434,45 @@ Section transitions between the tab bar and the active screen use a **1 px Signa
 - Chips: 200 ms `scale(.9) → 1` entrance, so a "low stock" flag catches the eye once and then stops moving.
 - Focus: 2 px `--of-focus` ring plus a 4 px `--of-focus-halo` glow, `outline-offset: 2px`, `:focus-visible` only.
 
+### 7.10 Inline help — the "?" affordance
+
+Maya is not an engineer, has no onboarding call, and will never read a manual. Every non-obvious control therefore carries its own explanation, one click away.
+
+- **The glyph.** A 20 px circular `?` in `--of-text-3` at 70 % opacity — present but never competing with a live status colour. On hover or while open it fills with `--of-signal-soft` and turns Signal: help is *offered* by the product, never demanded.
+- **The popover.** 320 px wide, `--of-surface`, `--of-shadow-3`, with a 2 px `--of-signal` top edge that ties it to the "the system is telling you something" channel. Bold title line at `--of-text-meta` 640, body at `--of-text-body-sm` / 1.55. Enters with `of-rise` at `--of-dur-2`.
+- **Portalled to `<body>`.** The tab strip and the table wrappers both scroll on overflow; an in-flow popover would be sliced in half by either. Position is computed from the trigger's rect, clamped 12 px from both vertical edges and **flipped above the trigger** when it would otherwise run off the bottom.
+- **Dismissal.** Escape (stopped from propagating, so it closes the help and not the dialog behind it), outside pointer-down, or the trigger again. Repositions on scroll and resize rather than closing — an operator reading an explanation while the timeline streams underneath should not lose it.
+- **Never `role="dialog"`.** It is `role="note"`: help must not look, sound, or behave like the confirmation gate. Nothing in the app is modal except the two things that deserve it.
+
+**Where they sit** — one per question a first-time user actually asks:
+
+| Location | Answers |
+|---|---|
+| Each of the three tabs | What is this screen for? |
+| Header, beside *Inspect tools* | What is the agent allowed to do? |
+| Batch, beside *Run batch* | What do I type, and what will it commit? |
+| Batch, in the **Select** column header | Why would I overrule the agent, and what carries forward? |
+| Shipping, beside the breakdown toggle | Where did this number come from? |
+| Shipping, beside the declarative submit | What is this form, and why is it annotated? |
+| Holds, in the **TTL** header | What happens when the clock runs out? |
+| Holds, in the **Actions** header | What do these two buttons do — and which one commits? |
+| Confirmation dialog, beside the eyebrow | Why did the page stop? |
+| Timeline and Inspector panel headings | How do I read this? |
+
+**Naming rule (hard constraint).** A help button's accessible name may never contain a string the test suite locates a real control by — `Confirm`, `Cancel`, `Release`, `Run batch`, `Calculate shipping`, `Inspect tools`, `Show breakdown` — nor the word `Goal`, which is the goal input's own `aria-label` (Playwright's `getByLabel` and `getByRole({name})` both match on substring). Help is named for the *question* it answers, never for the button it sits beside: "About the instruction box", not "About Run batch". This is a usability rule as much as a test one — a screen-reader user tabbing the header should never hear two controls with confusable names.
+
+### 7.11 The product story — "How it works"
+
+The first question any visitor has, judge or operator, is *what is this and who is it for?* It is answered next to the title.
+
+- **The trigger.** A labelled pill beside the tagline — `--of-signal-soft` fill, Signal text, book glyph — deliberately more visible than a `?` because it is the one affordance a cold visitor needs to find.
+- **The document.** `design_documents/real-life-usecase-opsflow.md`, imported at build time with Vite's `?raw`. The story on the page and the story in the repository are the *same file* and cannot drift apart. Cost: ~7 kB of prose, ~2.5 kB gzipped — inside the `NFR-10` budget with room to spare.
+- **The reader.** A ~120-line Markdown block renderer (headings, blockquote, rules, bullets, bold/italic/code, paragraphs) rather than a dependency. Every node is a React element, so no raw HTML is ever produced and there is no injection surface. Headings are demoted one level: the story's `#` title must not become a second `<h1>` (§11.1).
+- **The surface.** A centred modal, `min(760px, 100vw - 32px)` wide, capped at 82 vh with its body scrolling. Prose measure is 62 ch at `--of-text-lead` / 1.65 — reading typography, not console density (§5). A 3 px **Signal** top edge, never the gate's amber: this document is information, and nothing here commits anything (§3.1).
+- **Behaviour.** The same focus-trap contract as the confirmation gate — focus to the close button on open, Tab cycles inside, Escape closes and returns focus to the trigger (`NFR-09`).
+
+---
+
 ---
 
 ## 8. Component library & stack recommendations (required cue #5)
@@ -499,6 +538,8 @@ Ordered by what I would actually adopt first:
 | **Confirm dialog** (`FR-05`/`06`) | `--of-surface`, `--of-shadow-3`, 4 px Gate leading rail | Title `--of-text-h3` with mono tool name; args mono 13 | §7.5 | `role`, `aria-modal`, `aria-labelledby`, `data-testid`s and focus order unchanged |
 | **Empty states** | `--of-text-2` on a dashed-border well | `--of-text-body-sm` | A 40 px static Signal mark above the text | Existing strings verbatim |
 | **Error alerts** | Fault soft bg, Fault border and text | `--of-text-body-sm`; code in mono | 8 px, three-cycle shake on mount | `role="alert"` preserved |
+| **Inline help** (§7.10) | `--of-text-3` at rest → Signal on hover/open; popover `--of-surface` + 2 px Signal top edge | Title `--of-text-meta` 640; body `--of-text-body-sm` | `of-rise` 200 ms | Portalled, clamped and flipped. `role="note"`, never `dialog`. Accessible names may not collide with any located control |
+| **"How it works"** (§7.11) | Signal-soft pill in the header; modal with a 3 px Signal top edge | Prose at `--of-text-lead` / 1.65, 62 ch measure | `of-dialog-in` 240 ms spring | Renders `real-life-usecase-opsflow.md` itself; headings demoted so the `<h1>` count stays 1 |
 
 ---
 
@@ -547,6 +588,8 @@ Files **never touched:** everything under `src/platform/**` (chassis, `NFR-05`),
 7. No `<iframe>` anywhere (`NFR-12`).
 8. Every product string in `src/ui/**` byte-identical.
 9. Zero new runtime dependencies → bundle and `NFR-10` cold-load budget unaffected.
+10. **Help and story buttons are named for the question, not the control.** No accessible name may contain `Confirm`, `Cancel`, `Release`, `Run batch`, `Calculate shipping`, `Inspect tools`, `Show breakdown` or `Goal` — `getByRole({name})` and `getByLabel` both match on substring, so a careless label makes a real control ambiguous. (`getByLabel("Goal")` did exactly that once, against a help button first labelled "About the goal box"; it is now "About the instruction box".)
+11. Help buttons live in the tab strip but are never `role="tab"`, and never sit *inside* an `<h2>` or a tab button — a nested button folds its label into the parent's accessible name.
 
 **One test line changed, and why.** `tests/e2e/09-production-bundle.static.spec.ts` asserted `getComputedStyle(".opsflow").display === "flex"` as its proxy for "a stylesheet reached the built page". The console root is now `grid`, because the identity gives the Co-Execution Timeline a desktop side rail (§6.4). The assertion was widened to `["flex", "grid"]` — it still fails loudly if the stylesheet does not ship, which is the property that test exists to protect. No product behaviour, string, role, or `data-testid` was touched. Everything else in `npm test` (164 tests) and `npm run test:e2e` (62 tests) passes unmodified, including the `NFR-10` cold-load gate.
 
