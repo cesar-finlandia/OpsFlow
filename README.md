@@ -93,7 +93,7 @@ npx vercel --prod        # deploy static SPA + api/ functions to production
 
 ### Planner credentials (optional)
 
-The planner reaches **Gemini 2.5 Flash through Vertex AI**, not through a
+The planner reaches **Gemini 3.6 Flash through Vertex AI**, not through a
 Generative Language API key. A long-lived API key cannot be scoped, cannot be
 rotated without a redeploy, and is one copy-paste away from a public repository;
 Vertex mints a short-lived OAuth token from a service account instead, so nothing
@@ -137,9 +137,9 @@ The chassis `src/` was never edited — all composition is via the public surfac
 
 ## Links
 
-- **Live URL:** `https://opsflow-2026-09-webmcp.vercel.app` _(placeholder — verified after `npx vercel --prod`; frozen Sep 3 13:00 PDT / 20:00 UTC → Sep 21)_
-- **Repository:** `https://github.com/example/opsflow-2026-09-webMCP` _(placeholder — public repo with MIT LICENSE detectable in GitHub About box)_
-- **Demo video (YouTube, <3 min, public):** `https://www.youtube.com/watch?v=REPLACE_ME` _(placeholder — public YouTube link with audio covering what was built and how WebMCP was used; frozen Sep 3 13:00 PDT → Sep 21)_
+- **Live URL:** `https://opsflow-2026-09-webmcp.vercel.app` 
+- **Repository:** `https://github.com/cesar-finlandia/OpsFlow` _(placeholder — public repo with MIT LICENSE detectable in GitHub About box)_
+- **Demo video (YouTube, <3 min, public):** `https://youtu.be/lMuggGD8KcM` _(placeholder — public YouTube link with audio covering what was built and how WebMCP was used)_
 
 Placeholders will be replaced with the verified production URL, public repo URL, and public YouTube video before submission. All three URLs are frozen from Sep 3 13:00 PDT (20:00 UTC) until judging ends Sep 21; no redeploys or video edits after the freeze.
 
