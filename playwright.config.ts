@@ -1,5 +1,5 @@
 // Requirement IDs: FR-01…FR-20, NFR-01…NFR-12, MAN-01…MAN-05
-// E2E configuration — see design_documents/e2e-testing/strategy.md §2.1.
+// E2E configuration — live catalogue in tests/e2e/ (planning docs are local-only, gitignored).
 import { defineConfig, devices } from "@playwright/test";
 
 const LIVE_PORT = 5174; // vite dev — serves the app AND api/** via the dev plugin

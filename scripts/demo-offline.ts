@@ -29,21 +29,51 @@ async function main(): Promise<void> {
   //    CLI form (what this script does programmatically):
   //    chassis mock --script demo/mock-script.json
   //    Programmatic equivalent: read script JSON, for each envelope call publisher.publish(...)
-  let raw: string;
-  try {
-    raw = readFileSync(scriptPath, "utf8");
-  } catch (e) {
-    console.error(`[demo:offline] BLOCKER: missing ${scriptPath} — report to DP-SEED`);
-    console.error(String(e));
-    process.exit(1);
-  }
+  // demo/ is local-only authoring material (gitignored) so a clean clone has no
+  // mock-script.json. Prefer the checked-in file when present, otherwise fall
+  // back to an inline skeleton with the same 14-envelope shape (agent.plan +
+  // 5 tools + confirm gate) so FR-20 works with zero network on any clone.
   let script: { trace_id: string; envelopes: Array<{ step_id: string; status: string; payload: Record<string, unknown>; trace_id?: string }> };
   try {
-    script = JSON.parse(raw) as typeof script;
-  } catch (e) {
-    console.error(`[demo:offline] BLOCKER: invalid JSON in ${scriptPath}`);
-    console.error(String(e));
-    process.exit(1);
+    const raw = readFileSync(scriptPath, "utf8");
+    try {
+      script = JSON.parse(raw) as typeof script;
+    } catch (e) {
+      console.error(`[demo:offline] BLOCKER: invalid JSON in ${scriptPath}`);
+      console.error(String(e));
+      process.exit(1);
+    }
+  } catch {
+    const trace_id = `opsflow-${Date.now()}`;
+    const goal = "hold all low-stock blue variants under $12 shipping to zone 4 for 15 minutes";
+    const steps = [
+      { tool: "search_inventory", args: { query: "blue", inStockOnly: false, limit: 25 }, rationale: "find blue variants" },
+      { tool: "filter_variants", args: { options: { color: "Blue" }, maxPriceCents: 1200, limit: 25 }, rationale: "narrow to low-stock Blues" },
+      { tool: "calculate_shipping", args: { items: [], zone: 4, service: "ground" }, rationale: "quote zone 4 ground" },
+      { tool: "hold_order", args: { lineItems: [], ttlMinutes: 15 }, rationale: "hold the batch" },
+      { tool: "confirm_fulfillment", args: { holdId: "HOLD-ABCD1234" }, rationale: "confirm after human gate" },
+    ];
+    const pairs: Array<[string, Record<string, unknown>]> = [
+      ["agent.plan", { goal }],
+      ["agent.plan", { goal, steps, planner: "deterministic", degraded: true }],
+      ["tool.search_inventory", { args: steps[0]!.args }],
+      ["tool.search_inventory", { outcome: { ok: true, data: { matches: [], total: 0, truncated: false, query_echo: "blue" } } }],
+      ["tool.filter_variants", { args: steps[1]!.args }],
+      ["tool.filter_variants", { outcome: { ok: true, data: { matches: [], total: 0, applied: ["color=Blue"], from_result_set: true } } }],
+      ["tool.calculate_shipping", { args: steps[2]!.args }],
+      ["tool.calculate_shipping", { outcome: { ok: true, degraded: true, data: { zone: 4, service: "ground", items: [], total_weight_g: 0, subtotal_cents: 0, base_rate_cents: 0, surcharges: [], total_cents: 0, explain: ["offline replay"], excluded: [] } } }],
+      ["tool.hold_order", { args: steps[3]!.args }],
+      ["tool.hold_order", { outcome: { ok: false, error: { code: "NEEDS_CONFIRMATION", message: "offline replay — confirmation required" } } }],
+      ["session.confirm", { tool: "hold_order", args: steps[3]!.args }],
+      ["session.confirm", { granted: false }],
+      ["tool.confirm_fulfillment", { args: steps[4]!.args }],
+      ["tool.confirm_fulfillment", { outcome: { ok: false, error: { code: "NEEDS_CONFIRMATION", message: "offline replay — confirmation required" } } }],
+    ];
+    console.warn(`[demo:offline] ${scriptPath} not found (gitignored authoring file) — using inline 14-envelope replay skeleton`);
+    script = {
+      trace_id,
+      envelopes: pairs.map(([step_id, payload], i) => ({ step_id, status: i % 2 === 0 ? "started" : "done", payload, trace_id })),
+    };
   }
   if (!Array.isArray(script.envelopes) || script.envelopes.length !== 14) {
     console.error(`[demo:offline] BLOCKER: expected 14 envelopes in ${scriptPath}, got ${script.envelopes?.length ?? "none"} — report to DP-SEED`);

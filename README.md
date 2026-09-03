@@ -78,9 +78,8 @@ npm run test:e2e  # end-to-end browser suite (Playwright) — starts its own ser
 ```
 
 The E2E suite drives a real Chromium against both the dev server (with the `api/`
-routes served) and the production bundle, and covers every use case in the design
-plans. The strategy, the use-case catalogue and the requirement traceability
-matrix live in [`design_documents/e2e-testing/`](./design_documents/e2e-testing/strategy.md).
+routes served) and the production bundle, and covers every use case in the
+product flow. The live test catalogue is the tracked suite in [`tests/e2e/`](./tests/e2e/).
 
 ## Deploy
 
