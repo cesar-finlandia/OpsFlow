@@ -64,6 +64,20 @@ const TABS: Array<{ id: TabId; label: string; helpLabel: string; helpTitle: stri
 
 export function App({ probe }: { probe: Probe }): JSX.Element {
   const { degraded, envelopes, meter } = useSession();
+  // Banner "Replaying cached results" must only show when actually replaying, not when working live.
+  // degraded is sticky per trace (any envelope degraded:true). If the current trace has a live
+  // Gemini plan or any non-degraded tool success, we are live — hide the replay banner.
+  // Timeline chips still show per-step degraded where applicable (FR-18).
+  const hasLiveSuccess = envelopes.some((e) => {
+    if (e.status !== "done") return false;
+    if (e.degraded === true) return false;
+    if (e.step_id === "agent.plan") {
+      const planner = (e.payload as { planner?: string })?.planner ?? "";
+      return planner.startsWith("gemini");
+    }
+    return e.step_id.startsWith("tool.");
+  });
+  const showReplayBanner = degraded && !hasLiveSuccess;
   const [activeTab, setActiveTab] = React.useState<TabId>("batch");
   const [inspectorOpen, setInspectorOpen] = React.useState(false);
   const { request, onResolve } = useConfirmDialogState();
@@ -99,7 +113,7 @@ export function App({ probe }: { probe: Probe }): JSX.Element {
   return (
     <div className="opsflow">
       {!probe.available && <WebMcpBanner probe={probe} />}
-      {degraded && <DegradedBanner degraded={degraded} />}
+      {showReplayBanner && <DegradedBanner degraded={showReplayBanner} />}
       <header className="opsflow-header">
         {/* The Signal mark is a legend for the trust model: five nodes, one per
             tool, the fourth an open ring because that is where the human

@@ -123,7 +123,11 @@ export const apiClient = {
   },
 
   async plan(goal: string, ctx?: { skus?: string[] }): Promise<ToolPlan> {
-    const timeout = loadConfig().tools.network_timeout_ms;
+    // Planner needs longer than tools.network_timeout_ms (900ms): gemini-3.5-flash-lite takes 1-3s live.
+    // Using the short timeout marked every live Gemini plan as degraded:true, which stuck the replay banner on.
+    let timeout = 15000;
+    try { timeout = loadConfig().resilience.timeout_ms ?? 15000; } catch {}
+    if (timeout < 12000) timeout = 12000;
     const url = `${apiBase()}/api/agent/plan`;
     try {
       const r = await fetchWithTimeout(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ goal: goal.slice(0, 400), context: ctx }) }, timeout);
