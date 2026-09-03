@@ -1,7 +1,7 @@
 // Requirement IDs: DP-UI · visual_identity_plan.md §7.11
 //
 // A deliberately small Markdown block renderer — enough for the product story
-// in design_documents/real-life-usecase-opsflow.md and nothing more.
+// in src/ui/components/real-life-usecase-opsflow.md and nothing more.
 //
 // Why not a library: the story is one document with a known vocabulary
 // (headings, blockquote, rules, bullets, bold/italic/code, paragraphs), and the

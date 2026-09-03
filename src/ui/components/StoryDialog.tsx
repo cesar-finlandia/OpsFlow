@@ -2,9 +2,9 @@
 //
 // "How it works" — the header affordance that answers the first question any
 // visitor has: what is this console for, and who is it for? It renders
-// design_documents/real-life-usecase-opsflow.md, imported at build time, so the
-// story a judge reads on the page and the story in the repository are the same
-// file and cannot drift apart.
+// ./real-life-usecase-opsflow.md (product copy co-located with this component),
+// imported at build time, so the story a judge reads on the page and the story
+// in the repository are the same file and cannot drift apart.
 //
 // It is modal because it is a full document that takes the screen; it uses the
 // same focus-trap contract as the confirmation gate (NFR-09) but never borrows
@@ -12,7 +12,7 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import storySource from "../../../design_documents/real-life-usecase-opsflow.md?raw";
+import storySource from "./real-life-usecase-opsflow.md?raw";
 import { Markdown } from "src/ui/components/Markdown.tsx";
 import { CrossIcon, StoryIcon } from "src/ui/components/Icons.tsx";
 
