@@ -152,3 +152,7 @@ Thumbs.db
 # Authoring docs — local planning material, not part of the product
 # ---------------------------------------------------------------------------
 design_documents/
+templates/
+private/
+demo/
+deck/

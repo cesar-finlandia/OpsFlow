@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120" role="img">
-  <style> text{font-family:Inter,system-ui; fill:#F2F2F2} .bar{fill:#6AE3FF} .track{fill:#8A8F98; opacity:.25}</style>
-  <text x="12" y="22" font-size="13" font-weight="700">TAM — from winning_project_plan.md § Business Value</text>
-  <rect x="12" y="40" width="576" height="22" rx="11" class="track"/>
-  <rect x="12" y="40" width="309" height="22" rx="11" class="bar"/>
-  <text x="12" y="88" font-size="16" font-weight="700">** estimate — validate via IDEA-03 gallery scan — narrow TAM is credible if co-task is specific and demonstrably improved; anchor to Shopify's 2M+ daily active merchants and ops-tooling vertical rather than inventing a dollar figure.</text>
-  <text x="12" y="108" font-size="11" fill="#8A8F98">Source: winning_project_plan.md — never invented</text>
-</svg>
